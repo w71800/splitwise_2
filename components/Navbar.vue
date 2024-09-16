@@ -9,11 +9,11 @@ nav.navbar
     .navbar__item(
       v-for="item in navItems" 
       :key="item.path" 
-      :class="{ 'active': isActive(item.path), 'navbar__item--spacer': item.spacer }"
+      :class="{ 'active': isActive(item.path), 'navbar__item--spacer': item.spacer, 'profile': item.name === '帳戶' }"
     )
       template(v-if="!item.spacer")
         .img_wrapper
-          //- img(:src="item.icon" :alt="item.name")
+          img(:src="isActive(item.path) ? item.icon.active : item.icon.inactive" :alt="item.name")
         NuxtLink(:to="item.path") {{ item.name }}
     .add 
       span +
@@ -24,11 +24,39 @@ const route = useRoute()
 const userId = 3 
 
 const navItems = [
-  { name: '朋友', path: '/friends', icon: '/icons/friends.png' },
-  { name: '群組', path: '/groups', icon: '/icons/groups.png' },
+  { 
+    name: '朋友', 
+    path: '/friends', 
+    icon: {
+      active: '/icons/friend_active.png',
+      inactive: '/icons/friend_inactive.png'
+    }
+  },
+  { 
+    name: '群組', 
+    path: '/groups', 
+    icon: {
+      active: '/icons/group_active.png',
+      inactive: '/icons/group_inactive.png'
+    }
+  },
   { spacer: true },
-  { name: '搜尋', path: '/search', icon: '/icons/search.png' },
-  { name: '帳戶', path: `/account/${userId}`, icon: '/icons/account.png' },
+  { 
+    name: '搜尋', 
+    path: '/search', 
+    icon: {
+      active: '/icons/search_active.png',
+      inactive: '/icons/search_inactive.png'
+    }
+  },
+  { 
+    name: '帳戶', 
+    path: `/account/${userId}`, 
+    icon: {
+      active: '/icons/profile.jpg',
+      inactive: '/icons/profile.jpg'
+    }
+  },
 ]
 
 const isActive = (pathString: string) => route.path === pathString
@@ -45,8 +73,8 @@ const isActive = (pathString: string) => route.path === pathString
     text-align: center
     flex: 1
     padding-top: 10px
-    border-top: 1px solid #888
-    border-right: 1px solid #888
+    // border-top: 1px solid #888
+    // border-right: 1px solid #888
     cursor: pointer
 
     &:first-child
@@ -54,7 +82,7 @@ const isActive = (pathString: string) => route.path === pathString
 
     &--spacer
       flex: 0
-      flex-basis: 100px
+      flex-basis: 90px
       border: none
       cursor: default
 
@@ -81,23 +109,35 @@ const isActive = (pathString: string) => route.path === pathString
     transform: translateY(-11%)
   
 .img_wrapper
-  +block_size(30px)
+  +block_size(28px)
   position: relative
   left: 50%
   transform: translateX(-50%)
+  align-content: center
+  margin-bottom: 5px
 
   img
     +block_size(100%)
     object-fit: cover
 
-.navbar__item.active::before
-  content: ''
-  display: block
-  width: 100%
-  height: 3px
-  background-color: $color_primary
-  position: absolute
-  top: -1px
-  left: 0
+.navbar__item.active
+  a
+    color: $color_primary
+    font-weight: $font_weight_bold
+  &::before
+    content: ''
+    display: block
+    width: 100%
+    height: 6px
+    background-color: $color_primary
+    position: absolute
+    top: -1px
+    left: 0
+    border-radius: 0 0 3px 3px
+
+.navbar__item.profile
+  .img_wrapper
+    border-radius: 50%
+    overflow: hidden
 </style>
 

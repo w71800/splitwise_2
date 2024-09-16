@@ -37,8 +37,7 @@ const toggleSearchInput = () => {
   padding: 0 10px
   z-index: 100
   &__previous, &__search
-    width: 25px
-    height: 25px
+    +block_size(20px)
     cursor: pointer
     img
       +block-size(100%)
