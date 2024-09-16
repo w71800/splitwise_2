@@ -1,5 +1,6 @@
 <template lang="pug">
-Record(v-for="record in records" :key="record.id" :record="record")
+NuxtLayout
+  NuxtPage
 </template>
 
 <script setup lang="ts">

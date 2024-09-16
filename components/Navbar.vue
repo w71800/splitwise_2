@@ -1,40 +1,38 @@
+/**
+ * @todo: 
+ */
+
 <template lang="pug">
 nav.navbar
   .container
     .navbar__item
       .img_wrapper
-        img(src="/equal.png")
+        //- img(src="/equal.png")
       a(href="/") 朋友
     .navbar__item(:class="{ active: true }")
       .img_wrapper
-        img(src="/equal.png")
+        //- img(src="/equal.png")
       a(href="/") 群組
     .navbar__item
     .navbar__item
       .img_wrapper
-        img(src="/equal.png")
+        //- img(src="/equal.png")
       a(href="/") 搜尋
     .navbar__item
       .img_wrapper
-        img(src="/equal.png")
+        //- img(src="/equal.png")
       a(href="/") 帳戶
     .add 
       span +
 </template>
 
-<script>
-export default {
-  name: 'Navbar',
-  mounted() {
-    console.log(this.$route.path)
-  }
-}
+<script setup lang="ts">
+const { path } = useRoute()
+console.log('Navbar', path)
 </script>
 
 <style lang="sass" scoped>
 .navbar
-  *
-    // border: 1px solid #000
   position: fixed
   bottom: 0
   right: 0
@@ -78,7 +76,7 @@ export default {
   position: relative
   left: 50%
   transform: translateX(-50%)
-  img
+  & img
     +block_size(100%)
     object-fit: cover
 
