@@ -2,6 +2,8 @@
 .layout
   Header(:title="pageTitle")
   Navbar
+  //- 加入要插在 NuxtPage 中的頁面
+  NuxtPage 
 </template>
 
 <script setup lang="ts">
