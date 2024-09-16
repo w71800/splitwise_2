@@ -1,6 +1,6 @@
 <template lang="pug">
 .layout
-  Header(:title="pageTitle")
+  Topbar
   Navbar
   //- 加入要插在 NuxtPage 中的頁面
   NuxtPage 
