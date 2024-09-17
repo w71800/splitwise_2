@@ -1,7 +1,7 @@
-/**
- * @todo: 
- * 1. 要動態取得使用者 id
- */
+<!-- 
+  @todo 
+  - 要動態取得使用者 id
+-->
 
 <template lang="pug">
 nav.navbar
@@ -9,11 +9,18 @@ nav.navbar
     .navbar__item(
       v-for="item in navItems" 
       :key="item.path" 
-      :class="{ 'active': isActive(item.path), 'navbar__item--spacer': item.spacer, 'profile': item.name === '帳戶' }"
+      :class=`{ 
+        'active': isActive(item.path),
+        'navbar__item--spacer': item.spacer, 
+        'profile': item.name === '帳戶'
+      }`
     )
       template(v-if="!item.spacer")
         .img_wrapper
-          img(:src="isActive(item.path) ? item.icon.active : item.icon.inactive" :alt="item.name")
+          img(
+            :src="isActive(item.path) ? item.icon.active : item.icon.inactive" 
+            :alt="item.name"
+          )
         NuxtLink(:to="item.path") {{ item.name }}
     .add 
       span +
@@ -68,6 +75,7 @@ const isActive = (pathString: string) => route.path === pathString
   bottom: 0
   right: 0
   left: 0
+  background-color: rgba(#fff, 0.8)
 
   &__item
     text-align: center
@@ -133,7 +141,7 @@ const isActive = (pathString: string) => route.path === pathString
     position: absolute
     top: -1px
     left: 0
-    border-radius: 0 0 3px 3px
+    border-radius: 0 0 2px 2px
 
 .navbar__item.profile
   .img_wrapper

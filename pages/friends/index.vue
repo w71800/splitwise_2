@@ -1,6 +1,11 @@
 <template lang="pug">
 .friends
-  ListItem(v-for="friend in fakeFriends" :key="friend.id" :id="friend.id" :avatar="friend.avatar" :name="friend.name")
+  ListItem(
+    v-for="friend in fakeFriends" 
+    :key="friend.id" :id="friend.id" 
+    :avatar="friend.avatar" 
+    :name="friend.name"
+  )
 </template>
 
 <script setup lang="ts">

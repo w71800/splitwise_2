@@ -1,3 +1,8 @@
+<!-- 
+  @todo 
+  - 將 friends 和 groups 的頁面合併為一個共用的 layout
+-->
+
 <template lang="pug">
 .layout
   Topbar
