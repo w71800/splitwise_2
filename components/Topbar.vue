@@ -1,11 +1,13 @@
 <!-- 
   @todo 
-  - 點擊左邊的箭頭，會回到上一頁（要怎麼知道上一頁是哪一頁？）
+  - 修飾上一頁跳轉的流程：在有下一層頁面時，點選上一頁才會跳回上一層頁面（沒有的話不顯示箭頭？）
+  - 加上搜尋送出（還有需要做嗎？還是要把搜尋功能統一在搜尋頁面？）
+  - 改為白底綠字
 -->
 
 <template lang="pug">
 .topbar
-  .topbar__previous
+  .topbar__previous(@click="goBack")
     .icon
       img(src="/icons/left-arrow.png")
   .topbar__title
@@ -18,14 +20,38 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const searchInput = ref('')
 const isSearchInputActive = ref(false)
+const previousRoute = ref('')
 
 const toggleSearchInput = () => {
   isSearchInputActive.value = !isSearchInputActive.value
 }
+
+const goBack = () => {
+  if (previousRoute.value) {
+    router.push(previousRoute.value)
+    previousRoute.value = ''
+  } else {
+    router.back()
+  }
+}
+
+const saveCurrentRoute = (to: any, from: any) => {
+  previousRoute.value = from.fullPath
+}
+
+onMounted(() => {
+  router.beforeEach(saveCurrentRoute)
+})
+
+onUnmounted(() => {
+  router.beforeEach(() => {})
+})
 </script>
 
 <style lang="sass" scoped>

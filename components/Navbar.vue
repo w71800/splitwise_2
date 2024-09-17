@@ -21,8 +21,9 @@ nav.navbar
             :src="isActive(item.path) ? item.icon.active : item.icon.inactive" 
             :alt="item.name"
           )
-        NuxtLink(:to="item.path") {{ item.name }}
-    .add 
+        .text {{ item.name }}
+        NuxtLink(:to="item.path")
+    .navbar__add-button
       span +
 </template>
 
@@ -76,6 +77,7 @@ const isActive = (pathString: string) => route.path === pathString
   right: 0
   left: 0
   background-color: rgba(#fff, 0.8)
+  // +debug()
 
   &__item
     text-align: center
@@ -93,12 +95,21 @@ const isActive = (pathString: string) => route.path === pathString
       flex-basis: 90px
       border: none
       cursor: default
+    
+    .text
+      color: $color_text
+
+    a 
+      display: block
+      position: absolute
+      top: 0
+      +block_size(100%)
 
 .container
   display: flex
   align-items: flex-end
 
-.add
+.navbar__add-button
   border-radius: 50%
   +block_size(120px)
   position: absolute
@@ -129,7 +140,7 @@ const isActive = (pathString: string) => route.path === pathString
     object-fit: cover
 
 .navbar__item.active
-  a
+  .text
     color: $color_primary
     font-weight: $font_weight_bold
   &::before
