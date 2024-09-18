@@ -1,6 +1,5 @@
 <!-- 
   @todo 
-  - 修飾上一頁跳轉的流程：在有下一層頁面時，點選上一頁才會跳回上一層頁面（沒有的話不顯示箭頭？）
   - 加上搜尋送出（還有需要做嗎？還是要把搜尋功能統一在搜尋頁面？）
 -->
 
@@ -8,7 +7,7 @@
 .topbar
   .topbar__previous(@click="goBack")
     .icon
-      img(src="/icons/left-arrow.png")
+      img(src="/icons/left-arrow.png" v-if="isPreviousActive")
   .topbar__title
     .text 記帳
   .topbar__search(@click="toggleSearchInput")
@@ -25,7 +24,7 @@ const router = useRouter()
 const searchInput = ref('')
 const isSearchInputActive = ref(false)
 const previousRoute = ref('')
-
+const isPreviousActive = ref(false)
 const toggleSearchInput = () => {
   isSearchInputActive.value = !isSearchInputActive.value
 }
@@ -38,7 +37,9 @@ const goBack = () => {
     router.back()
   }
 }
-
+watch(() => router.currentRoute.value, (to) => {
+  isPreviousActive.value = to.fullPath.split('/').length == 3
+})
 const saveCurrentRoute = (to: any, from: any) => {
   previousRoute.value = from.fullPath
 }

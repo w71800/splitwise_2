@@ -5,14 +5,25 @@
 
 <template lang="pug">
 .layout
-  Topbar
+  Topbar(v-if="isTopbarActive")
   Navbar
   //- 加入要插在 NuxtPage 中的頁面
   NuxtPage 
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue'
+import { useRoute, onBeforeRouteUpdate } from 'vue-router'
 
-const pageTitle = ref('家裡事項')
+const route = useRoute()
+
+const isTopbarActive = ref(checkTopbarActive(route.path))
+
+function checkTopbarActive(path: string): boolean {
+  return path.split('/').length > 1
+}
+
+watch(() => route.path, (toPath) => {
+  isTopbarActive.value = checkTopbarActive(toPath)
+})
 </script>
