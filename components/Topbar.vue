@@ -11,10 +11,10 @@
     .icon
       img(src="/icons/left-arrow.png")
   .topbar__title
-    h1.title 記帳
+    .text 記帳
   .topbar__search(@click="toggleSearchInput")
     .icon
-      img(src="/icons/search.png")
+      img(src="/icons/search_active.png")
   .topbar__search-input(v-if="isSearchInputActive")
     input(type="text" placeholder="搜尋")
 </template>
@@ -61,7 +61,7 @@ onUnmounted(() => {
   top: 0
   left: 0
   right: 0
-  background-color: $color_primary
+  background-color: #fff
   display: flex
   justify-content: space-between
   align-items: center
@@ -75,8 +75,9 @@ onUnmounted(() => {
       object-fit: contain
   &__title
     padding: 5px 0px
-    font-size: .7rem
-    color: #fff
+    font-size: 1.5rem
+    font-weight: $font_weight_bold
+    color: $color_primary
   &__search-input
     position: absolute
     background-color: $color_primary
