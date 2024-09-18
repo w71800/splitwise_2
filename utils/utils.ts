@@ -1,3 +1,5 @@
+import type { Record } from '@/types/types'
+
 export const setPaddingZero = (num: number | string): string => {
   return num.toString().padStart(2, '0')
 }
@@ -15,4 +17,8 @@ export const methods = {
   fixed() {return '定值'},
   percentage() {return '百分比'},
   ratio() {return '比例'}
+}
+
+export const filterRecords = (id: string): Record[] => {
+  return []
 }
