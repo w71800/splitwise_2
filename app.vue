@@ -1,3 +1,9 @@
+<!-- 
+  @todo: 
+  - 1. 將假資料集中在一個檔案中管理
+  - 2. 首頁顯示最新動態之類的東西，沒登入的話（例如沒有 token），顯示登入頁面。且不顯示 topbar 和 navbar
+-->
+
 <template lang="pug">
 NuxtLayout
   NuxtPage

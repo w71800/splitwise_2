@@ -1,6 +1,7 @@
 <template lang="pug">
-h1 這是群組 {{ id }}
-
+.page
+  .container
+    Header(title="群組")
 </template>
 
 <script setup lang="ts">

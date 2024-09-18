@@ -1,10 +1,11 @@
 <template lang="pug">
-h1 這是帳戶頁面 {{ id }}
+.page
+  .container
+    Header(title="家裡")
 </template>
 
 <script setup lang="ts">
 const { id } = useRoute().params
-
 </script>
 
 <style scoped lang="sass">
