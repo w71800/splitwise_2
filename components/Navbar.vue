@@ -1,6 +1,8 @@
 <!-- 
   @todo 
   - 要動態取得使用者 id
+  - 用 margin 來做中間的分隔
+  - 調整一下 CSS 的寫法
 -->
 
 <template lang="pug">
@@ -105,6 +107,12 @@ const isActive = (pathString: string) => route.path === pathString
       top: 0
       +block_size(100%)
 
+.navbar__item.profile
+  .img_wrapper
+    border-radius: 50%
+    overflow: hidden
+    border: 2px solid #999
+
 .container
   display: flex
   align-items: flex-end
@@ -153,10 +161,8 @@ const isActive = (pathString: string) => route.path === pathString
     top: -1px
     left: 0
     border-radius: 0 0 2px 2px
-
-.navbar__item.profile
-  .img_wrapper
-    border-radius: 50%
-    overflow: hidden
+  &.profile
+    .img_wrapper
+      border: 2px solid $color_primary
 </style>
 
