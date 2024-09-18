@@ -8,6 +8,9 @@ export default defineNuxtConfig({
     '@': resolve(__dirname, './')
   },
   css: ['@/assets/global.sass'], // 在每一個頁面中的 head 都引入 global.sass 作為全局樣式
+  modules: [
+    '@pinia/nuxt'
+  ],
   vite: {
     css: {
       preprocessorOptions: {
