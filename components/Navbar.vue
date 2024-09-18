@@ -3,6 +3,7 @@
   - 要動態取得使用者 id
   - 用 margin 來做中間的分隔
   - 調整一下 CSS 的寫法
+  - 在進入群組或朋友的子頁時，navbar 一樣要有 highlight 的效果
 -->
 
 <template lang="pug">
@@ -111,7 +112,7 @@ const isActive = (pathString: string) => route.path === pathString
   .img_wrapper
     border-radius: 50%
     overflow: hidden
-    border: 2px solid #999
+    border: 2px solid rgba(#999, 0.5)
 
 .container
   display: flex

@@ -1,8 +1,8 @@
-/**
- * @todo:
+<!-- 
+ @todo:
  * - title 的樣式，是根據看到這個 record 的使用者，是否為債權人，還是債務人，來決定顏色
- * - 從該資料的 payer 是否是使用者，來決定 isPayer 的值
- */
+ * - 從該資料的 payer 是否是使用者，來決定 isPayer 的值 
+-->
 
 <template lang="pug">
 .record
@@ -37,7 +37,7 @@ const titleClass = computed(() => ({
 const [ _, month, date ] = fullDate.value.split('-')
 const payerStr = computed(() => {
   if (payers.value.length === 1) {
-    return `${payers.value[0]} 付了`
+    return `${payers.value[0].name} 付了`
   }
   return `${payers.value.join('、')} 付了`
 })

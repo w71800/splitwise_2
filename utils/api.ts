@@ -7,6 +7,6 @@ export const getRecords = (source: 'groups' | 'friends', id: string | number) =>
       return res.json()
     })
     .catch( (error) => {
-throw new Error(error.message)
+      throw new Error(error.message)
     })
 }
