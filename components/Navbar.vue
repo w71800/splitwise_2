@@ -70,7 +70,7 @@ const navItems = [
   },
 ]
 
-const isActive = (pathString: string) => route.path === pathString
+const isActive = (pathString: string) => route.path.includes(pathString)
 </script>
 
 <style lang="sass" scoped>
