@@ -2,7 +2,6 @@
   @todo 
   - 修飾上一頁跳轉的流程：在有下一層頁面時，點選上一頁才會跳回上一層頁面（沒有的話不顯示箭頭？）
   - 加上搜尋送出（還有需要做嗎？還是要把搜尋功能統一在搜尋頁面？）
-  - 改為白底綠字
 -->
 
 <template lang="pug">
@@ -15,8 +14,7 @@
   .topbar__search(@click="toggleSearchInput")
     .icon
       img(src="/icons/search_active.png")
-  .topbar__search-input(v-if="isSearchInputActive")
-    input(type="text" placeholder="搜尋")
+  SearchInput(v-if="isSearchInputActive")
 </template>
 
 <script setup lang="ts">
@@ -78,24 +76,5 @@ onUnmounted(() => {
     font-size: 1.5rem
     font-weight: $font_weight_bold
     color: $color_primary
-  &__search-input
-    position: absolute
-    background-color: $color_primary
-    bottom: 0
-    left: 0
-    right: 0
-    transform: translateY(100%)
-    padding: 10px 0px
-    input
-      display: block
-      margin: 0 auto
-      width: 90%
-      height: 30px
-      border-radius: 20px
-      border: none
-      outline: none
-      background-color: #fff
-      font-size: 1rem
-      padding: 0 15px
       
 </style>
