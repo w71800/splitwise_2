@@ -1,4 +1,4 @@
-import type { Record } from '@/types/types'
+import type { Record, User } from '@/types/types'
 
 export const fakeGroups = [
 	{
@@ -25,14 +25,14 @@ export const fakeRecords: Record[] = [
     value: 300,
     fullDate: '2024-03-15',
     participants: [
-      { id: '1', displayName: '小明', email: 'xiaoming@example.com' },
+      { id: "1", displayName: '威利', email: 'william@gmail.com' },
       { id: '2', displayName: '小華', email: 'xiaohua@example.com' }
     ],
     divisions: [
-      { id: '1', displayName: '小明', email: 'xiaoming@example.com', value: 150 },
+      { id: "1", displayName: '威利', email: 'william@gmail.com', value: 150 },
       { id: '2', displayName: '小華', email: 'xiaohua@example.com', value: 150 }
     ],
-    payers: { id: '1', displayName: '小明', email: 'xiaoming@example.com', paid: 300 },
+    payers: { id: "1", displayName: '威利', email: 'william@gmail.com', paid: 300 },
     splitor: 'equal'
   },
   {
@@ -41,12 +41,12 @@ export const fakeRecords: Record[] = [
     value: 500,
     fullDate: '2024-03-20',
     participants: [
-      { id: '1', displayName: '小明', email: 'xiaoming@example.com' },
+      { id: "1", displayName: '威利', email: 'william@gmail.com' },
       { id: '2', displayName: '小華', email: 'xiaohua@example.com' },
       { id: '3', displayName: '小芳', email: 'xiaofang@example.com' }
     ],
     divisions: [
-      { id: '1', displayName: '小明', email: 'xiaoming@example.com', value: 200 },
+      { id: "1", displayName: '威利', email: 'william@gmail.com', value: 200 },
       { id: '2', displayName: '小華', email: 'xiaohua@example.com', value: 150 },
       { id: '3', displayName: '小芳', email: 'xiaofang@example.com', value: 150 }
     ],
@@ -59,16 +59,16 @@ export const fakeRecords: Record[] = [
     value: 120,
     fullDate: '2024-04-01',
     participants: [
-      { id: '1', displayName: '小明', email: 'xiaoming@example.com' },
+      { id: "1", displayName: '威利', email: 'william@gmail.com' },
       { id: '2', displayName: '小華', email: 'xiaohua@example.com' },
       { id: '3', displayName: '小芳', email: 'xiaofang@example.com' }
     ],
     divisions: [
-      { id: '1', displayName: '小明', email: 'xiaoming@example.com', value: 20 },
+      { id: "1", displayName: '威利', email: 'william@gmail.com', value: 20 },
       { id: '2', displayName: '小華', email: 'xiaohua@example.com', value: 40 },
       { id: '3', displayName: '小芳', email: 'xiaofang@example.com', value: 40 }
     ],
-    payers: { id: '1', displayName: '小明', email: 'xiaoming@example.com', paid: 40 },
+    payers: { id: "1", displayName: '威利', email: 'william@gmail.com', paid: 40 },
     splitor: 'percentage'
   },
   {
@@ -77,16 +77,22 @@ export const fakeRecords: Record[] = [
     value: 200,
     fullDate: '2024-04-05',
     participants: [
-      { id: '1', displayName: '小明', email: 'xiaoming@example.com' },
+      { id: "1", displayName: '威利', email: 'william@gmail.com' },
       { id: '2', displayName: '小華', email: 'xiaohua@example.com' },
       { id: '3', displayName: '小芳', email: 'xiaofang@example.com' }
     ],
     divisions: [
-      { id: '1', displayName: '小明', email: 'xiaoming@example.com', value: 1 },
+      { id: "1", displayName: '威利', email: 'william@gmail.com', value: 1 },
       { id: '2', displayName: '小華', email: 'xiaohua@example.com', value: 1 },
       { id: '3', displayName: '小芳', email: 'xiaofang@example.com', value: 2 }
     ],
-    payers: { id: '1', displayName: '小明', email: 'xiaoming@example.com', paid: 200 },
+    payers: { id: "1", displayName: '威利', email: 'william@gmail.com', paid: 200 },
     splitor: 'ratio'
   }
 ]
+
+export const fakeUsers: User = {
+  id: "1",
+  displayName: '威利',
+  email: 'william@gmail.com',
+}

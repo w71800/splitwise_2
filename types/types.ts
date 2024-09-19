@@ -3,17 +3,17 @@
  * - 將 payers 改為多人
  */
 
-export interface Member {
+export interface User {
   id: string;
   displayName: string;
   email: string;
 }
 
-export interface Division extends Member {
+export interface Division extends User {
   value: number;
 }
 
-export interface Payer extends Member {
+export interface Payer extends User {
   paid: number;
 }
 
@@ -23,7 +23,7 @@ export interface Record {
   value: number;
   fullDate: string;
   payers: Payer;
-  participants: Member[];
+  participants: User[];
   divisions: Division[];
   splitor: 'equal' | 'fixed' | 'percentage' | 'ratio';
 }

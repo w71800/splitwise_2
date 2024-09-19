@@ -1,3 +1,8 @@
+/**
+ * @todo
+ * - 希望能夠把工具及撰寫的更加簡潔
+ */
+
 import type { Record, Division, Debt } from '@/types/types'
 
 export const setPaddingZero = (num: number | string): string => {
@@ -94,7 +99,7 @@ export const filterRecords = (id: string): Record[] => {
   return []
 }
 
-export const getDebts = (record: Record, memberId?: string): Debt[] => {
+export const getDebts = (record: Record, userId?: string): Debt[] => {
   let debts: Debt[] = []
   const { participants, payers, value, splitor } = record
   // 1. 計算每個參與者應付的金額
@@ -117,54 +122,9 @@ export const getDebts = (record: Record, memberId?: string): Debt[] => {
     creditorId: null
   }))
 
-  if (memberId) {
-    debts = debts.filter(debt => debt.id === memberId)
+  if (userId) {
+    debts = debts.filter(debt => debt.id === userId)
   }
-  console.log(debts) 
+
   return debts
 }
-
-// export function calculateDebts(record: Record): RecordCalculation {
-//   const totalAmount = record.value as number;
-//   const debts: DebtCalculation[] = [];
-
-//   // 計算每個參與者應付的金額
-//   record.participants.forEach(participant => {
-//     const division = record.divisions.find(d => d.id === participant.id);
-//     const shouldPay = division ? division.value : 0;
-//     const paid = record.payers.find(p => p.id === participant.id)?.paid || 0;
-//     const debt = shouldPay - paid;
-
-//     debts.push({
-//       memberId: participant.id,
-//       displayName: participant.displayName,
-//       shouldPay,
-//       debt,
-//       creditorId: null
-//     });
-//   });
-
-//   // 找出債權人（付款超過應付金額的人）
-//   const creditors = debts.filter(d => d.debt < 0);
-
-//   // 分配債務給債權人
-//   debts.forEach(debt => {
-//     if (debt.debt > 0) {
-//       for (const creditor of creditors) {
-//         if (creditor.debt < 0 && debt.debt > 0) {
-//           const amountToSettle = Math.min(debt.debt, -creditor.debt);
-//           debt.debt -= amountToSettle;
-//           creditor.debt += amountToSettle;
-//           debt.creditorId = creditor.memberId;
-//           if (debt.debt === 0) break;
-//         }
-//       }
-//     }
-//   });
-
-//   return {
-//     recordId: record.id,
-//     totalAmount,
-//     debts
-//   };
-// }

@@ -22,12 +22,13 @@
 import { computed, ref, toRefs } from 'vue'
 import { setPaddingZero, getSingleDigitMonth, getDebts } from '@/utils/utils'
 import type { Record as RecordProps, Payer } from '@/types/types'
+import { useUserDataStore } from '@/store/userData'
 
 const props = defineProps<{
   record: RecordProps
 }>()
 
-const userId = ref("1")
+const userId = ref(useUserDataStore().id)
 
 const { value, payers, fullDate, title } = toRefs(props.record)
 const isPayer = ref(payers.value.id === userId.value)
