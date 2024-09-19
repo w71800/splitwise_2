@@ -62,7 +62,7 @@ const navItems = [
   },
   { 
     name: '帳戶', 
-    path: `/account/${userId}`, 
+    path: `/account`, 
     icon: {
       active: '/icons/profile.jpg',
       inactive: '/icons/profile.jpg'

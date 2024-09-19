@@ -6,7 +6,8 @@
 export interface User {
   id: string;
   displayName: string;
-  email: string;
+  email?: string;
+  avatar?: string;
 }
 
 export interface Division extends User {

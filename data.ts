@@ -91,8 +91,9 @@ export const fakeRecords: Record[] = [
   }
 ]
 
-export const fakeUsers: User = {
+export const fakeUser: User = {
   id: "1",
   displayName: '威利',
   email: 'william@gmail.com',
+  avatar: '/avatars/profile.jpg'
 }

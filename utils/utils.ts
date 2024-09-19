@@ -5,10 +5,21 @@
 
 import type { Record, Division, Debt } from '@/types/types'
 
+/**
+ * 將數字或字符串轉換為兩位數的字符串，如果不足兩位則在前面補零。
+ * @param {number | string} num - 要轉換的數字或字符串
+ * @returns {string} 轉換後的兩位數字符串
+ */
 export const setPaddingZero = (num: number | string): string => {
   return num.toString().padStart(2, '0')
 }
 
+/**
+ * 從月份字符串中獲取單個數字的月份。
+ * 如果月份是單個數字，則直接返回；如果是兩位數，則返回第二個數字。
+ * @param {string} month - 月份字符串
+ * @returns {string} 單個數字的月份
+ */
 export const getSingleDigitMonth = (month : string): string => {
   if (month.length === 1) { 
     return month
@@ -17,8 +28,15 @@ export const getSingleDigitMonth = (month : string): string => {
   }
 }
 
-// 取得每個 division 來計算每個參與者應付的金額的工具函數集
+/**
+ * 包含不同分攤方式計算的工具函數集合
+ */
 export const splitors = {
+  /**
+   * 計算平均分攤的金額
+   * @param {Record} record - 記錄對象
+   * @returns {Array<{id: string, displayName: string, shouldPay: number}>} 每個參與者應付金額的數組
+   */
   equal(record: Record): {
     id: string;
     displayName: string;
@@ -38,6 +56,11 @@ export const splitors = {
     
     return debts
   },
+  /**
+   * 計算固定金額分攤
+   * @param {Record} record - 記錄對象
+   * @returns {Array<{id: string, displayName: string, shouldPay: number}>} 每個參與者應付金額的數組
+   */
   fixed(record: Record): {
     id: string;
     displayName: string;
@@ -56,6 +79,11 @@ export const splitors = {
     
     return debts
   },
+  /**
+   * 計算百分比分攤的金額
+   * @param {Record} record - 記錄對象
+   * @returns {Array<{id: string, displayName: string, shouldPay: number}>} 每個參與者應付金額的數組
+   */
   percentage(record: Record): {
     id: string;
     displayName: string;
@@ -74,6 +102,11 @@ export const splitors = {
     
     return debts
   },
+  /**
+   * 計算比例分攤的金額
+   * @param {Record} record - 記錄對象
+   * @returns {Array<{id: string, displayName: string, shouldPay: number}>} 每個參與者應付金額的數組
+   */
   ratio(record: Record): {
     id: string;
     displayName: string;
@@ -95,10 +128,21 @@ export const splitors = {
   }
 }
 
+/**
+ * 根據用戶ID過濾記錄
+ * @param {string} id - 用戶ID
+ * @returns {Record[]} 過濾後的記錄數組
+ */
 export const filterRecords = (id: string): Record[] => {
   return []
 }
 
+/**
+ * 計算記錄中的債務情況
+ * @param {Record} record - 記錄對象
+ * @param {string} [userId] - 可選的用戶ID，用於過濾特定用戶的債務
+ * @returns {Debt[]} 債務數組
+ */
 export const getDebts = (record: Record, userId?: string): Debt[] => {
   let debts: Debt[] = []
   const { participants, payers, value, splitor } = record
