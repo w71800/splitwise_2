@@ -15,21 +15,22 @@
     p.description {{ payerStr }}
   .record__hint
     h3.title(:class="titleClass") {{ hintTitle }}
-    p.value {{ value }} 元
+    p.value {{ Math.abs(displayDebt) }} 元
 </template>
 
 <script setup lang="ts">
 import { computed, ref, toRefs } from 'vue'
-import { setPaddingZero, getSingleDigitMonth } from '@/utils/utils'
+import { setPaddingZero, getSingleDigitMonth, getDebts } from '@/utils/utils'
 import type { Record as RecordProps, Payer } from '@/types/types'
 
 const props = defineProps<{
   record: RecordProps
 }>()
 
-const { value, payers, fullDate, title } = toRefs(props.record)
+const userId = ref("1")
 
-const isPayer = ref(true)
+const { value, payers, fullDate, title } = toRefs(props.record)
+const isPayer = ref(payers.value.id === userId.value)
 const hintTitle = computed(() => isPayer.value ? '可回收' : '應支付')
 const titleClass = computed(() => ({
   'title--to-pay': !isPayer.value,
@@ -38,6 +39,7 @@ const titleClass = computed(() => ({
 const [ _, month, date ] = fullDate.value.split('-')
 // const payerStr = computed(() => payers.value.map(payer => payer.displayName).join('、') + ' 付了')
 const payerStr = computed(() => `${payers.value.displayName} 付了 ${value.value} 元`)
+const displayDebt = computed(() => getDebts(props.record).find(debt => debt.id === userId.value)?.debt)
 </script>
 
 <style lang="sass" scoped>

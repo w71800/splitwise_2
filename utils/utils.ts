@@ -94,7 +94,7 @@ export const filterRecords = (id: string): Record[] => {
   return []
 }
 
-export const getDebts = (record: Record): Debt[] => {
+export const getDebts = (record: Record, memberId?: string): Debt[] => {
   let debts: Debt[] = []
   const { participants, payers, value, splitor } = record
   // 1. 計算每個參與者應付的金額
@@ -117,6 +117,10 @@ export const getDebts = (record: Record): Debt[] => {
     creditorId: null
   }))
 
+  if (memberId) {
+    debts = debts.filter(debt => debt.id === memberId)
+  }
+  console.log(debts) 
   return debts
 }
 
