@@ -20,7 +20,7 @@ const route = useRoute()
 const isTopbarActive = ref(checkTopbarActive(route.path))
 
 function checkTopbarActive(path: string): boolean {
-  return path.split('/').length > 1
+  return path.split('/').length > 1 && ( path.includes('/groups') || path.includes('/friends') )
 }
 
 watch(() => route.path, (toPath) => {
