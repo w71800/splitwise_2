@@ -151,7 +151,7 @@ export const getDebts = (record: Record, userId?: string): Debt[] => {
   // 3. 計算每個參與者應付金額與實際支付金額的差額
   // 4. 找出債權人（付款超過應付金額的人）
   // 5. 分配債務給債權人
-
+  
   const owes: {
     id: string;
     displayName: string;

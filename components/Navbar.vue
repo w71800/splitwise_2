@@ -80,6 +80,7 @@ const isActive = (pathString: string) => route.path.includes(pathString)
   right: 0
   left: 0
   background-color: rgba(#fff, 0.8)
+  box-shadow: 0 -2px 10px 0 rgba(0, 0, 0, 0.1)
   // +debug()
 
   &__item
@@ -95,7 +96,7 @@ const isActive = (pathString: string) => route.path.includes(pathString)
 
     &--spacer
       flex: 0
-      flex-basis: 90px
+      flex-basis: 100px
       border: none
       cursor: default
     
@@ -120,7 +121,7 @@ const isActive = (pathString: string) => route.path.includes(pathString)
 
 .navbar__add-button
   border-radius: 50%
-  +block_size(120px)
+  +block_size(100px)
   position: absolute
   left: 50%
   transform: translate(-50%, 25%)
