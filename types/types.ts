@@ -1,16 +1,37 @@
-export type Member = {
+/**
+ * @todo:
+ * - 將 payers 改為多人
+ */
+
+export interface Member {
   id: string;
-  name: string;
+  displayName: string;
   email: string;
-  phone: string;
 }
 
-export type Record = {
+export interface Division extends Member {
+  value: number;
+}
+
+export interface Payer extends Member {
+  paid: number;
+}
+
+export interface Record {
   id: string;
   title: string;
-  value: number | string;
+  value: number;
   fullDate: string;
+  payers: Payer;
   participants: Member[];
-  payers: Member[];
-  method: 'equal' | 'fixed' | 'percentage' | 'ratio';
+  divisions: Division[];
+  splitor: 'equal' | 'fixed' | 'percentage' | 'ratio';
+}
+
+export interface Debt {
+  id: string;
+  displayName: string;
+  shouldPay: number;
+  debt: number;
+  creditorId: string | null;
 }

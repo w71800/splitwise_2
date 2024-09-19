@@ -21,7 +21,7 @@
 <script setup lang="ts">
 import { computed, ref, toRefs } from 'vue'
 import { setPaddingZero, getSingleDigitMonth } from '@/utils/utils'
-import type { Record as RecordProps } from '@/types/types'
+import type { Record as RecordProps, Payer } from '@/types/types'
 
 const props = defineProps<{
   record: RecordProps
@@ -36,12 +36,8 @@ const titleClass = computed(() => ({
   'title--to-receive': isPayer.value
 }))
 const [ _, month, date ] = fullDate.value.split('-')
-const payerStr = computed(() => {
-  if (payers.value.length === 1) {
-    return `${payers.value[0].name} 付了`
-  }
-  return `${payers.value.join('、')} 付了`
-})
+// const payerStr = computed(() => payers.value.map(payer => payer.displayName).join('、') + ' 付了')
+const payerStr = computed(() => `${payers.value.displayName} 付了 ${value.value} 元`)
 </script>
 
 <style lang="sass" scoped>

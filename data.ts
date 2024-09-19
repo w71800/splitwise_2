@@ -1,4 +1,4 @@
-import type { Record } from '@/types/types.ts'
+import type { Record } from '@/types/types'
 
 export const fakeGroups = [
 	{
@@ -25,13 +25,15 @@ export const fakeRecords: Record[] = [
     value: 300,
     fullDate: '2024-03-15',
     participants: [
-      { id: '1', name: '小明', email: 'xiaoming@example.com', phone: '0912345678' },
-      { id: '2', name: '小華', email: 'xiaohua@example.com', phone: '0923456789' }
+      { id: '1', displayName: '小明', email: 'xiaoming@example.com' },
+      { id: '2', displayName: '小華', email: 'xiaohua@example.com' }
     ],
-    payers: [
-      { id: '1', name: '小明', email: 'xiaoming@example.com', phone: '0912345678' }
+    divisions: [
+      { id: '1', displayName: '小明', email: 'xiaoming@example.com', value: 150 },
+      { id: '2', displayName: '小華', email: 'xiaohua@example.com', value: 150 }
     ],
-    method: 'equal'
+    payers: { id: '1', displayName: '小明', email: 'xiaoming@example.com', paid: 300 },
+    splitor: 'equal'
   },
   {
     id: '2',
@@ -39,14 +41,17 @@ export const fakeRecords: Record[] = [
     value: 500,
     fullDate: '2024-03-20',
     participants: [
-      { id: '1', name: '小明', email: 'xiaoming@example.com', phone: '0912345678' },
-      { id: '2', name: '小華', email: 'xiaohua@example.com', phone: '0923456789' },
-      { id: '3', name: '小芳', email: 'xiaofang@example.com', phone: '0934567890' }
+      { id: '1', displayName: '小明', email: 'xiaoming@example.com' },
+      { id: '2', displayName: '小華', email: 'xiaohua@example.com' },
+      { id: '3', displayName: '小芳', email: 'xiaofang@example.com' }
     ],
-    payers: [
-      { id: '2', name: '小華', email: 'xiaohua@example.com', phone: '0923456789' }
+    divisions: [
+      { id: '1', displayName: '小明', email: 'xiaoming@example.com', value: 200 },
+      { id: '2', displayName: '小華', email: 'xiaohua@example.com', value: 150 },
+      { id: '3', displayName: '小芳', email: 'xiaofang@example.com', value: 150 }
     ],
-    method: 'fixed'
+    payers: { id: '2', displayName: '小華', email: 'xiaohua@example.com', paid: 500 },
+    splitor: 'fixed'
   },
   {
     id: '3',
@@ -54,15 +59,34 @@ export const fakeRecords: Record[] = [
     value: 120,
     fullDate: '2024-04-01',
     participants: [
-      { id: '1', name: '小明', email: 'xiaoming@example.com', phone: '0912345678' },
-      { id: '2', name: '小華', email: 'xiaohua@example.com', phone: '0923456789' },
-      { id: '3', name: '小芳', email: 'xiaofang@example.com', phone: '0934567890' }
+      { id: '1', displayName: '小明', email: 'xiaoming@example.com' },
+      { id: '2', displayName: '小華', email: 'xiaohua@example.com' },
+      { id: '3', displayName: '小芳', email: 'xiaofang@example.com' }
     ],
-    payers: [
-      { id: '1', name: '小明', email: 'xiaoming@example.com', phone: '0912345678' },
-      { id: '2', name: '小華', email: 'xiaohua@example.com', phone: '0923456789' },
-      { id: '3', name: '小芳', email: 'xiaofang@example.com', phone: '0934567890' }
+    divisions: [
+      { id: '1', displayName: '小明', email: 'xiaoming@example.com', value: 20 },
+      { id: '2', displayName: '小華', email: 'xiaohua@example.com', value: 40 },
+      { id: '3', displayName: '小芳', email: 'xiaofang@example.com', value: 40 }
     ],
-    method: 'percentage'
+    payers: { id: '1', displayName: '小明', email: 'xiaoming@example.com', paid: 40 },
+    splitor: 'percentage'
+  },
+  {
+    id: '4',
+    title: '晚餐',
+    value: 200,
+    fullDate: '2024-04-05',
+    participants: [
+      { id: '1', displayName: '小明', email: 'xiaoming@example.com' },
+      { id: '2', displayName: '小華', email: 'xiaohua@example.com' },
+      { id: '3', displayName: '小芳', email: 'xiaofang@example.com' }
+    ],
+    divisions: [
+      { id: '1', displayName: '小明', email: 'xiaoming@example.com', value: 1 },
+      { id: '2', displayName: '小華', email: 'xiaohua@example.com', value: 1 },
+      { id: '3', displayName: '小芳', email: 'xiaofang@example.com', value: 2 }
+    ],
+    payers: { id: '1', displayName: '小明', email: 'xiaoming@example.com', paid: 200 },
+    splitor: 'ratio'
   }
 ]

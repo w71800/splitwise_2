@@ -26,4 +26,4 @@ try {
 
 <style scoped lang="sass">
 
-</style>@/store/records
+</style>
