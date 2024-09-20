@@ -10,6 +10,10 @@ export interface User {
   avatar?: string;
 }
 
+export interface Participant extends User {
+  tags?: string[];
+}
+
 export interface Division extends User {
   value: number;
 }
@@ -24,7 +28,7 @@ export interface Record {
   value: number;
   fullDate: string;
   payers: Payer;
-  participants: User[];
+  participants: Participant[];
   divisions: Division[];
   splitor: 'equal' | 'fixed' | 'percentage' | 'ratio';
 }

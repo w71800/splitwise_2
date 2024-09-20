@@ -150,7 +150,7 @@ export const getDebts = (record: Record, userId?: string): Debt[] => {
   // 2. 計算每個參與者實際支付的金額
   // 3. 計算每個參與者應付金額與實際支付金額的差額
   // 4. 找出債權人（付款超過應付金額的人）
-  // 5. 分配債務給債權人
+  // 5. 分配債務給債權人已記帳
   
   const owes: {
     id: string;
@@ -171,4 +171,22 @@ export const getDebts = (record: Record, userId?: string): Debt[] => {
   }
 
   return debts
+}
+
+// 從現有的 records 中選出 5 個
+export const getTags = (records: Record[]): string[] => {
+  let resultTags: string[] = []
+  outerLoop: for(let record of records) {
+    
+    const { participants } = record
+    let recordTags = participants.reduce((acc, p) => [...acc, ...(p.tags || [])], [] as string[])
+    for(let tag of recordTags) {
+      if(resultTags.length >= 6) break outerLoop;
+      
+      if(!resultTags.includes(tag)) {
+        resultTags.push(tag)
+      }
+    }
+  }
+  return resultTags
 }
