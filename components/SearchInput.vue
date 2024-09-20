@@ -32,10 +32,14 @@ interface Tag {
   isActive: boolean
 }
 
+const emit = defineEmits(['update:activeTags'])
+
 const tags = ref<Tag[]>(getTags(records).map( tag => ({ name: tag, isActive: false })))
-const activeTags = computed(() => tags.value.filter(tag => tag.isActive))
+const activeTags = computed(() => tags.value.filter(tag => tag.isActive).map(tag => tag.name))
+
 const toggleTag = (tag: Tag) => {
   tag.isActive = !tag.isActive
+  emit('update:activeTags', activeTags.value)
 }
 </script>
 
@@ -72,6 +76,7 @@ const toggleTag = (tag: Tag) => {
     text-align: center
     align-content: center
     flex-shrink: 0
+  
   .tags__wrapper
     display: flex
     flex-wrap: wrap

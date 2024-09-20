@@ -129,12 +129,29 @@ export const splitors = {
 }
 
 /**
- * 根據用戶ID過濾記錄
+ * 根據條件物件過濾記錄
  * @param {string} id - 用戶ID
  * @returns {Record[]} 過濾後的記錄數組
  */
-export const filterRecords = (id: string): Record[] => {
-  return []
+interface Filter {
+  id?: string
+  tags?: string[]
+}
+export const filterRecords = (records: Record[], conditions: Filter): Record[] => {
+  let { id, tags } = conditions
+
+  if(id) {
+    return records.filter(record => record.id === id)
+  }
+  if(tags && tags.length > 0) {
+    return records.filter(record => {
+      const { participants } = record
+      return participants.some(p => 
+        p.tags && p.tags.some(tag => tags.includes(tag)) // todo: 消化一下這邊的寫法
+      )
+    })
+  }
+  return records // 如果沒有條件，返回所有記錄
 }
 
 /**
