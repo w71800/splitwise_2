@@ -1,5 +1,6 @@
 <template lang="pug">
-h1 這是搜尋頁面
+.page
+  SearchInput
 </template>
 
 <script setup lang="ts">
