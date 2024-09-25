@@ -1,6 +1,7 @@
 <template lang="pug">
+//- todo: 消化這邊的寫法（為什麼 v-model 可以跟 emits綁起來用），並複習 emits 的用法
 .page
-  SearchInput(v-model:activeTags="parentActiveTags")
+  SearchInput(v-model:activeTags="parentActiveTags") 
   .records
     Record(v-for="record in displayRecords" :key="record.id" :record="record")
 </template>

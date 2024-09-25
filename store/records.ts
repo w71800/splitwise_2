@@ -11,5 +11,10 @@ export const useRecordsStore = defineStore('records', {
     setRecords(newRecords: Record[]) {
       this.records = newRecords
     }
+  },
+  getters: {
+    getRecordsByGroup: (state) => (groupId: string) => {
+      return state.records.filter(record => record.group?.id === groupId)
+    }
   }
 })

@@ -29,6 +29,11 @@ export interface Record {
   fullDate: string;
   payers: Payer;
   participants: Participant[];
+  group: { 
+    id: string;
+    name: string;
+    members: Participant[];
+  } | null;
   divisions: Division[];
   splitor: 'equal' | 'fixed' | 'percentage' | 'ratio';
 }
