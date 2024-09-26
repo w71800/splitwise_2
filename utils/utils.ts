@@ -220,3 +220,53 @@ export const getTags = (records: Record[]): string[] => {
   }
   return resultTags
 }
+
+
+interface Summary {
+  displayName: string
+  status: '可回收' | '應支付' | '無欠款'
+  value: number
+}
+// 計算每個參與者的債務總和
+export const getSummary = (records: Record[]): Summary[] => {
+  const debts = records.map(record => getDebts(record)).flat()
+  
+  let temp: {
+    displayName: string
+    value: number
+  }[] = []
+  
+  debts.forEach(obj => {
+    const { displayName, debt } = obj
+    
+    const isExist = temp.find(item => item.displayName === displayName)
+
+    if (isExist) {
+      isExist.value += debt
+    } else {
+      temp.push({
+        displayName,
+        value: debt
+      })
+    }
+  })
+
+  const summary = temp.map(obj => {
+    let status = undefined
+    if (obj.value > 0) {
+      status = '可回收'
+    } else if (obj.value < 0) {
+      status = '應支付'
+    } else {
+      status = '無欠款'
+    }
+
+    return {
+      displayName: obj.displayName,
+      status: status as '可回收' | '應支付' | '無欠款',
+      value: obj.value
+    }
+  })
+
+  return summary
+}
