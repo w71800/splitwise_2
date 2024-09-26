@@ -13,12 +13,12 @@ export const useRecordsStore = defineStore('records', {
     }
   },
   getters: {
-    getRecordsByGroup: (state) => (groupId: string) => {
+    getRecordsByGroup: (state) => (groupId: string): Record[] => {
       return state.records.filter(record => record.group?.id === groupId)
     },
-    getSummaryByGroup: (state) => (groupId: string) => {
+    getSummaryByGroup: (state) => (groupId: string): Record[] => {
       const records = state.records.filter(record => record.group?.id === groupId)
-      return 1
+      return records
     }
   }
 })

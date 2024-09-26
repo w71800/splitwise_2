@@ -40,7 +40,8 @@ const titleClass = computed(() => ({
 const [ _, month, date ] = fullDate.value.split('-')
 // const payerStr = computed(() => payers.value.map(payer => payer.displayName).join('、') + ' 付了')
 const payerStr = computed(() => `${payers.value.displayName} 付了 ${value.value} 元`)
-const displayDebt = computed(() => getDebts(props.record).find(debt => debt.id === userId.value)?.debt)
+// 取得這筆紀錄中，目前使用者於這筆紀錄的 debt
+const displayDebt = computed(() => getDebts(props.record, userId.value)[0].debt)
 </script>
 
 <style lang="sass" scoped>

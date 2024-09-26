@@ -1,7 +1,5 @@
 <!-- 
-  @todo: 這邊會從該群組中計算而得的 summary 資料
-  1. 預計結構為 [ { displayName: '小華', status: '可回收', value: 1000 } ]
-  2. 這個 summary 會直接從傳進來的 records 中計算得到
+  @todo: 修飾一下 summary 的呈現
 -->
 
 <template lang="pug">
@@ -10,10 +8,10 @@ header.header
     h1.header__title {{ title }}
     .header__summary
       ul.summary__list
-        li.summary__item(v-for="i in 3" :key="i")
-          span.label 小華：
-          span.status(:class="{ isPayer: true }") 可回收 
-          span.value 1000 元
+        li.summary__item(v-for="item in summary" :key="item.displayName")
+          span.label {{ item.displayName }}：
+          span.status(:class="{ isPayer: item.status === '可回收' }") {{ item.status }} 
+          span.value {{ Math.abs(item.value) }} 元
 </template>
   
 <script setup lang="ts">
