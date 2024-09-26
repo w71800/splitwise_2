@@ -15,6 +15,10 @@ export const useRecordsStore = defineStore('records', {
   getters: {
     getRecordsByGroup: (state) => (groupId: string) => {
       return state.records.filter(record => record.group?.id === groupId)
+    },
+    getSummaryByGroup: (state) => (groupId: string) => {
+      const records = state.records.filter(record => record.group?.id === groupId)
+      return 1
     }
   }
 })

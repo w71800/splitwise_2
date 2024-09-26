@@ -19,7 +19,7 @@ import { useGroupsStore } from '@/store/groups'
 const { getRecordsByGroup } = useRecordsStore()
 const { getGroupById } = useGroupsStore()
 
-const records = getRecordsByGroup(id as string)
+const records = getRecordsByGroup(id as string) // 該群組的 records。要準備拿來計算 summary 的資料
 const group = getGroupById(id as string)
 </script>
 

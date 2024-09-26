@@ -51,7 +51,7 @@ const displayDebt = computed(() => getDebts(props.record).find(debt => debt.id =
   display: flex
   justify-content: space-between
   align-items: center
-  border-bottom: 1px solid #888
+  border-bottom: 1px solid rgba(#999, .4)
   margin-bottom: 20px
   // &__date, &__content, &__hint
   &__date

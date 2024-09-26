@@ -169,19 +169,32 @@ export const getDebts = (record: Record, userId?: string): Debt[] => {
   // 4. 找出債權人（付款超過應付金額的人）
   // 5. 分配債務給債權人已記帳
   
+  console.log(payers)
+  
+  // 先計算每一個參與者的應付金額
   const owes: {
     id: string;
     displayName: string;
     shouldPay: number;
   }[] = splitors[splitor](record)
 
-  debts = owes.map(owe => ({
-    id: owe.id,
-    displayName: owe.displayName,
-    shouldPay: owe.shouldPay,
-    debt: owe.shouldPay - payers.paid || 0,
-    creditorId: null
-  }))
+
+  // 計算每一個參與者的債務
+  debts = owes.map(owe => {
+    let debt = owe.id === payers.id
+      ? payers.paid - owe.shouldPay
+      : -1 * owe.shouldPay
+    
+    return {
+      ...owe,
+      debt,
+      creditor: {
+        id: payers.id,
+        displayName: payers.displayName,
+        paid: payers.paid
+      }
+    }
+  })
 
   if (userId) {
     debts = debts.filter(debt => debt.id === userId)

@@ -43,5 +43,9 @@ export interface Debt {
   displayName: string;
   shouldPay: number;
   debt: number;
-  creditorId: string | null;
+  creditor: {
+    id: string;
+    displayName: string;
+    paid: number;
+  };
 }
