@@ -1,7 +1,6 @@
 <!-- 
   @todo:
   - 繼續完善群組頁面的呈現
-  - 把取得 summary 的邏輯放到整理起來，放到 utils 中
 -->
 
 <template lang="pug">

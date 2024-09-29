@@ -1,27 +1,31 @@
 <!-- 
-  @todo: 修飾一下 summary 的呈現
+  @todo: 
+  - 修飾一下 summary 的呈現，或許可以把結構抽離出來作為一個元件
+  - 撰寫 summary 的單元測試
+
 -->
 
 <template lang="pug">
 header.header
   .header__container
     h1.header__title {{ title }}
-    .header__summary
+    .summary
       ul.summary__list
-        li.summary__item(v-for="item in summary" :key="item.displayName")
-          span.label {{ item.displayName }}：
-          span.status(:class="{ isPayer: item.status === '可回收' }") {{ item.status }} 
-          span.value {{ Math.abs(item.value) }} 元
+        li.summary__item(
+          v-for="item in summary" 
+          :key="item.displayName"
+        )
+          span.summary__label {{ item.displayName }}：
+          span.summary__status(:class="{ 'isPayer': item.status === '可回收' }") {{ `${item.status} ` }} 
+          span.summary__value {{ Math.abs(item.value) }} 元
 </template>
   
 <script setup lang="ts">
+import type { Summary } from '@/types/types'
+
 defineProps<{
   title: string
-  summary: {
-    displayName: string
-    status: string
-    value: number
-  }[]
+  summary: Summary[]
 }>()
 </script>
 
@@ -45,10 +49,11 @@ defineProps<{
   &__item
     list-style: none
     margin-bottom: 8px
-
-.summary__item
-  span.status
-    font-weight: $font_weight_medium
+  &__label
+    font-weight: 700
+    color: #555
+  &__status
+    font-weight: 700
     &.isPayer
       color: $color_primary
     &:not(.isPayer)

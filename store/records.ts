@@ -16,9 +16,8 @@ export const useRecordsStore = defineStore('records', {
     getRecordsByGroup: (state) => (groupId: string): Record[] => {
       return state.records.filter(record => record.group?.id === groupId)
     },
-    getSummaryByGroup: (state) => (groupId: string): Record[] => {
-      const records = state.records.filter(record => record.group?.id === groupId)
-      return records
+    getRecordsByFriend: (state) => (friendId: string): Record[] => {
+      return state.records.filter(record => record.participants.some(participant => participant.id === friendId))
     }
   }
 })

@@ -4,7 +4,12 @@
  * - 要不要把 debt 的債務人資料包起來
  */
 
-import type { Record, Division, Debt } from '@/types/types'
+import type { Record, Division, Debt, Summary } from '@/types/types'
+export enum DebtStatus {
+  Receivable = '可回收',
+  Payable = '應支付',
+  Settled = '無欠款'
+}
 
 /**
  * 將數字或字符串轉換為兩位數的字符串，如果不足兩位則在前面補零。
@@ -222,50 +227,36 @@ export const getTags = (records: Record[]): string[] => {
 }
 
 
-interface Summary {
-  displayName: string
-  status: '可回收' | '應支付' | '無欠款'
-  value: number
-}
 // 計算每個參與者的債務總和
 export const getSummary = (records: Record[]): Summary[] => {
   const debts = records.map(record => getDebts(record)).flat()
-  
-  let temp: {
-    displayName: string
-    value: number
-  }[] = []
-  
-  debts.forEach(obj => {
-    const { displayName, debt } = obj
-    
-    const isExist = temp.find(item => item.displayName === displayName)
 
+  const temp = debts.reduce((acc, debt) => {
+    const { displayName, debt: debtValue } = debt
+    const isExist = acc.find(item => item.displayName === displayName)
     if (isExist) {
-      isExist.value += debt
+      isExist.value += debtValue
     } else {
-      temp.push({
+      acc.push({
         displayName,
-        value: debt
+        value: debtValue
       })
     }
-  })
+    return acc
+  }, [] as { displayName: string, value: number }[])
 
   const summary = temp.map(obj => {
-    let status = undefined
+    let status: DebtStatus
+
     if (obj.value > 0) {
-      status = '可回收'
+      status = DebtStatus.Receivable
     } else if (obj.value < 0) {
-      status = '應支付'
+      status = DebtStatus.Payable
     } else {
-      status = '無欠款'
+      status = DebtStatus.Settled
     }
 
-    return {
-      displayName: obj.displayName,
-      status: status as '可回收' | '應支付' | '無欠款',
-      value: obj.value
-    }
+    return { ...obj, status }
   })
 
   return summary

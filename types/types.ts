@@ -49,3 +49,9 @@ export interface Debt {
     paid: number;
   };
 }
+
+export interface Summary {
+  displayName: string
+  status: DebtStatus
+  value: number
+}
