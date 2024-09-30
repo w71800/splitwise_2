@@ -132,3 +132,18 @@ export const fakeUser: User = {
   email: 'william@gmail.com',
   avatar: '/avatars/profile.jpg'
 }
+
+export const fakeFriends: User[] = [
+  {
+    id: '2',
+    displayName: '小華',
+    email: 'xiaohua@example.com',
+    avatar: '/avatars/profile.jpg'
+  },
+  {
+    id: '3',
+    displayName: '小芳',
+    email: 'xiaofang@example.com',
+    avatar: '/avatars/profile.jpg'
+  }
+]

@@ -40,6 +40,10 @@
 
 - - 繼續完善群組頁面的呈現
 
+## `store/userData.ts`
+
+- - 在沒有回傳一整包物件的狀況，要如何抓到這個 User 資料？
+
 ## `types/types.ts`
 
 - * - 將 payers 改為多人
