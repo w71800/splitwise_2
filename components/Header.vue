@@ -15,22 +15,35 @@ header.header
           v-for="item in summary" 
           :key="item.displayName"
         )
-          span.summary__label {{ `${item.id === userId ? '我' : item.displayName}：` }}
-          span.summary__status(:class="{ 'isPayer': item.status === '可回收' }") {{ `${item.status} ` }} 
+          span.summary__label {{ displayLabel(item) }}
+          span.summary__status(:class="statusClass(item)") {{ `${item.status} ` }} 
           span.summary__value {{ Math.abs(item.value) }} 元
 </template>
   
 <script setup lang="ts">
+import { computed } from 'vue'
 import type { Summary } from '@/types/types'
 import { useUserDataStore } from '@/store/userData'
 
 const { id: userId } = useUserDataStore()
 
-
-defineProps<{
+const props = defineProps<{
   title: string
   summary: Summary[]
 }>()
+
+const displayLabel = computed(() => {
+  return (item: Summary['partial'][number]) => `${item.id === userId ? '我' : item.displayName}：`
+})
+
+const statusClass = computed(() => {
+  return (item: Summary['partial'][number]) => {
+    if (item.status === '可回收') {
+      return 'isPayer'
+    }
+    return ''
+  }
+})
 </script>
 
 <style lang="sass" scoped>

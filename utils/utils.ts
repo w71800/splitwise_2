@@ -3,14 +3,13 @@
  * - 希望能夠把工具及撰寫的更加簡潔
  * - 要不要把 debt 的債務人資料包起來
  * - 將 getPartialSummary 的重複的邏輯整合在一起
+ * - 摘要的內容值，跟個別 Record 的值總和對不起來。
  */
 
+
 import type { Record, Division, Debt, Summary } from '@/types/types'
-export enum DebtStatus {
-  Receivable = '可回收',
-  Payable = '應支付',
-  Settled = '無欠款'
-}
+
+
 
 /**
  * 將數字或字符串轉換為兩位數的字符串，如果不足兩位則在前面補零。
@@ -230,6 +229,7 @@ export const getTags = (records: Record[]): string[] => {
 
 export const getSummary = (records: Record[], userId: string): Summary => {
   const debts = records.map(record => getDebts(record)).flat()
+  console.log(records);
   const totalSummary = getTotalSummary(debts, userId)
   
   const partialSummary = getPartialSummary(debts, userId)
@@ -293,6 +293,7 @@ function getPartialSummary(debts: Debt[], userId: string): {
   const creditorDebts = debts.filter(debt => debt.creditor.id === userId && debt.id !== userId)
   creditorDebts.forEach(debt => {
     const { displayName, debt: debtValue, id } = debt
+    
     const isExist = summary.find(item => item.displayName === displayName)
     if(isExist) {
       isExist.value += (-1 * debtValue)
@@ -304,12 +305,11 @@ function getPartialSummary(debts: Debt[], userId: string): {
       })
     }
   })
-
   // 使用者為 debtor 的 debts
   const debtorDebts = debts.filter(debt => debt.id === userId && debt.creditor.id !== userId)
   debtorDebts.forEach(debt => {
-    const { displayName, debt: debtValue, id } = debt
-    const isExist = summary.find(item => item.displayName === displayName)
+    const { displayName, debt: debtValue, id, creditor } = debt
+    const isExist = summary.find(item => item.displayName === creditor.displayName)
     if(isExist) {
       isExist.value += debtValue
     } else {
@@ -336,4 +336,10 @@ function getPartialSummary(debts: Debt[], userId: string): {
   })
 
   return partialSummary
+}
+
+export enum DebtStatus {
+  Receivable = '可回收',
+  Payable = '應支付',
+  Settled = '無欠款'
 }
