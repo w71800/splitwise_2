@@ -1,3 +1,8 @@
+<!-- 
+  @todo: 
+    - 要不要把 store 集中起來管理？
+-->
+
 <template lang="pug">
 //- todo: 消化這邊的寫法（為什麼 v-model 可以跟 emits綁起來用），並複習 emits 的用法
 .page

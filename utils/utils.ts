@@ -2,6 +2,7 @@
  * @todo
  * - 希望能夠把工具及撰寫的更加簡潔
  * - 要不要把 debt 的債務人資料包起來
+ * - 將 getPartialSummary 的重複的邏輯整合在一起
  */
 
 import type { Record, Division, Debt, Summary } from '@/types/types'
@@ -227,25 +228,100 @@ export const getTags = (records: Record[]): string[] => {
 }
 
 
-// 計算每個參與者的債務總和
-export const getSummary = (records: Record[]): Summary[] => {
+export const getSummary = (records: Record[], userId: string): Summary => {
   const debts = records.map(record => getDebts(record)).flat()
+  const totalSummary = getTotalSummary(debts, userId)
+  
+  const partialSummary = getPartialSummary(debts, userId)
+  return {
+    total: totalSummary,
+    partial: partialSummary
+  }
+}
 
+
+function getTotalSummary(debts: Debt[], userId: string): {
+  id: string,
+  displayName: string, 
+  status: DebtStatus, 
+  value: number
+}[]{
   const temp = debts.reduce((acc, debt) => {
-    const { displayName, debt: debtValue } = debt
+    const { displayName, debt: debtValue, id } = debt
     const isExist = acc.find(item => item.displayName === displayName)
     if (isExist) {
       isExist.value += debtValue
     } else {
       acc.push({
+        id: id,
         displayName,
         value: debtValue
       })
     }
     return acc
-  }, [] as { displayName: string, value: number }[])
+  }, [] as { id: string, displayName: string, value: number }[])
 
   const summary = temp.map(obj => {
+    let status: DebtStatus
+
+    if (obj.value > 0) {
+      status = DebtStatus.Receivable
+    } else if (obj.value < 0) {
+      status = DebtStatus.Payable
+    } else {
+      status = DebtStatus.Settled
+    }
+    return { ...obj, status }
+  })
+  
+  return summary
+}
+
+function getPartialSummary(debts: Debt[], userId: string): {
+  id: string
+  displayName: string
+  status: DebtStatus
+  value: number
+}[]{
+  let summary: {
+    id: string
+    displayName: string
+    value: number
+  }[] = []
+  
+  // 使用者為 creditor 的 debts
+  const creditorDebts = debts.filter(debt => debt.creditor.id === userId && debt.id !== userId)
+  creditorDebts.forEach(debt => {
+    const { displayName, debt: debtValue, id } = debt
+    const isExist = summary.find(item => item.displayName === displayName)
+    if(isExist) {
+      isExist.value += (-1 * debtValue)
+    } else {
+      summary.push({
+        id,
+        displayName,
+        value: (-1 * debtValue)
+      })
+    }
+  })
+
+  // 使用者為 debtor 的 debts
+  const debtorDebts = debts.filter(debt => debt.id === userId && debt.creditor.id !== userId)
+  debtorDebts.forEach(debt => {
+    const { displayName, debt: debtValue, id } = debt
+    const isExist = summary.find(item => item.displayName === displayName)
+    if(isExist) {
+      isExist.value += debtValue
+    } else {
+      summary.push({
+        id,
+        displayName,
+        value: debtValue
+      })
+    }
+  })
+
+  const partialSummary = summary.map(obj => {
     let status: DebtStatus
 
     if (obj.value > 0) {
@@ -259,5 +335,5 @@ export const getSummary = (records: Record[]): Summary[] => {
     return { ...obj, status }
   })
 
-  return summary
+  return partialSummary
 }

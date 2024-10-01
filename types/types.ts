@@ -51,7 +51,16 @@ export interface Debt {
 }
 
 export interface Summary {
-  displayName: string
-  status: DebtStatus
-  value: number
+  partial: {
+    id: string
+    displayName: string
+    status: DebtStatus
+    value: number
+  }[]
+  total: {
+    id: string
+    displayName: string
+    status: DebtStatus
+    value: number
+  }[]
 }

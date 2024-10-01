@@ -15,13 +15,17 @@ header.header
           v-for="item in summary" 
           :key="item.displayName"
         )
-          span.summary__label {{ item.displayName }}：
+          span.summary__label {{ `${item.id === userId ? '我' : item.displayName}：` }}
           span.summary__status(:class="{ 'isPayer': item.status === '可回收' }") {{ `${item.status} ` }} 
           span.summary__value {{ Math.abs(item.value) }} 元
 </template>
   
 <script setup lang="ts">
 import type { Summary } from '@/types/types'
+import { useUserDataStore } from '@/store/userData'
+
+const { id: userId } = useUserDataStore()
+
 
 defineProps<{
   title: string

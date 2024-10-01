@@ -17,21 +17,22 @@ import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRecordsStore } from '@/store/records'
 import { useFriendsStore } from '@/store/friends'
+import { useUserDataStore } from '@/store/userData'
 import { getDebts, getSummary } from '@/utils/utils'
 import type { User } from '@/types/types'
 
 const route = useRoute()
-const { id } = route.params
-const recordStore = useRecordsStore()
-const { getRecordsByFriend } = recordStore
-const displayRecords = getRecordsByFriend(id as string)
+const { id: friendId } = route.params
+const { id: userId } = useUserDataStore()
 
 const { friends } = useFriendsStore()
-const friend: User = friends.find(friend => friend.id === id)!
+const friend: User = friends.find(friend => friend.id === friendId)!
 
-// 計算摘要
-const summary = getSummary(displayRecords)
-console.log(summary)
+const recordStore = useRecordsStore()
+const { getRecordsByFriend } = recordStore
+const displayRecords = getRecordsByFriend(friendId as string)
+
+const summary = getSummary(displayRecords, userId as string)
 
 // 可以考慮添加一個緩存機制
 // const cachedRecords = useMemo(() => displayRecords.value, [id])

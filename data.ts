@@ -85,7 +85,7 @@ export const fakeRecords: Record[] = [
       { id: '2', displayName: '小華', email: 'xiaohua@example.com', value: 40 },
       { id: '3', displayName: '小芳', email: 'xiaofang@example.com', value: 40 }
     ],
-    payers: { id: "1", displayName: '威利', email: 'william@gmail.com', paid: 40 },
+    payers: { id: "1", displayName: '威利', email: 'william@gmail.com', paid: 120 },
     splitor: 'percentage',
     group: {
       id: '3',
