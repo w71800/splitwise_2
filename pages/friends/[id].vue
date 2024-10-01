@@ -7,7 +7,7 @@
 <template lang="pug">
 .page
   .container
-    Header(:title="thisFriend?.displayName" :summary="summary")
+    Header(:title="thisFriend?.displayName" :summary="partialSummary")
   .records
     Record(v-for="record in displayRecords" :key="record.id" :record="record")
 </template>
@@ -32,7 +32,8 @@ const recordStore = useRecordsStore()
 const { getRecordsByFriend } = recordStore
 const displayRecords = getRecordsByFriend(friendId as string)
 
-const summary = getSummary(displayRecords, userId as string)
+const { partial } = getSummary(displayRecords, userId as string)
+const partialSummary = partial.filter(item => item.id === friendId)
 
 // 可以考慮添加一個緩存機制
 // const cachedRecords = useMemo(() => displayRecords.value, [id])
