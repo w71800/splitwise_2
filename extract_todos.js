@@ -5,11 +5,14 @@ function extractTodos(directory) {
     const todoMap = new Map();
     const files = getAllFiles(directory);
     files.forEach(file => {
-        if (['.vue', '.ts', '.sass',].includes(path.extname(file))) {
+        if (['.vue', '.ts', '.sass'].includes(path.extname(file))) {
             const content = fs.readFileSync(file, 'utf-8');
-            const matches = content.match(/@todo:?\s*(.*)/gi);
+            const matches = content.match(/(@todo|\/\/ @todo|<!-- @todo)[:：]?\s*([\s\S]*?)(?=\n\s*\n|\n\s*[^-\s]|$)/gi);
             if (matches) {
-                const todos = matches.map(match => match.replace(/@todo:?\s*/i, '').trim());
+                const todos = matches.map(match => {
+                    const todoContent = match.replace(/(@todo|\/\/ @todo|<!-- @todo)[:：]?\s*/i, '').trim();
+                    return todoContent.split('\n').map(line => line.replace(/^[-\s]*/, '').trim()).filter(line => line).join('\n');
+                });
                 todoMap.set(file, todos);
             }
         }
@@ -35,7 +38,7 @@ function writeTodosToFile(todoMap, outputFile) {
     todoMap.forEach((todos, file) => {
         content += `## \`${file}\`\n\n`;
         todos.forEach(todo => {
-            content += `- ${todo}\n`;
+            content += `- ${todo}\n\n`;
         });
         content += '\n';
     });
