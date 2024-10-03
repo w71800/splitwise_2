@@ -204,6 +204,12 @@ export const getDebts = (record: Record, userId?: string): Debt[] => {
   if (userId) {
     debts = debts.filter(debt => debt.id === userId)
   }
+  // TODO: 不太懂為什麼是這樣排序，他會是用怎麼樣的模式進行比對的呢？
+  debts.sort((a, b) => {
+    if (a.id === a.creditor.id) return -1
+    if (b.id === b.creditor.id) return 1
+    return 0
+  })
 
   return debts
 }

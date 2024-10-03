@@ -66,6 +66,18 @@
 >
 
 
+## `pages/record/[id].vue`
+
+- 要了解一下這邊原先使用 nextTick 的意義（這邊的 DOM 是怎麼更新的，更新循環是什麼）
+>
+
+
+## `pages/record/components/Detail.vue`
+
+- 有沒有更好整合性寫法，可以將兩者整合在一起？（使用 v-if 有點浪費效能）
+>
+
+
 ## `pages/search/index.vue`
 
 - 要不要把 store 集中起來管理？

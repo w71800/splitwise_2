@@ -13,9 +13,8 @@
     .header__date {{ record.fullDate }}
   .page__body
     .body__content
-      Detail(isPayer)
-      Detail
-      Detail
+      Detail(isPayer :payer="record.payers")
+      Detail(v-for="debt in debts" :key="debt.id" :debt="debt")
 
 .page(v-else)
   h1 找不到紀錄
@@ -29,6 +28,7 @@ import { useRecordsStore } from '@/store/records'
 import type { Record, Debt } from '@/types/types'
 import { getDebts } from '@/utils/utils'
 import Detail from './components/Detail.vue'
+
 const route = useRoute()
 const router = useRouter()
 const recordId = route.params.id as string
@@ -43,8 +43,8 @@ onMounted(() => {
   if (fetchedRecord) {
     record.value = fetchedRecord
     debts.value = getDebts(fetchedRecord)
-    console.log(record.value)
-    console.log(debts.value)
+
+    
   } else {
     console.error(`找不到 ID 為 ${recordId} 的紀錄`)
   }

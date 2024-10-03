@@ -1,20 +1,47 @@
+<!-- 
+  @TODO: 
+  - 有沒有更好整合性寫法，可以將兩者整合在一起？（使用 v-if 有點浪費效能）
+-->
+
 <template lang="pug">
 .detail.detail--payer(v-if="isPayer")
   .avatar 
     img(src="/avatars/profile.jpg")
-  .info 威利先付了 $670 
+  .info {{ displayInfo }}
 .detail.detail--debtor(v-else)
   .separator
   .wrapper
     .avatar
       img(src="/avatars/profile.jpg")
-    .info 小華欠款 15 元
+    .info {{ displayInfo }}
 </template>
 
 <script setup lang="ts">
+import type { Debt, Payer } from '@/types/types'
+
 const props = defineProps<{
   isPayer: boolean
+  debt: Debt
+  payer: Payer
 }>()
+
+// const { debt } = toRefs(props) // NOTE: 這邊 debt 是 reactive 的，所以透過 toRefs 轉成 ref
+const { debt: debtObj, isPayer, payer } = props
+
+
+const displayInfo = computed(() => {
+  if(isPayer) {
+    const { displayName, paid } = payer
+    return `${displayName}先付了 $${Math.abs(paid)}`
+  } else {
+    const { id, displayName, debt, creditor } = debtObj
+    if(id === creditor.id) {
+      return `${displayName} 支付了 $${Math.abs(debt)}`
+    } else {
+      return `${displayName} 欠款 $${Math.abs(debt)}`
+    }
+  }
+})
 </script>
 
 <style lang="sass" scoped>  
