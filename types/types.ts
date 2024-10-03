@@ -26,16 +26,16 @@ export interface Record {
   id: string;
   title: string;
   value: number;
-  fullDate: string;
-  payers: Payer;
+  fullDate: string;  // 新增這一行
   participants: Participant[];
+  divisions: Division[];
+  payers: Payer;
+  splitor: 'equal' | 'fixed' | 'percentage' | 'ratio';
   group: { 
     id: string;
     name: string;
     members: Participant[];
   } | null;
-  divisions: Division[];
-  splitor: 'equal' | 'fixed' | 'percentage' | 'ratio';
 }
 
 export interface Debt {

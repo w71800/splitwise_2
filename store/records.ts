@@ -18,6 +18,9 @@ export const useRecordsStore = defineStore('records', {
     },
     getRecordsByFriend: (state) => (friendId: string): Record[] => {
       return state.records.filter(record => record.participants.some(participant => participant.id === friendId))
+    },
+    getRecordById: (state) => (recordId: string): Record | undefined => {
+      return state.records.find(record => record.id === recordId)
     }
   }
 })
