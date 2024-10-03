@@ -13,9 +13,9 @@
     .header__date {{ record.fullDate }}
   .page__body
     .body__content
-      Debtor(isPayer)
-      Debtor
-      Debtor
+      Detail(isPayer)
+      Detail
+      Detail
 
 .page(v-else)
   h1 找不到紀錄
@@ -28,7 +28,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useRecordsStore } from '@/store/records'
 import type { Record, Debt } from '@/types/types'
 import { getDebts } from '@/utils/utils'
-import Debtor from './components/Debtor.vue'
+import Detail from './components/Detail.vue'
 const route = useRoute()
 const router = useRouter()
 const recordId = route.params.id as string
