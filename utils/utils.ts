@@ -187,7 +187,7 @@ export const getDebts = (record: Record, userId?: string): Debt[] => {
   // 計算每一個參與者的債務
   debts = owes.map(owe => {
     let debt = owe.id === payers.id
-      ? payers.paid - owe.shouldPay
+      ? owe.shouldPay
       : -1 * owe.shouldPay
     
     return {

@@ -1,12 +1,14 @@
 <!-- 
   @todo:
   - 要了解一下這邊原先使用 nextTick 的意義（這邊的 DOM 是怎麼更新的，更新循環是什麼）
+  - 加上 Topbar
 -->
 
 <template lang="pug">
 .page(v-if="isLoading")
   h1 正在加載...
 .page(v-else-if="record")
+  Topbar
   .page__header
     .header__title {{ record.title }}
     .header__value ${{ record.value }}
@@ -43,8 +45,6 @@ onMounted(() => {
   if (fetchedRecord) {
     record.value = fetchedRecord
     debts.value = getDebts(fetchedRecord)
-
-    
   } else {
     console.error(`找不到 ID 為 ${recordId} 的紀錄`)
   }
@@ -57,7 +57,7 @@ onMounted(() => {
 .page
   &__header
     padding-bottom: 20px
-    border-bottom: 1px solid #000
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1)
   &__body
     padding: 20px 20px
     
@@ -66,11 +66,13 @@ onMounted(() => {
       
 .header
   &__title
-    font-size: 2rem
-    font-weight: $font_weight_bold
+    font-size: 1.2rem
+    font-weight: $font_weight_regular
+    margin-bottom: 6px
   &__value
-    font-size: 1.3rem
-    margin-bottom: 1rem
+    font-size: 1.8rem
+    margin-bottom: .5rem
+    font-weight: $font_weight_semibold
   &__date
     color: $color_text
   

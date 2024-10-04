@@ -1,6 +1,7 @@
 <!-- 
   @TODO: 
   - 有沒有更好整合性寫法，可以將兩者整合在一起？（使用 v-if 有點浪費效能）
+  - 計算的債務好像有問題
 -->
 
 <template lang="pug">
@@ -34,9 +35,9 @@ const displayInfo = computed(() => {
     const { displayName, paid } = payer
     return `${displayName}先付了 $${Math.abs(paid)}`
   } else {
-    const { id, displayName, debt, creditor } = debtObj
+    const { id, displayName, debt, creditor, shouldPay } = debtObj
     if(id === creditor.id) {
-      return `${displayName} 支付了 $${Math.abs(debt)}`
+      return `${displayName} 應負擔 $${Math.abs(debt)}`
     } else {
       return `${displayName} 欠款 $${Math.abs(debt)}`
     }
