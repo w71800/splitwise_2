@@ -27,28 +27,28 @@
 </template>
 
 <script setup lang="ts">
+import Detail from './components/Detail.vue'
 import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { useRecordsStore } from '@/store/records'
 import type { Record, Debt } from '@/types/types'
 import { getDebts } from '@/utils/utils'
-import Detail from './components/Detail.vue'
 import { useUserDataStore } from '@/store/userData'
 
 const route = useRoute()
-const router = useRouter()
-const recordId = route.params.id as string
-const userId = useUserDataStore().id
+const { id: recordId } = route.params
+const { id: userId } = useUserDataStore()
 
 const { getRecordById } = useRecordsStore()
+// NOTE: 如果把這些必要的資料，用一包物件包起來管理如何？
 const record = ref<Record | null>(null)
 const debts = ref<Debt[]>([])
 const tags = ref<string[]>([])
 const group = ref<string | null>(null)
-
 const isLoading = ref(true)
+
 onMounted(() => {
-  const fetchedRecord = getRecordById(recordId)
+  const fetchedRecord = getRecordById(recordId as string)
   if (fetchedRecord) {
     record.value = fetchedRecord
     debts.value = getDebts(fetchedRecord)
@@ -62,17 +62,14 @@ onMounted(() => {
 </script>
 
 <style scoped lang="sass">
-
 .page
   &__header
     padding-bottom: 20px
     border-bottom: 1px solid rgba(0, 0, 0, 0.1)
   &__body
     padding: 20px 20px
-    
-      
-      
-      
+          
+
 .header
   &__title
     font-size: 1.3rem
@@ -94,7 +91,4 @@ onMounted(() => {
     font-size: 1rem
     color: rgba($color_text, .7)
     margin-left: .5rem
-
-  
-
 </style>
