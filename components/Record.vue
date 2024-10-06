@@ -8,7 +8,7 @@
 
 <template lang="pug">
 .record
-  NuxtLink(:to="`/record/${recordId}`")
+  NuxtLink(:to="`/records/${recordId}`")
   .record__date
     .month {{ getSingleDigitMonth(month) }}月
     .day {{ setPaddingZero(date) }}
