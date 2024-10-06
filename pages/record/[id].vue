@@ -11,6 +11,9 @@
   Topbar
   .page__header
     .header__title {{ record.title }}
+      .header__group {{ `@ ${group}` }}
+      .header__tags
+        span.tag(v-for="tag in tags" :key="tag.id" :tag="tag") {{ `#${tag}` }}
     .header__value ${{ record.value }}
     .header__date {{ record.fullDate }}
   .page__body
@@ -30,14 +33,18 @@ import { useRecordsStore } from '@/store/records'
 import type { Record, Debt } from '@/types/types'
 import { getDebts } from '@/utils/utils'
 import Detail from './components/Detail.vue'
+import { useUserDataStore } from '@/store/userData'
 
 const route = useRoute()
 const router = useRouter()
 const recordId = route.params.id as string
+const userId = useUserDataStore().id
 
 const { getRecordById } = useRecordsStore()
 const record = ref<Record | null>(null)
 const debts = ref<Debt[]>([])
+const tags = ref<string[]>([])
+const group = ref<string | null>(null)
 
 const isLoading = ref(true)
 onMounted(() => {
@@ -45,6 +52,8 @@ onMounted(() => {
   if (fetchedRecord) {
     record.value = fetchedRecord
     debts.value = getDebts(fetchedRecord)
+    tags.value = fetchedRecord.participants.find(participant => participant.id === userId)?.tags || []
+    group.value = fetchedRecord.group?.name || null
   } else {
     console.error(`找不到 ID 為 ${recordId} 的紀錄`)
   }
@@ -66,15 +75,26 @@ onMounted(() => {
       
 .header
   &__title
-    font-size: 1.2rem
+    font-size: 1.3rem
     font-weight: $font_weight_regular
-    margin-bottom: 6px
   &__value
     font-size: 1.8rem
     margin-bottom: .5rem
     font-weight: $font_weight_semibold
   &__date
     color: $color_text
+  &__tags
+    font-size: .7rem
+    margin: 8px 0px
+    .tag
+      color: rgba($color_text, .5)
+      margin-right: .5rem
+  &__group
+    display: inline-block
+    font-size: 1rem
+    color: rgba($color_text, .7)
+    margin-left: .5rem
+
   
 
 </style>

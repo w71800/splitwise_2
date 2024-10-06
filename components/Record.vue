@@ -8,6 +8,7 @@
 
 <template lang="pug">
 .record
+  NuxtLink(:to="`/record/${recordId}`")
   .record__date
     .month {{ getSingleDigitMonth(month) }}月
     .day {{ setPaddingZero(date) }}
@@ -24,6 +25,8 @@ import { computed, ref, toRefs } from 'vue'
 import { setPaddingZero, getSingleDigitMonth, getDebts } from '@/utils/utils'
 import type { Record as RecordProps, Payer } from '@/types/types'
 import { useUserDataStore } from '@/store/userData'
+import { useRouter } from 'vue-router'
+
 
 const props = defineProps<{
   record: RecordProps
@@ -31,7 +34,7 @@ const props = defineProps<{
 
 const userId = ref(useUserDataStore().id)
 
-const { value, payers, fullDate, title } = toRefs(props.record)
+const { value, payers, fullDate, title, id: recordId } = toRefs(props.record)
 const isPayer = ref(payers.value.id === userId.value)
 const hintTitle = computed(() => isPayer.value ? '可回收' : '應支付')
 const titleClass = computed(() => ({
@@ -85,4 +88,12 @@ const displayDebt = computed(() => getDebts(props.record, userId.value)[0].debt)
         color: $color_secondary // 應付款用紅色
     .value
       // 樣式
+
+a
+  position: absolute
+  top: 0
+  left: 0
+  width: 100%
+  height: 100%
+  z-index: 10
 </style>
