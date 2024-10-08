@@ -26,11 +26,14 @@ nav.navbar
           )
         .text {{ item.name }}
         NuxtLink(:to="item.path")
-    .navbar__add-button
+    .navbar__add-button(@click="isEditorShowing = !isEditorShowing")
       span +
 </template>
 
 <script setup lang="ts">
+import { inject } from 'vue'
+
+const isEditorShowing = inject('isEditorShowing')
 const route = useRoute()
 const userId = 3 
 

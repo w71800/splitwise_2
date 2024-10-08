@@ -13,6 +13,10 @@ NuxtLayout
 </template>
 
 <script setup lang="ts">
+import { provide } from 'vue'
+
+provide('isEditorShowing', ref(false))
+
 const records = ref([
   {
     id: '1',

@@ -41,7 +41,8 @@ export const fakeRecords: Record[] = [
         { id: "1", displayName: '威利', email: 'william@gmail.com', avatar: '/avatars/profile.jpg' },
         { id: '2', displayName: '小華', email: 'xiaohua@example.com', avatar: '/avatars/profile.jpg' }
       ]
-    }
+    },
+    // group: null,
   },
   {
     id: '2',
