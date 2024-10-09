@@ -5,52 +5,76 @@
 
 <template lang="pug">
 .topbar
-  .topbar__previous(@click="goBack")
-    .icon
-      img(src="/icons/left-arrow.png" v-if="isPreviousActive")
+  .topbar__left
+    .icon(v-if="config.left")
+      img(:src="config.left.icon")
   .topbar__title
-    .text 記帳
-  .topbar__search(@click="toggleSearchInput")
-    .icon
-      img(src="/icons/search_active.png")
+    .text {{ config.middle }}
+  .topbar__right
+    .icon(v-if="config.right")
+      img(:src="config.right.icon")
   SearchInput(v-if="isSearchInputActive")
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+import { useRoute } from 'vue-router'
+import configs, { type Config } from '@/utils/topbarConfig'
 
-const router = useRouter()
-const searchInput = ref('')
+
+const props = defineProps<Config>()
+const route = useRoute()
+const currentPath = ref(route.path)
 const isSearchInputActive = ref(false)
 const previousRoute = ref('')
 const isPreviousActive = ref(false)
+
+const pathList = computed(() => currentPath.value.split("/"))
+
+// 優先使用 props 以串接從父元件來的組態設定。若沒有的話，使用從路由對照取得的組態
+const config = computed(() => {
+  if (props.left) {
+    return props
+  } else {
+    const rootPath = pathList.value[1]
+    const temp = configs[rootPath as keyof typeof configs]
+    return pathList.value.length == 2
+      ? { middle: temp.middle }
+      : temp
+  }
+})
+
 const toggleSearchInput = () => {
   isSearchInputActive.value = !isSearchInputActive.value
 }
 
-const goBack = () => {
-  if (previousRoute.value) {
-    router.push(previousRoute.value)
-    previousRoute.value = ''
-  } else {
-    router.back()
-  }
-}
-watch(() => router.currentRoute.value, (to) => {
-  isPreviousActive.value = to.fullPath.split('/').length == 3
-})
-const saveCurrentRoute = (to: any, from: any) => {
-  previousRoute.value = from.fullPath
-}
-
-onMounted(() => {
-  router.beforeEach(saveCurrentRoute)
+watch(() => route.path, (newPath) => {
+  currentPath.value = newPath
 })
 
-onUnmounted(() => {
-  router.beforeEach(() => {})
-})
+
+// const goBack = () => {
+//   if (previousRoute.value) {
+//     router.push(previousRoute.value)
+//     previousRoute.value = ''
+//   } else {
+//     router.back()
+//   }
+// }
+// watch(() => router.currentRoute.value, (to) => {
+//   isPreviousActive.value = to.fullPath.split('/').length == 3
+// })
+// const saveCurrentRoute = (to: any, from: any) => {
+//   previousRoute.value = from.fullPath
+// }
+
+// onMounted(() => {
+//   router.beforeEach(saveCurrentRoute)
+// })
+
+// onUnmounted(() => {
+//   router.beforeEach(() => {})
+// })
 </script>
 
 <style lang="sass" scoped>
@@ -66,7 +90,7 @@ onUnmounted(() => {
   align-items: center
   padding: 0 10px
   z-index: 100
-  &__previous, &__search
+  &__left, &__right
     +block_size(20px)
     cursor: pointer
     img
@@ -75,7 +99,7 @@ onUnmounted(() => {
   &__title
     padding: 5px 0px
     font-size: 1.5rem
-    font-weight: $font_weight_bold
+    font-weight: $font_weight_regular
     color: $color_primary
       
 </style>

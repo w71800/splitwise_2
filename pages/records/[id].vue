@@ -8,7 +8,6 @@
 .page(v-if="isLoading")
   h1 正在加載...
 .page(v-else-if="record")
-  Topbar
   .page__header
     .header__title {{ record.title }}
     .header__value ${{ record.value }}
@@ -57,7 +56,7 @@ const group = ref<string | null>(null)
 const isLoading = ref(true)
 
 const displayDate = computed(() => {
-  const [ year, month, day ] = record.value?.fullDate.split('-') || ["1900", "1", "1"]
+  const [ year, month, day ] = record.value?.fullDate?.split('-') || ["1900", "1", "1"]
   return `${year} 年 ${getSingleDigitMonth(month)} 月 ${day} 日`
 })
 
