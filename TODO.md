@@ -44,7 +44,9 @@
 
 ## `components/Topbar.vue`
 
-- 加上搜尋送出（還有需要做嗎？還是要把搜尋功能統一在搜尋頁面？）
+- 路由歷史紀錄，應該要用類似 stack 的結構來實作
+之後如果使用 Editor 導入進來，要能夠顯示成文字按鈕。
+調整結構上的易讀性
 >
 
 
@@ -67,14 +69,14 @@
 >
 
 
-## `pages/record/[id].vue`
+## `pages/records/[id].vue`
 
 - 要了解一下這邊原先使用 nextTick 的意義（這邊的 DOM 是怎麼更新的，更新循環是什麼）
 加上 Topbar
 >
 
 
-## `pages/record/components/Detail.vue`
+## `pages/records/components/Detail.vue`
 
 - 有沒有更好整合性寫法，可以將兩者整合在一起？（使用 v-if 有點浪費效能）
 >

@@ -1,33 +1,39 @@
 <!-- 
   @todo 
-  - 加上搜尋送出（還有需要做嗎？還是要把搜尋功能統一在搜尋頁面？）
+  - 路由歷史紀錄，應該要用類似 stack 的結構來實作，或者直接從 pathList 來取得？
+  - 之後如果使用 Editor 導入進來，要能夠顯示成文字按鈕。
+  - 調整結構上的易讀性（可能使用 switch 配上生成對應的左右結構元件 component 來實作）
 -->
 
 <template lang="pug">
 .topbar
   .topbar__left
-    .icon(v-if="config.left")
+    .icon(v-if="config.left?.type == 'icon'" @click="methodsMapper[config.left.method]")
       img(:src="config.left.icon")
+    .text(v-if="config.left?.type == 'text'" @click="methodsMapper[config.left.method]")
+      .text {{ config.left.text }}
   .topbar__title
     .text {{ config.middle }}
   .topbar__right
-    .icon(v-if="config.right")
+    .icon(v-if="config.right?.type == 'icon'" @click="methodsMapper[config.right.method]")
       img(:src="config.right.icon")
+    .text(v-if="config.right?.type == 'text'" @click="methodsMapper[config.right.method]")
+      .text {{ config.right.text }}
   SearchInput(v-if="isSearchInputActive")
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from 'vue'
-import { useRoute } from 'vue-router'
-import configs, { type Config } from '@/utils/topbarConfig'
+import { ref, onMounted, onUnmounted, computed, inject } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import configMapper, { type Config } from '@/utils/topbarConfig'
 
-
+const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
 const props = defineProps<Config>()
 const route = useRoute()
+const router = useRouter()
 const currentPath = ref(route.path)
-const isSearchInputActive = ref(false)
 const previousRoute = ref('')
-const isPreviousActive = ref(false)
+const isSearchInputActive = ref(false)
 
 const pathList = computed(() => currentPath.value.split("/"))
 
@@ -37,40 +43,47 @@ const config = computed(() => {
     return props
   } else {
     const rootPath = pathList.value[1]
-    const temp = configs[rootPath as keyof typeof configs]
+    const temp = configMapper[rootPath as keyof typeof configMapper]
     return pathList.value.length == 2
       ? { middle: temp.middle }
       : temp
   }
 })
 
-const toggleSearchInput = () => {
-  isSearchInputActive.value = !isSearchInputActive.value
-}
 
-watch(() => route.path, (newPath) => {
+watch(() => route.path, (newPath, oldPath) => {
   currentPath.value = newPath
+  previousRoute.value = `/${pathList.value[1]}`
+  // todo: 如果是從 friends 或 gruops 跳轉到 records/id 的話，的確還是要抓到上一層
 })
 
+const methodsMapper = {
+  'back': () => {
+    router.push(previousRoute.value)
+  },
+  'edit': () => {
+    isEditorShowing.value = true
+    console.log(isEditorShowing.value)
+  },
+  'close': () => {
+    isEditorShowing.value = false
+  },
+  'submit': () => {
+    // todo: 與 store 溝通，將資料存入
+  },
+  'scrollBack': () => {
+    // todo:scroll contents 滾回去
+  },
+  'save': () => {
+    // todo: 將分擔方式寫入 temp obj 中
+  }
+}
 
-// const goBack = () => {
-//   if (previousRoute.value) {
-//     router.push(previousRoute.value)
-//     previousRoute.value = ''
-//   } else {
-//     router.back()
-//   }
-// }
-// watch(() => router.currentRoute.value, (to) => {
-//   isPreviousActive.value = to.fullPath.split('/').length == 3
-// })
-// const saveCurrentRoute = (to: any, from: any) => {
-//   previousRoute.value = from.fullPath
-// }
 
-// onMounted(() => {
-//   router.beforeEach(saveCurrentRoute)
-// })
+
+onMounted(() => {
+  previousRoute.value = `/${pathList.value[1]}`
+})
 
 // onUnmounted(() => {
 //   router.beforeEach(() => {})
@@ -78,6 +91,10 @@ watch(() => route.path, (newPath) => {
 </script>
 
 <style lang="sass" scoped>
+img
+  +block-size(100%)
+  object-fit: contain
+
 .topbar
   // +debug
   position: fixed
@@ -93,9 +110,6 @@ watch(() => route.path, (newPath) => {
   &__left, &__right
     +block_size(20px)
     cursor: pointer
-    img
-      +block-size(100%)
-      object-fit: contain
   &__title
     padding: 5px 0px
     font-size: 1.5rem

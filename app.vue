@@ -15,7 +15,9 @@ NuxtLayout
 <script setup lang="ts">
 import { provide } from 'vue'
 
-provide('isEditorShowing', ref(false))
+const isEditorShowing: Ref<boolean> = ref(false)
+
+provide('isEditorShowing', isEditorShowing)
 
 const records = ref([
   {
