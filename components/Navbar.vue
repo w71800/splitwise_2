@@ -31,9 +31,9 @@ nav.navbar
 </template>
 
 <script setup lang="ts">
-import { inject } from 'vue'
+import { inject, ref } from 'vue'
 
-const isEditorShowing = inject('isEditorShowing')
+const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
 const route = useRoute()
 const userId = 3 
 
@@ -74,6 +74,10 @@ const navItems = [
 ]
 
 const isActive = (pathString: string) => route.path.includes(pathString)
+
+const handleAdd = () => {
+  isEditorShowing.value = true
+}
 </script>
 
 <style lang="sass" scoped>

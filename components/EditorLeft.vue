@@ -17,13 +17,15 @@
         img(:src="'/icons/remove.png'")
   .recommend-participants
     .recommend-item(v-for="participant in recommendParticipants" :key="participant.id") {{ participant.displayName }}
+  .test(@click="isEditorScrolled = true") 到下頁
 </template>
 
 <script setup lang="ts">
 import { ref, inject } from 'vue'
 import type { Participant } from '@/types/types'
 
-const isEditorShowing = inject('isEditorShowing')
+const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
+const isEditorScrolled = inject('isEditorScrolled') as Ref<boolean>
 
 // 假資料：已選擇的參與者
 const chosenParticipants = ref<Participant[]>([
@@ -70,7 +72,7 @@ const topbarConfig = {
   middle: '新增',
   right: {
     type: 'icon',
-    icon: '/icons/save.png',
+    icon: '/icons/submit.png',
     method: 'submit'
   }
 }
@@ -79,6 +81,11 @@ const topbarConfig = {
 </script>
 
 <style lang="sass" scoped>
+.topbar
+  position: absolute
+  top: -44px
+  left: 0
+  right: 0
 .scroll-contents__left
   height: 100%
   width: 100vw

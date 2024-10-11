@@ -1,20 +1,30 @@
 <!-- 
   @todo:
-  - 把左右兩邊抽出來成一個元件
 -->
 
 <template lang="pug">
-.editor.showing(:class="{ 'showing': isEditorShowing }")
+.editor(:class="{ 'showing': isEditorShowing }")
   //- container 不動，改變的是 contents 的位置
+  //- todo: 但想要把滾動的結構改成 container
   .scroll-container 
-    .scroll-contents
+    .scroll-contents(:class="{ 'scrolled': isEditorScrolled }")
       EditorLeft
       EditorRight
 </template>
 
-<script setup lang="ts">
 
+<script setup lang="ts">
+import { ref, inject, provide } from 'vue'
+
+const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
+const isEditorScrolled = ref(false)
+provide('isEditorScrolled', isEditorScrolled)
+
+const scrollHandler = () => {
+  isEditorScrolled.value = !isEditorScrolled.value
+}
 </script>
+
 
 <style scoped lang="sass">
 .scroll-container

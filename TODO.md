@@ -10,6 +10,17 @@
 >
 
 
+## `components/Editor.vue`
+
+- >
+
+
+## `components/EditorLeft.vue`
+
+- 如何將這個地方也吃到一些 Editor 中的共用樣式？
+>
+
+
 ## `components/Header.vue`
 
 - 修飾一下 summary 的呈現，或許可以把結構抽離出來作為一個元件
@@ -44,9 +55,8 @@
 
 ## `components/Topbar.vue`
 
-- 路由歷史紀錄，應該要用類似 stack 的結構來實作
+- 路由歷史紀錄，應該要用類似 stack 的結構來實作，或者直接從 pathList 來取得？
 之後如果使用 Editor 導入進來，要能夠顯示成文字按鈕。
-調整結構上的易讀性
 >
 
 

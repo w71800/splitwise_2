@@ -1,15 +1,17 @@
-interface Icon {
+export interface Icon {
   type: 'icon'
   icon: string
   method: string
 }
 
-interface Text {
+export interface Text {
   type: 'text'
   text: string
   method: string
 }
 
+// 一整個 topbar 的 config
+// todo: 把 middle 改為 title、以及將 left 和 right 改為 { content: Icon | Text, method: string } 這樣的結構
 export interface Config {
   left: Icon | Text
   middle: string
