@@ -23,7 +23,21 @@
           img(:src="participant.avatar")
         span {{ participant.displayName }}
   .editor__body
-  .editor__footer
+    .user_inputs
+      .input_wrapper
+        span.label 項目：
+        input(type="text" placeholder="鱔魚意麵")
+      .input_wrapper
+        span.currency 
+          span $
+        input(type="text" placeholder="90")
+        span.unit 元
+    .divide_hinter(@click="isEditorScrolled = !isEditorScrolled")
+      span 先由
+      span.highlight {{ payer?.displayName ? payer.displayName : "我" }}
+      span 支付，
+      span.highlight {{ payer?.method ? payer.method : "均等分配" }}
+  .editor__footer 我是 footer
 </template>
 
 <script setup lang="ts">
@@ -69,14 +83,14 @@ const topbarConfig = {
 </script>
 
 <style lang="sass" scoped>
-// todo: 調整 topbar 的樣式，這樣太醜了
+// todo: 調整 topbar 的樣式，這樣太醜了。還有如何在 topbar 為 fixed 時，讓 scroll-contents__left 的高度正確？（Editor 目前有個 44 的 pt，以容納 topbar）
 .topbar
   position: absolute
   top: -44px
   left: 0
   right: 0
 .scroll-contents__left
-  height: 100%
+  height: calc(100vh - 44px)
   width: 100vw
   flex-shrink: 0
 .avatar
@@ -139,7 +153,73 @@ const topbarConfig = {
         border: 1px solid #929292
       span
         color: #929292
+  
+  &__body
+    padding: 16px 
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    gap: 80px
+    // +debug
+    .user_inputs
+      padding: 40px 0
+      display: flex
+      justify-content: space-around
+      flex-direction: column
+      gap: 40px
+      span
+        &.label, &.currency
+          display: inline-block
+          color: #5E5E5E
+          font-size: 27px
+          font-weight: $font-weight-bold
+          width: 90px
+        &.unit
+          color: #5E5E5E
+          font-size: 27px
+          font-weight: $font-weight-bold
+        &.currency
+          text-align: right
+          padding-right: 20px
+          cursor: pointer
+          vertical-align: bottom
+          span
+            text-align: center
+            align-content: center
+            display: inline-block
+            border: 1px solid #5E5E5E
+            border-radius: 10px
+            +block_size(48px)
+      input
+        border: none
+        border-bottom: 1px solid #5E5E5E
+        font-size: 27px
+        margin-right: 10px
+        &::placeholder
+          color: rgba(#5E5E5E, 0.3)
+          font-weight: $font-weight-bold
 
+    .divide_hinter
+      padding: 5px 60px
+      border: 1px solid #929292
+      border-radius: 8px
+      font-size: 19px
+      cursor: pointer
+      span
+        color: #929292
+        font-weight: $font-weight-regular
+        &.highlight
+          display: inline-block
+          color: $color-primary
+          padding: 0px 5px
+          font-weight: $font-weight-bold
+
+  &__footer
+    position: absolute
+    left: 0
+    right: 0
+    bottom: 0
 
 .recommend-participants
   &.active

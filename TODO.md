@@ -12,12 +12,15 @@
 
 ## `components/Editor.vue`
 
-- >
+- 目前都是做空的新增資料，但要能夠接到在如果要編輯某個紀錄時的整包資料，且在編輯時，topbar 要為「編輯紀錄」
+>
 
 
 ## `components/EditorLeft.vue`
 
 - 如何將這個地方也吃到一些 Editor 中的共用樣式？
+如何讓推薦參與者列表展開？
+點擊推薦參與者時，如何將其加入到 chosenParticipants 中？
 >
 
 
