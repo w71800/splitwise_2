@@ -6,12 +6,12 @@
 
 <template lang="pug">
 .topbar
-  .topbar__left(@click="methodsMapper[config.left.method]")
-    NavigationButton(:option="config.left" class="left")
+  .topbar__left(@click="methodsMapper[config.left?.method]")
+    NavigationButton(v-if="config.left" :option="config.left" class="left")
   .topbar__title
     .text {{ config.middle }}
-  .topbar__right(@click="methodsMapper[config.right.method]")
-    NavigationButton(:option="config.right" class="right")
+  .topbar__right(@click="methodsMapper[config.right?.method]")
+    NavigationButton(v-if="config.right" :option="config.right" class="right")
 </template>
 
 <script setup lang="ts">

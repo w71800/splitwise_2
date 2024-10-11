@@ -37,7 +37,23 @@
       span.highlight {{ payer?.displayName ? payer.displayName : "我" }}
       span 支付，
       span.highlight {{ payer?.method ? payer.method : "均等分配" }}
-  .editor__footer 我是 footer
+  .editor__footer
+    .date
+      .icon
+        img(:src="'/icons/calendar.png'")
+      input(type="text" placeholder="2024-08-01")
+      span.today_hint （今天）
+    .group
+      .icon
+        img(:src="'/icons/group_active.png'")
+      span.group_name 家庭事項
+    .tags
+      .icon
+        img(:src="'/icons/tag_active.png'")
+      //- .tag(v-for="tag in tags" :key="tag") {{ `#${tag}` }}
+      input(type="text" @input="setAdjustWidth($event.target)" @blur="setPoundSign($event.target)")
+      input(type="text")
+
 </template>
 
 <script setup lang="ts">
@@ -77,6 +93,39 @@ const topbarConfig = {
     icon: '/icons/submit.png',
     method: 'submit'
   }
+}
+
+const setAdjustWidth = (el: HTMLInputElement) => {
+  // 創建一個隱藏的 span 元素來測量文字寬度
+  const span = document.createElement('span')
+  span.style.visibility = 'hidden'
+  span.style.position = 'absolute'
+  span.style.whiteSpace = 'pre'
+  
+  // 複製 input 的字體樣式到 span
+  const styles = window.getComputedStyle(el)
+  span.style.font = styles.font
+  span.style.fontSize = styles.fontSize
+  span.style.fontFamily = styles.fontFamily
+  span.style.fontWeight = styles.fontWeight
+  span.style.letterSpacing = styles.letterSpacing
+
+  // 將 span 添加到文檔中
+  document.body.appendChild(span)
+
+  // 設置 span 的文字內容為 input 的值
+  span.textContent = el.value || el.placeholder
+
+  // 獲取文字寬度並設置 input 的寬度
+  const textWidth = span.offsetWidth
+  el.style.width = `${textWidth + 20}px` // 加 20px 作為緩衝
+
+  // 移除 span
+  document.body.removeChild(span)
+}
+
+const setPoundSign = (el: HTMLInputElement) => {
+  el.value = `#${el.value}`
 }
 
 
@@ -154,6 +203,7 @@ const topbarConfig = {
       span
         color: #929292
   
+
   &__body
     padding: 16px 
     display: flex
@@ -196,6 +246,7 @@ const topbarConfig = {
         border-bottom: 1px solid #5E5E5E
         font-size: 27px
         margin-right: 10px
+        width: 200px
         &::placeholder
           color: rgba(#5E5E5E, 0.3)
           font-weight: $font-weight-bold
@@ -215,11 +266,47 @@ const topbarConfig = {
           padding: 0px 5px
           font-weight: $font-weight-bold
 
-  &__footer
-    position: absolute
-    left: 0
-    right: 0
-    bottom: 0
+
+.editor__footer
+  position: absolute
+  left: 0
+  right: 0
+  bottom: 0
+  display: flex
+  gap: 16px
+  padding: 16px 16px
+  border-top: 2px solid #D5D5D5
+  >*
+    display: flex
+    align-items: center
+    justify-content: center
+  .date, & .group, & .tags
+    margin-right: 10px
+    .icon
+      +block_size(20px)
+      margin-right: 6px
+    img
+      +block_size(100%)
+      object-fit: cover
+    input
+      border: none
+      font-size: 12px
+      color: #929292
+    span
+      white-space: nowrap
+      font-size: 12px
+      color: #929292
+  .date
+    color: #929292
+    input
+      width: 80px
+  .group
+    span
+      color: $color-primary
+  .tags
+    input
+      color: $color-primary
+
 
 .recommend-participants
   &.active
