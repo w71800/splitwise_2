@@ -11,17 +11,55 @@
   //- todo: 但想要把滾動的結構改成 container
   .scroll-container 
     .scroll-contents(:class="{ 'scrolled': isEditorScrolled }")
-      EditorLeft
-      EditorRight
+      EditorLeft(:record="recordData")
+      EditorRight(:record="recordData")
 </template>
 
 
 <script setup lang="ts">
 import { ref, inject, provide } from 'vue'
+import type { Record } from '@/types/types'
+import { fakeUser, fakeFriends } from '@/data'
 
 const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
 const isEditorScrolled = ref(false)
 provide('isEditorScrolled', isEditorScrolled)
+
+const recordData = reactive<Record>({
+  id: '1',
+  title: '晚餐',
+  value: 1200,
+  fullDate: '2024-03-15',
+  participants: [fakeUser, fakeFriends[0]],
+  payers: {
+    id: "1",
+    displayName: '威利',
+    email: 'william@gmail.com',
+    avatar: '/avatars/profile.jpg',
+    paid: 1200
+  },
+  divisions: [],
+  splitor: 'equal',
+  group: {
+    id: 'g1',
+    name: '朋友聚會',
+    members: [fakeUser, ...fakeFriends]
+  }
+})
+
+// const fakeRecord = computed<Record>(() => ({
+//   ...recordData,
+//   divisions: recordData.participants.map(participant => ({
+//     id: participant.id,
+//     displayName: participant.displayName,
+//     value: recordData.value / recordData.participants.length
+//   })),
+//   payers: {
+//     id: recordData.payers.id,
+//     displayName: recordData.payers.displayName,
+//     paid: recordData.value
+//   }
+// }))
 
 const scrollHandler = () => {
   isEditorScrolled.value = !isEditorScrolled.value

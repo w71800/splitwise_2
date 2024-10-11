@@ -26,17 +26,17 @@
     .user_inputs
       .input_wrapper
         span.label 項目：
-        input(type="text" placeholder="鱔魚意麵")
+        input(type="text" v-model="title" placeholder="鱔魚意麵")
       .input_wrapper
         span.currency 
           span $
-        input(type="text" placeholder="90")
+        input(type="text" v-model.number="value" placeholder="90")
         span.unit 元
     .divide_hinter(@click="isEditorScrolled = !isEditorScrolled")
       span 先由
-      span.highlight {{ payer?.displayName ? payer.displayName : "我" }}
+      span.highlight {{ payers.displayName }}
       span 支付，
-      span.highlight {{ payer?.method ? payer.method : "均等分配" }}
+      span.highlight {{ splitorText }}
   .editor__footer
     .date
       .icon
@@ -51,35 +51,24 @@
       .icon
         img(:src="'/icons/tag_active.png'")
       //- .tag(v-for="tag in tags" :key="tag") {{ `#${tag}` }}
+      //- todo: 如何處理新加上 tag ？
       input(type="text" @input="setAdjustWidth($event.target)" @blur="setPoundSign($event.target)")
-      input(type="text")
 
 </template>
 
 <script setup lang="ts">
-import { ref, inject } from 'vue'
-import type { Participant } from '@/types/types'
+import { ref, inject, computed, reactive } from 'vue'
+import type { Participant, Record, User } from '@/types/types'
+import { fakeUser, fakeFriends } from '@/data'
+
+const props = defineProps<{
+  record: Record
+}>()
+const { title, value, fullDate, participants, payers, splitor, group } = toRefs(props.record)
 
 const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
 const isEditorScrolled = inject('isEditorScrolled') as Ref<boolean>
 const isRecommendListActive = ref(false)
-
-// 假資料：已選擇的參與者
-const chosenParticipants = ref<Participant[]>([
-  {
-    id: '1',
-    displayName: '張三',
-    tags: ['朋友', '同事'],
-    avatar: '/avatars/profile.jpg'
-  },
-  {
-    id: '2',
-    displayName: '李四',
-    email: 'lisi@example.com',
-    avatar: '/avatars/profile.jpg'
-  }
-])
-
 
 const topbarConfig = {
   left: {
@@ -94,6 +83,21 @@ const topbarConfig = {
     method: 'submit'
   }
 }
+
+const splitorText = computed(() => {
+  switch (splitor.value) {
+    case 'equal':
+      return '均等分配'
+    case 'fixed':
+      return '固定金額'
+    case 'percentage':
+      return '百分比'
+    case 'ratio':
+      return '比例'
+    default:
+      return '均等分配'
+  }
+})
 
 const setAdjustWidth = (el: HTMLInputElement) => {
   // 創建一個隱藏的 span 元素來測量文字寬度
