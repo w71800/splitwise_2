@@ -87,10 +87,9 @@ onMounted(() => {
 <style lang="sass" scoped>
 .topbar
   // +debug
-  position: fixed
+  position: sticky
   top: 0
-  left: 0
-  right: 0
+  width: 100vw
   background-color: #fff
   display: flex
   justify-content: space-between

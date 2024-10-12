@@ -9,7 +9,8 @@
   Navbar
   Editor
   //- 加入要插在 NuxtPage 中的頁面
-  NuxtPage 
+  main
+    NuxtPage 
 </template>
 
 <script setup lang="ts">

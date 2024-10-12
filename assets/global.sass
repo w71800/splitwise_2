@@ -17,8 +17,13 @@ a
   font-weight: $font_weight_medium
 .container
 
-.layout
-  padding: 60px 20px // TODO: 這邊要想想如何比較好去處理 topbar 的 高度
+main
+  padding: 0px 20px
+  &.search
+    padding-top: 20px
+
+input:focus
+  outline: 1px solid $color_primary
 
 @media screen and (min-width: $breakpoint_desktop)
   h1

@@ -45,11 +45,10 @@ const toggleTag = (tag: Tag) => {
 
 <style scoped lang="sass">
 .search-input
-  position: fixed
-  background-color: $color_primary
+  width: 100vw
+  position: sticky
   top: 0
-  left: 0
-  right: 0
+  background-color: $color_primary
   padding: 10px 0px
   padding-top: 15px
   input

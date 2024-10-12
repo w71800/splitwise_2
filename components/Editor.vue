@@ -81,7 +81,6 @@ const scrollHandler = () => {
   top: 0
   +block_size(100vw, 100vh)
   background-color: #fff
-  padding-top: 44px
   z-index: 100
 
 

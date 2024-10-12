@@ -3,6 +3,9 @@
   - 如何將這個地方也吃到一些 Editor 中的共用樣式？
   - 如何讓推薦參與者列表展開？
   - 點擊推薦參與者時，如何將其加入到 chosenParticipants 中？
+  - 或許將 body 和 footer 拆成兩個元件？
+  @bug:
+  - 目前這邊的 topbar 會在編輯頁面收掉時，在視窗最下面
 -->
 
 <template lang="pug">
@@ -136,14 +139,8 @@ const setPoundSign = (el: HTMLInputElement) => {
 </script>
 
 <style lang="sass" scoped>
-// todo: 調整 topbar 的樣式，這樣太醜了。還有如何在 topbar 為 fixed 時，讓 scroll-contents__left 的高度正確？（Editor 目前有個 44 的 pt，以容納 topbar）
-.topbar
-  position: absolute
-  top: -44px
-  left: 0
-  right: 0
 .scroll-contents__left
-  height: calc(100vh - 44px)
+  height: calc(100vh)
   width: 100vw
   flex-shrink: 0
 .avatar
@@ -270,12 +267,12 @@ const setPoundSign = (el: HTMLInputElement) => {
           padding: 0px 5px
           font-weight: $font-weight-bold
 
-
+// bug: 以目前的狀況，發現在手機上 footer 會跑到螢幕下面，為什麼會這樣
 .editor__footer
   position: absolute
   left: 0
   right: 0
-  bottom: 0
+  bottom: 0px
   display: flex
   gap: 16px
   padding: 16px 16px

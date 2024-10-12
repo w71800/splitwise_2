@@ -7,7 +7,7 @@
 <template lang="pug">
 .page
   .container
-    Header(:title="thisFriend?.displayName" :summary="partialSummary")
+    Header(:title="friend?.displayName" :summary="partialSummary")
   .records
     Record(v-for="record in displayRecords" :key="record.id" :record="record")
 </template>
