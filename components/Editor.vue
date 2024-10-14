@@ -2,11 +2,10 @@
   @todo: 
   - 目前都是做空的新增資料，但要能夠接到在如果要編輯某個紀錄時的整包資料，且在編輯時，topbar 要為「編輯紀錄」
   - 要接測試資料進來
-
 -->
 
 <template lang="pug">
-.editor(:class="{ 'showing': isEditorShowing }")
+.editor(:class="{ 'showing': isEditorShowing }" :style="{ height: editorHeight }")
   //- container 不動，改變的是 contents 的位置
   //- todo: 但想要把滾動的結構改成 container
   .scroll-container 
@@ -23,6 +22,7 @@ import { fakeUser, fakeFriends } from '@/data'
 
 const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
 const isEditorScrolled = ref(false)
+const editorHeight = ref('100vh')
 provide('isEditorScrolled', isEditorScrolled)
 
 const recordData = reactive<Record>({
@@ -64,24 +64,37 @@ const recordData = reactive<Record>({
 const scrollHandler = () => {
   isEditorScrolled.value = !isEditorScrolled.value
 }
+
+const setEditorHeight = () => {
+  const vh = window.innerHeight * 0.01
+  editorHeight.value = `${vh * 100}px`
+}
+
+onMounted(() => {
+  setEditorHeight()
+  window.addEventListener('resize', setEditorHeight)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', setEditorHeight)
+})
 </script>
 
 
 <style scoped lang="sass">
-.scroll-container
-  height: 100%
-.scroll-contents
-  width: 200vw
-  display: flex
-  height: 100%
 .editor
   position: fixed
   left: 0
   right: 0
   top: 0
-  +block_size(100vw, 100vh)
   background-color: #fff
   z-index: 100
+.scroll-container
+  height: 100%
+.scroll-contents
+  width: 200vw
+  height: 100%
+  display: flex
 
 
 .editor

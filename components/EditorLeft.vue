@@ -4,8 +4,9 @@
   - 如何讓推薦參與者列表展開？
   - 點擊推薦參與者時，如何將其加入到 chosenParticipants 中？
   - 或許將 body 和 footer 拆成兩個元件？
-  @bug:
-  - 目前這邊的 topbar 會在編輯頁面收掉時，在視窗最下面
+  - 把日期拉到 body 中做，並用套件做一個選單
+  - 根據新的稿子進行調整
+
 -->
 
 <template lang="pug">
@@ -35,17 +36,12 @@
           span $
         input(type="text" v-model.number="value" placeholder="90")
         span.unit 元
-    .divide_hinter(@click="isEditorScrolled = !isEditorScrolled")
+    .divide_info(@click="isEditorScrolled = !isEditorScrolled")
       span 先由
       span.highlight {{ payers.displayName }}
       span 支付，
       span.highlight {{ splitorText }}
   .editor__footer
-    .date
-      .icon
-        img(:src="'/icons/calendar.png'")
-      input(type="text" placeholder="2024-08-01")
-      span.today_hint （今天）
     .group
       .icon
         img(:src="'/icons/group_active.png'")
@@ -53,9 +49,13 @@
     .tags
       .icon
         img(:src="'/icons/tag_active.png'")
-      //- .tag(v-for="tag in tags" :key="tag") {{ `#${tag}` }}
       //- todo: 如何處理新加上 tag ？
-      input(type="text" @input="setAdjustWidth($event.target)" @blur="setPoundSign($event.target)")
+      .tag(v-for="(tag,index) in tags" :key="tag")
+        label #
+        input(type="text" @input="setAdjustWidth($event.target)" v-model="tags[index]")
+      .add_tag(@click="addTag")
+        .icon
+          img(:src="'/icons/add.png'")
 
 </template>
 
@@ -72,6 +72,8 @@ const { title, value, fullDate, participants, payers, splitor, group } = toRefs(
 const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
 const isEditorScrolled = inject('isEditorScrolled') as Ref<boolean>
 const isRecommendListActive = ref(false)
+
+const tags = ref<string[]>([])
 
 const topbarConfig = {
   left: {
@@ -131,8 +133,12 @@ const setAdjustWidth = (el: HTMLInputElement) => {
   document.body.removeChild(span)
 }
 
-const setPoundSign = (el: HTMLInputElement) => {
-  el.value = `#${el.value}`
+const removeEmptyTag = () => {
+  tags.value = tags.value.filter(tag => tag.trim() !== '')
+}
+
+const addTag = () => {
+  tags.value.push('')
 }
 
 
@@ -140,7 +146,7 @@ const setPoundSign = (el: HTMLInputElement) => {
 
 <style lang="sass" scoped>
 .scroll-contents__left
-  height: calc(100vh)
+  height: 100%
   width: 100vw
   flex-shrink: 0
 .avatar
@@ -252,8 +258,8 @@ const setPoundSign = (el: HTMLInputElement) => {
           color: rgba(#5E5E5E, 0.3)
           font-weight: $font-weight-bold
 
-    .divide_hinter
-      padding: 5px 60px
+    .divide_info
+      padding: 8px 30px
       border: 1px solid #929292
       border-radius: 8px
       font-size: 19px
@@ -272,41 +278,58 @@ const setPoundSign = (el: HTMLInputElement) => {
   position: absolute
   left: 0
   right: 0
-  bottom: 0px
+  bottom: 0
   display: flex
   gap: 16px
   padding: 16px 16px
   border-top: 2px solid #D5D5D5
+  z-index: 999
   >*
     display: flex
     align-items: center
     justify-content: center
-  .date, & .group, & .tags
+  
+  & .group, & .tags
     margin-right: 10px
+    display: flex
+    align-items: center
+    gap: 8px
+    color: rgba($color-primary, 0.7)
+    font-size: 12px
     .icon
       +block_size(20px)
-      margin-right: 6px
     img
       +block_size(100%)
       object-fit: cover
     input
-      border: none
       font-size: 12px
+      outline: none
+      border: 1px solid white
       color: #929292
-    span
-      white-space: nowrap
-      font-size: 12px
-      color: #929292
-  .date
-    color: #929292
-    input
-      width: 80px
-  .group
-    span
-      color: $color-primary
-  .tags
+      padding-left: 0px
+      &:focus
+        border: 1px solid $color-primary
+  
+  & .tags
     input
       color: $color-primary
+    .tag
+      display: flex
+      align-items: center
+      label
+        color: rgba($color-primary, 0.7)
+        font-weight: $font-weight-bold
+        font-size: 12px
+      input
+        padding-right: 0
+        width: 4rem
+    .add_tag
+      cursor: pointer
+      .icon
+        +block_size(16px)
+        img
+          +block_size(100%)
+          object-fit: cover
 
 
 .recommend-participants

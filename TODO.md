@@ -13,6 +13,7 @@
 ## `components/Editor.vue`
 
 - 目前都是做空的新增資料，但要能夠接到在如果要編輯某個紀錄時的整包資料，且在編輯時，topbar 要為「編輯紀錄」
+要接測試資料進來
 >
 
 
@@ -21,7 +22,9 @@
 - 如何將這個地方也吃到一些 Editor 中的共用樣式？
 如何讓推薦參與者列表展開？
 點擊推薦參與者時，如何將其加入到 chosenParticipants 中？
->
+或許將 body 和 footer 拆成兩個元件？
+把日期拉到 body 中做，並用套件做一個選單
+根據新的稿子進行調整
 
 
 ## `components/Header.vue`
@@ -98,6 +101,7 @@
 ## `pages/search/index.vue`
 
 - 要不要把 store 集中起來管理？
+這邊可能要用到另一個 layout
 >
 
 
