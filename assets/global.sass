@@ -22,8 +22,22 @@ main
   &.search
     padding-top: 20px
 
-input:focus
+input[type='text']:focus
   outline: 1px solid $color_primary
+
+input[type='checkbox']
+  appearance: none
+  +block-size(30px)
+  border: 2px solid #E5E5E5
+  cursor: pointer
+  border-radius: 50%
+  &:checked
+    border: 2px solid transparent
+    background-color: $color_primary
+    background-image: url('/icons/check.png')
+    background-size: 70%
+    background-repeat: no-repeat
+    background-position: 50% 75%
 
 @media screen and (min-width: $breakpoint_desktop)
   h1
