@@ -1,3 +1,8 @@
+<!-- 
+  @todo: 
+  - 所有的 input 在 safari ，下邊框樣式都很奇怪，或許要改用 outline 來處理？
+-->
+
 <template lang="pug">
 .scroll-contents__right
   Topbar(:left="topbarConfig.left" :middle="topbarConfig.middle" :right="topbarConfig.right")

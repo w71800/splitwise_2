@@ -5,7 +5,7 @@
   - 點擊推薦參與者時，如何將其加入到 chosenParticipants 中？
   - 或許將 body 和 footer 拆成兩個元件？
   - 把日期拉到 body 中做，並用套件做一個選單
-  - 根據新的稿子進行調整
+  - 根據新的稿子進行調整（尤其是 body 中的 user_inputs 內部結構的命名有點混亂）
 
 -->
 
@@ -31,11 +31,17 @@
       .input_wrapper
         span.label 項目：
         input(type="text" v-model="title" placeholder="鱔魚意麵")
-      .input_wrapper
-        span.currency 
-          span $
+      .input_wrapper 
+        span.currency(@click="isCurrencyListActive = !isCurrencyListActive") $
+          .currency-list(:class="{ 'active': isCurrencyListActive }")
+            .currency-item(
+              v-for="currency in currencyList" 
+              :key="currency" 
+              @click="setCurrency(currency)" 
+              :class="{ 'active': currentCurrency === currency }"
+            ) {{ currency }}
         input(type="text" v-model.number="value" placeholder="90")
-        span.unit 元
+        span.unit {{ currentCurrency }}
     .divide_info(@click="isEditorScrolled = !isEditorScrolled")
       span 先由
       span.highlight {{ payers.displayName }}
@@ -74,7 +80,9 @@ const isEditorScrolled = inject('isEditorScrolled') as Ref<boolean>
 const isRecommendListActive = ref(false)
 
 const tags = ref<string[]>([])
-
+const currencyList = ref(['TWD', 'USD', 'JPY'])
+const currentCurrency = ref('TWD')
+const isCurrencyListActive = ref(false)
 const topbarConfig = {
   left: {
     type: 'icon',
@@ -141,6 +149,9 @@ const addTag = () => {
   tags.value.push('')
 }
 
+const setCurrency = (currency: string) => {
+  currentCurrency.value = currency
+}
 
 </script>
 
@@ -233,21 +244,20 @@ const addTag = () => {
           font-weight: $font-weight-bold
           width: 90px
         &.unit
+          display: inline-block
           color: #5E5E5E
-          font-size: 27px
+          font-size: 20px
           font-weight: $font-weight-bold
+          width: 10px
         &.currency
-          text-align: right
-          padding-right: 20px
+          +block_size(48px)
           cursor: pointer
           vertical-align: bottom
-          span
-            text-align: center
-            align-content: center
-            display: inline-block
-            border: 1px solid #5E5E5E
-            border-radius: 10px
-            +block_size(48px)
+          text-align: center
+          align-content: center
+          border: 1px solid #5E5E5E
+          border-radius: 10px
+          margin-right: 40px
       input
         border: none
         border-bottom: 1px solid #5E5E5E
@@ -257,6 +267,23 @@ const addTag = () => {
         &::placeholder
           color: rgba(#5E5E5E, 0.3)
           font-weight: $font-weight-bold
+
+      .currency-list
+        display: none
+        position: absolute
+        border: 1px solid #000
+        border-radius: 6px
+        bottom: 0px
+        left: 50%
+        transform: translateX(-50%) translateY(calc(100% + 10px))
+        font-size: 1rem
+        flex-direction: column
+        gap: 10px
+        padding: 10px 0px
+        .currency-item
+          padding: 0 10px
+          cursor: pointer
+          text-align: left
 
     .divide_info
       padding: 8px 30px
@@ -335,4 +362,12 @@ const addTag = () => {
 .recommend-participants
   &.active
     height: auto
+
+.currency-list
+  &.active
+    display: flex !important
+  .currency-item
+    &.active
+      font-weight: $font-weight-bold
+      color: $color-primary
 </style>

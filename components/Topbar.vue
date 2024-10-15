@@ -101,7 +101,7 @@ onMounted(() => {
     cursor: pointer
   &__title
     padding: 5px 0px
-    font-size: 1.5rem
+    font-size: 1.3rem
     font-weight: $font_weight_regular
     color: $color_primary
       

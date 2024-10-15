@@ -26,6 +26,7 @@ export interface Record {
   id: string;
   title: string;
   value: number;
+  currency: string;
   fullDate: string;  // 新增這一行
   participants: Participant[];
   divisions: Division[];

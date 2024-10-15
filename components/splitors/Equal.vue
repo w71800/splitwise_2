@@ -3,10 +3,13 @@
   .splitor__content
     .participants
       .participant(v-for="i in 10" :key="i")
+        label(:for="`participant${i}`")
         .avatar
           img(:src="'/avatars/profile.jpg'")
         .name 威利
-        input(type='checkbox' name='participant')
+        .input_wrapper
+          input(type='checkbox' name='participant' :id="`participant${i}`")
+          
   .splitor__hinter
     .title 
       span 2 人分擔，每人分擔 $150
@@ -23,6 +26,13 @@ const settled = ref(false)
 </script>
 
 <style scoped lang="sass">
+label
+  position: absolute
+  width: 100%
+  height: 100%
+  top: 0
+  left: 0
+  z-index: 1
 .splitor__hinter
   display: flex
   align-items: center
