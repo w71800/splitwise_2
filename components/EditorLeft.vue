@@ -11,7 +11,11 @@
 
 <template lang="pug">
 .scroll-contents__left
-  Topbar(:left="topbarConfig.left" :middle="topbarConfig.middle" :right="topbarConfig.right")
+  Topbar(
+    :left="topbarConfig.left" 
+    :middle="topbarConfig.middle" 
+    :right="topbarConfig.right"
+  )
   .editor__participants
     .participants-list
       .label 和：
@@ -30,7 +34,7 @@
     .user_inputs
       .input_wrapper
         span.label 項目：
-        input(type="text" v-model="title" placeholder="鱔魚意麵")
+        input(type="text" v-model="title" placeholder="項目名稱")
       .input_wrapper 
         span.currency(@click="isCurrencyListActive = !isCurrencyListActive") $
           .currency-list(:class="{ 'active': isCurrencyListActive }")
@@ -40,7 +44,11 @@
               @click="setCurrency(currency)" 
               :class="{ 'active': currentCurrency === currency }"
             ) {{ currency }}
-        input(type="text" v-model.number="value" placeholder="90")
+        input(
+          type="text"
+          v-model.number="value"
+          placeholder="金額"
+        )
         span.unit {{ currentCurrency }}
     .divide_info(@click="isEditorScrolled = !isEditorScrolled")
       span 先由
@@ -48,13 +56,14 @@
       span 支付，
       span.highlight {{ splitorText }}
   .editor__footer
-    .group
+    .group(:class="{ 'inactive': isGroupEmpty }")
       .icon
-        img(:src="'/icons/group_active.png'")
-      span.group_name 家庭事項
-    .tags
+        img(:src="groupIconSrc")
+      span.no_exist(v-if="isGroupEmpty") 無
+      span.group_name(v-else) {{ group.name }}
+    .tags(:class="{ 'inactive': isTagsEmpty }")
       .icon
-        img(:src="'/icons/tag_active.png'")
+        img(:src="tagIconSrc")
       //- todo: 如何處理新加上 tag ？
       .tag(v-for="(tag,index) in tags" :key="tag")
         label #
@@ -83,6 +92,10 @@ const tags = ref<string[]>([])
 const currencyList = ref(['TWD', 'USD', 'JPY'])
 const currentCurrency = ref('TWD')
 const isCurrencyListActive = ref(false)
+const isTagsEmpty = computed(() => tags.value.length === 0)
+const tagIconSrc = computed(() => isTagsEmpty.value ? '/icons/tag_inactive.png' : '/icons/tag_active.png')
+const isGroupEmpty = computed(() => group.value?.name.trim() == "")
+const groupIconSrc = computed(() => isGroupEmpty.value ? '/icons/group_inactive.png' : '/icons/group_active.png')
 const topbarConfig = {
   left: {
     type: 'icon',
@@ -316,7 +329,7 @@ const setCurrency = (currency: string) => {
     align-items: center
     justify-content: center
   
-  & .group, & .tags
+  .group, .tags
     margin-right: 10px
     display: flex
     align-items: center
@@ -337,7 +350,7 @@ const setCurrency = (currency: string) => {
       &:focus
         border: 1px solid $color-primary
   
-  & .tags
+  .tags
     input
       color: $color-primary
     .tag
@@ -357,6 +370,15 @@ const setCurrency = (currency: string) => {
         img
           +block_size(100%)
           object-fit: cover
+
+  .tags, .group
+    &.inactive
+      opacity: 0.3
+  .group
+    span
+      color: $color-primary
+    span.no_exist
+      color: rgba(#929292, 1)
 
 
 .recommend-participants

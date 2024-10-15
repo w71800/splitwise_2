@@ -29,6 +29,7 @@ const recordData = reactive<Record>({
   id: '1',
   title: '晚餐',
   value: 1200,
+  currency: 'TWD',
   fullDate: '2024-03-15',
   participants: [fakeUser, fakeFriends[0]],
   payers: {
@@ -42,7 +43,7 @@ const recordData = reactive<Record>({
   splitor: 'equal',
   group: {
     id: 'g1',
-    name: '朋友聚會',
+    name: '測試群組',
     members: [fakeUser, ...fakeFriends]
   }
 })
