@@ -22,7 +22,8 @@
 點擊推薦參與者時，如何將其加入到 chosenParticipants 中？
 或許將 body 和 footer 拆成兩個元件？
 把日期拉到 body 中做，並用套件做一個選單
-根據新的稿子進行調整
+根據新的稿子進行調整（尤其是 body 中的 user_inputs 內部結構的命名有點混亂）
+>
 
 
 ## `components/EditorRight.vue`

@@ -6,7 +6,7 @@
   - 或許將 body 和 footer 拆成兩個元件？
   - 把日期拉到 body 中做，並用套件做一個選單
   - 根據新的稿子進行調整（尤其是 body 中的 user_inputs 內部結構的命名有點混亂）
-
+  - 處理在參與者名單被加入後，高度變化的問題
 -->
 
 <template lang="pug">
@@ -17,16 +17,20 @@
     :right="topbarConfig.right"
   )
   .editor__participants
-    .participants-list
+    .participants-list(@click="isRecommendListActive = !isRecommendListActive")
       .label 和：
       .participants-item(v-for="participant in chosenParticipants" :key="participant.id") 
         .avatar
           img(:src="participant.avatar")
         .name {{ participant.displayName }}
-        .remove
+        .remove(@click="removeParticipant(participant)")
           img(:src="'/icons/remove.png'")
     .recommend-participants(:class="{ 'active': isRecommendListActive }")
-      .recommend-item(v-for="participant in recommendParticipants" :key="participant.id") 
+      .recommend-item(
+        v-for="participant in recommendParticipants" 
+        :key="participant.id" 
+        @click="insertParticipant(participant)"
+      ) 
         .avatar
           img(:src="participant.avatar")
         span {{ participant.displayName }}
@@ -64,7 +68,6 @@
     .tags(:class="{ 'inactive': isTagsEmpty }")
       .icon
         img(:src="tagIconSrc")
-      //- todo: 如何處理新加上 tag ？
       .tag(v-for="(tag,index) in tags" :key="tag")
         label #
         input(type="text" @input="setAdjustWidth($event.target)" v-model="tags[index]")
@@ -88,7 +91,10 @@ const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
 const isEditorScrolled = inject('isEditorScrolled') as Ref<boolean>
 const isRecommendListActive = ref(false)
 
+const recommendParticipants = ref(fakeFriends)
+
 const tags = ref<string[]>([])
+const chosenParticipants = ref<Participant[]>([])
 const currencyList = ref(['TWD', 'USD', 'JPY'])
 const currentCurrency = ref('TWD')
 const isCurrencyListActive = ref(false)
@@ -166,6 +172,14 @@ const setCurrency = (currency: string) => {
   currentCurrency.value = currency
 }
 
+const insertParticipant = (participant: Participant) => {
+  chosenParticipants.value.push(participant)
+}
+
+const removeParticipant = (participant: Participant) => {
+  chosenParticipants.value = chosenParticipants.value.filter(p => p.id !== participant.id)
+}
+
 </script>
 
 <style lang="sass" scoped>
@@ -218,17 +232,25 @@ const setCurrency = (currency: string) => {
           height: 100%
           object-fit: cover
     
-    // todo: 加上展開時的過渡效果
+    // todo: 加上展開時的過渡效果，可能改用 grid 來實作？
     .recommend-participants
       height: 0
+      position: absolute
+      left: 0
+      right: 0
+      bottom: 0
+      transform: translateY(100%)
       overflow: hidden
       transition: height 0.3s ease
+      background-color: #fff
+      z-index: 20
       .recommend-item
         display: flex
         align-items: center
         gap: 10px
         border-bottom: 1px solid #D5D5D5
         padding: 10px 16px
+        
       .avatar
         border: 1px solid #929292
       span
