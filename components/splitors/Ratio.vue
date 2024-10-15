@@ -6,24 +6,36 @@
         .avatar
           img(:src="'/avatars/profile.jpg'")
         .name 威利
-        input(type='checkbox' name='participant')
+          .value-hinter $30
+        .input_wrapper
+          input(type='number' name='participant' placeholder='1')
+          label(for="participant") 份
   .splitor__hinter
-    .title 
-      span 已分配 
-      span $180 
-      span 中的 
-      span $150
-    .subtitle(v-if="!settled") 
-      span 剩餘 
-      span $30 
-      span 未分配
-    .settled(v-else) 全部分配完了！
+    .title 分擔人數 1 人，共 
+      span.settled 1 
+      span 份
 </template>
 
 <script setup lang="ts">
 
 </script>
 
-<style scoped>
+<style scoped lang="sass">
+.value-hinter
+  position: absolute
+  bottom: 0
+  transform: translateY(100%)
+  font-size: 12px
+  color: #D5D5D5
+  font-weight: $font-weight-regular
 
+.splitor__hinter
+  padding: 20px 0
+  .title
+    margin-bottom: 0
+    span:nth-child(1)
+      font-weight: $font-weight-bold
+      color: $color_secondary
+      &.settled
+        color: $color_primary
 </style>

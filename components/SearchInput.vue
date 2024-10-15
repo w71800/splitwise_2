@@ -63,6 +63,9 @@ const toggleTag = (tag: Tag) => {
     font-size: 1rem
     margin-bottom: 15px
     padding: 0 15px
+    text-align: left
+    &::placeholder
+      text-align: left
   .tags
     padding-left: 20px
     display: flex

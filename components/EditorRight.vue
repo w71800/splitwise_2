@@ -176,9 +176,15 @@ const getSplitorComponent = (splitorName: string) => {
       +block-size(100%)
   .name
     margin-right: auto
-    font-size: 16px
+    font-size: 20px
     color: #929292
     font-weight: $font-weight-regular
+  input
+    text-align: right
+    &::placeholder
+      color: rgba(#5E5E5E, 0.2)
+      font-size: 16px
+      text-align: right
 
   
       
