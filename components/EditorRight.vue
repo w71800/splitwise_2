@@ -2,7 +2,7 @@
 .scroll-contents__right
   Topbar(:left="topbarConfig.left" :middle="topbarConfig.middle" :right="topbarConfig.right")
   .content__body
-    .splitor {{ displaySplitor }}
+    .now_splitor {{ nowSplitor }}
     .splitor-list
       .splitor-item(v-for="splitor in splitorList" :key="splitor" @click="changeSplitor(splitor)")
         .icon
@@ -38,7 +38,7 @@ const splitorList = ref([
   }
 ])
 const currentSplitor = ref('Equal')
-const displaySplitor = computed(() => {
+const nowSplitor = computed(() => {
   const now = splitorList.value.find(splitor => splitor.name === currentSplitor.value)
 
   switch (now?.name) {
@@ -72,6 +72,7 @@ const topbarConfig = {
 const changeSplitor = (splitor: { name: string, icon: string, iconActive: string }) => {
   currentSplitor.value = splitor.name
 }
+// @todo: 元件的渲染改成靜態的，避免載入時的跳閃
 const getSplitorComponent = (splitorName: string) => {
   return defineAsyncComponent(() => import(`./splitors/${splitorName}.vue`))
 }
@@ -88,7 +89,7 @@ const getSplitorComponent = (splitorName: string) => {
   grid-template-rows: auto auto 1fr
   height: calc(100% - 43px)
 
-.splitor
+.now_splitor
   padding: 60px 0
   text-align: center
   align-content: center
@@ -97,6 +98,7 @@ const getSplitorComponent = (splitorName: string) => {
   font-weight: $font-weight-bold
 
 .splitor-component-wrapper
+  // NOTE: 這邊註解掉之後，高度就會跑下去了
   overflow-y: scroll
 
 
@@ -125,28 +127,31 @@ const getSplitorComponent = (splitorName: string) => {
 
 
 <style lang="sass">
-#calculator
+#splitor
   display: flex
   flex-direction: column
+  // 撐滿高度 wrapper 的高度（其高度已確定佔滿剩下空間）
   height: 100%
 
-.calculator__content
+.splitor__content
+  // NOTE: 為什麼這邊要 overflow-y: auto ，還有 flex-grow: 1 呢？
   flex-grow: 1
   overflow-y: auto
 
-.calculator__hinter
+.splitor__hinter
+  // 推到底
   margin-top: auto
   color: #5E5E5E
   font-weight: $font-weight-bold
   background-color: #fff
-  padding: 8px 0px
+  padding: 10px 15px
   box-shadow: 0px -3px 10px 0px rgba(black, 0.1)
   >*
     text-align: center
-    margin-bottom: 5px
   .title
-    font-size: 19px
+    font-size: 18px
     color: #5E5E5E
+    margin-bottom: 5px
   .subtitle
     font-size: 16px
     color: #929292
@@ -174,6 +179,7 @@ const getSplitorComponent = (splitorName: string) => {
     font-size: 16px
     color: #929292
     font-weight: $font-weight-regular
+
   
       
 </style>

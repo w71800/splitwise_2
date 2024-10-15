@@ -1,7 +1,15 @@
 <template lang="pug">
-#calculator
-  .calculator__content
-  .calculator__hinter
+#splitor
+  .splitor__content
+    .participants
+      .participant(v-for="i in 10" :key="i")
+        .avatar
+          img(:src="'/avatars/profile.jpg'")
+        .name 威利
+        .input_wrapper.value_is_exist
+          label(for="participant") $
+          input(type='number' name='participant' placeholder='30')
+  .splitor__hinter
     .title 
       span 已分配 
       span $180 

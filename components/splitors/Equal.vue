@@ -1,18 +1,13 @@
 <template lang="pug">
-#calculator
-  .calculator__content
+#splitor
+  .splitor__content
     .participants
-      .participant
+      .participant(v-for="i in 10" :key="i")
         .avatar
           img(:src="'/avatars/profile.jpg'")
         .name 威利
         input(type='checkbox' name='participant')
-      .participant
-        .avatar
-          img(:src="'/avatars/profile.jpg'")
-        .name 威利
-        input(type='checkbox' name='participant')
-  .calculator__hinter
+  .splitor__hinter
     .title 
       span 2 人分擔，每人分擔 $150
     .divider
@@ -28,18 +23,25 @@ const settled = ref(false)
 </script>
 
 <style scoped lang="sass">
-.calculator__hinter
+.splitor__hinter
   display: flex
   align-items: center
-  padding: 10px 20px
-  gap: 20px
+
+.title
+  flex-grow: 3
+  margin-bottom: 0
+  margin-right: 20px
+
 .divider
   height: 40px
   border: 1px solid #D5D5D5
+  margin-right: 20px
+
 .select_all
-  margin-left: auto
+  flex-basis: auto
+  flex-shrink: 0
   display: flex
   align-items: center
-  justify-content: space-between
+  justify-content: flex-end
   gap: 20px
 </style>
