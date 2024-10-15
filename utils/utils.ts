@@ -344,6 +344,10 @@ function getPartialSummary(debts: Debt[], userId: string): {
   return partialSummary
 }
 
+function getComplement(source: any[], target: any[]): any[] {
+  return source.filter(item => !target.includes(item))
+}
+
 export enum DebtStatus {
   Receivable = '可回收',
   Payable = '應支付',

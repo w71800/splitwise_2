@@ -1,12 +1,10 @@
 <!-- 
   @todo:
   - 如何將這個地方也吃到一些 Editor 中的共用樣式？
-  - 如何讓推薦參與者列表展開？
-  - 點擊推薦參與者時，如何將其加入到 chosenParticipants 中？
   - 或許將 body 和 footer 拆成兩個元件？
   - 把日期拉到 body 中做，並用套件做一個選單
   - 根據新的稿子進行調整（尤其是 body 中的 user_inputs 內部結構的命名有點混亂）
-  - 處理在參與者名單被加入後，高度變化的問題
+  - 推薦者一旦被選了，就要消失
 -->
 
 <template lang="pug">
@@ -208,22 +206,26 @@ const removeParticipant = (participant: Participant) => {
     .label
       color: #D5D5D5
       font-weight: $font-weight-bold
+      height: 34px
+      align-content: center
     .participants-item
       align-items: center
       display: flex
       justify-content: space-between
-      gap: 10px
+      gap: 8px
       margin-right: 8px
       border: 1px solid #929292
       border-radius: 24px
-      padding: 6px 16px 6px 10px
+      padding: 6px 10px 6px 8px
       .avatar
-        +block_size(24px)
+        +block_size(20px)
         border: 1px solid #000
       .name
         color: #929292
+        font-size: .9rem
+        margin-right: 5px
       .remove
-        +block_size(13px)
+        +block_size(10px)
         cursor: pointer
         opacity: 0.3
         font-size: 0
