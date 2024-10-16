@@ -236,14 +236,15 @@ const removeParticipant = (participant: Participant) => {
     
     // todo: 加上展開時的過渡效果，可能改用 grid 來實作？
     .recommend-participants
-      height: 0
+      max-height: 0
+      opacity: 0
       position: absolute
       left: 0
       right: 0
       bottom: 0
       transform: translateY(100%)
       overflow: hidden
-      transition: height 0.3s ease
+      transition: max-height .3s ease, opacity .3s ease
       background-color: #fff
       z-index: 20
       .recommend-item
@@ -407,7 +408,8 @@ const removeParticipant = (participant: Participant) => {
 
 .recommend-participants
   &.active
-    height: auto
+    max-height: 999vh
+    opacity: 1
 
 .currency-list
   &.active
