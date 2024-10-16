@@ -34,11 +34,11 @@
         span {{ participant.displayName }}
   .editor__body
     .user_inputs
-      .input_wrapper
-        span.label 項目：
+      .input_wrapper.item-name
         input(type="text" v-model="title" placeholder="項目名稱")
-      .input_wrapper 
-        span.currency(@click="isCurrencyListActive = !isCurrencyListActive") $
+      .input_wrapper.value
+        .icon.currency-btn(@click="isCurrencyListActive = !isCurrencyListActive")
+          img(:src="'/icons/currency.png'")
           .currency-list(:class="{ 'active': isCurrencyListActive }")
             .currency-item(
               v-for="currency in currencyList" 
@@ -51,11 +51,16 @@
           v-model.number="value"
           placeholder="金額"
         )
-        span.unit {{ currentCurrency }}
+        span.currency {{ currentCurrency }}
+      .input_wrapper.date
+        .icon
+          img(:src="'/icons/calendar.png'")
+        input(placeholder="2024-10-26")
     .divide_info(@click="isEditorScrolled = !isEditorScrolled")
       span 先由
       span.highlight {{ payers.displayName }}
-      span 支付，
+      span 支付
+      br
       span.highlight {{ splitorText }}
   .editor__footer
     .group(:class="{ 'inactive': isGroupEmpty }")
@@ -193,6 +198,10 @@ const removeParticipant = (participant: Participant) => {
     width: 100%
     height: 100%
     object-fit: cover
+.icon
+  img
+    +block_size(100%)
+    object-fit: cover
 
 .editor
   &__participants
@@ -261,51 +270,59 @@ const removeParticipant = (participant: Participant) => {
   
 
   &__body
-    padding: 16px 
-    display: flex
-    flex-direction: column
-    align-items: center
-    justify-content: center
-    gap: 80px
-    // +debug
+    padding: 0px 16px 
+    width: 80%
+    margin: 0 auto
+    
     .user_inputs
-      padding: 40px 0
+      padding: 40px 0px
       display: flex
-      justify-content: space-around
       flex-direction: column
       gap: 40px
-      span
-        &.label, &.currency
-          display: inline-block
-          color: #5E5E5E
-          font-size: 27px
-          font-weight: $font-weight-bold
-          width: 90px
-        &.unit
-          display: inline-block
-          color: #5E5E5E
-          font-size: 20px
-          font-weight: $font-weight-bold
-          width: 10px
-        &.currency
-          +block_size(48px)
-          cursor: pointer
-          vertical-align: bottom
-          text-align: center
-          align-content: center
-          border: 1px solid #5E5E5E
-          border-radius: 10px
-          margin-right: 40px
-      input
-        border: none
-        border-bottom: 1px solid #5E5E5E
-        font-size: 27px
-        margin-right: 10px
-        width: 200px
-        &::placeholder
-          color: rgba(#5E5E5E, 0.3)
-          font-weight: $font-weight-bold
+      margin-bottom: 10px
 
+      .input_wrapper
+        display: flex
+        align-items: center
+        .icon
+          +block_size(35px)
+          margin-right: 20px
+          flex-shrink: 0
+        .icon.currency-btn
+          cursor: pointer
+          border: 2px solid #5E5E5E
+          border-radius: 10px
+          padding: 5px
+        input
+          font-size: 23px
+          font-weight: $font-weight-bold
+          border-bottom: 1px solid #5E5E5E
+          text-align: left
+          min-width: 100px
+        input::placeholder
+          color: rgba(#5e5e5e, 0.3)
+      
+      .input_wrapper 
+        &.item-name
+          input
+            width: 100%
+            text-align: center
+        &.value, &.date
+          margin-left: 10px
+
+        &.value
+          input
+            width: 100%
+          .currency
+            font-weight: $font-weight-regular
+            color: #5E5E5E
+            font-size: 1rem
+            margin-left: 20px
+
+        &.date
+          input
+            width: 100%
+      
       .currency-list
         display: none
         position: absolute
@@ -318,17 +335,22 @@ const removeParticipant = (participant: Participant) => {
         flex-direction: column
         gap: 10px
         padding: 10px 0px
+        background-color: #fff
+        z-index: 99
         .currency-item
           padding: 0 10px
           cursor: pointer
           text-align: left
 
+
     .divide_info
-      padding: 8px 30px
+      padding: 8px 20px
       border: 1px solid #929292
       border-radius: 8px
       font-size: 19px
       cursor: pointer
+      text-align: center
+      // margin: 0 auto
       span
         color: #929292
         font-weight: $font-weight-regular
@@ -349,6 +371,7 @@ const removeParticipant = (participant: Participant) => {
   padding: 16px 16px
   border-top: 2px solid #D5D5D5
   z-index: 999
+  background-color: #fff
   >*
     display: flex
     align-items: center
