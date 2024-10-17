@@ -14,24 +14,7 @@
     :middle="topbarConfig.middle" 
     :right="topbarConfig.right"
   )
-  .editor__participants
-    .participants-list(@click="isRecommendListActive = !isRecommendListActive")
-      .label 和：
-      .participants-item(v-for="participant in chosenParticipants" :key="participant.id") 
-        .avatar
-          img(:src="participant.avatar")
-        .name {{ participant.displayName }}
-        .remove(@click="removeParticipant(participant)")
-          img(:src="'/icons/remove.png'")
-    .recommend-participants(:class="{ 'active': isRecommendListActive }")
-      .recommend-item(
-        v-for="participant in recommendParticipants" 
-        :key="participant.id" 
-        @click="insertParticipant(participant)"
-      ) 
-        .avatar
-          img(:src="participant.avatar")
-        span {{ participant.displayName }}
+  ParticipantsList
   .editor__body
     .user_inputs
       .input_wrapper.item-name
@@ -84,6 +67,7 @@
 import { ref, inject, computed, reactive } from 'vue'
 import type { Participant, Record, User } from '@/types/types'
 import { fakeUser, fakeFriends } from '@/data'
+import ParticipantsList from '@/components/editor/ParticipantsList.vue'
 
 const props = defineProps<{
   record: Record
@@ -92,12 +76,9 @@ const { title, value, fullDate, participants, payers, splitor, group } = toRefs(
 
 const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
 const isEditorScrolled = inject('isEditorScrolled') as Ref<boolean>
-const isRecommendListActive = ref(false)
 
-const recommendParticipants = ref(fakeFriends)
 
 const tags = ref<string[]>([])
-const chosenParticipants = ref<Participant[]>([])
 const currencyList = ref(['TWD', 'USD', 'JPY'])
 const currentCurrency = ref('TWD')
 const isCurrencyListActive = ref(false)
@@ -175,13 +156,6 @@ const setCurrency = (currency: string) => {
   currentCurrency.value = currency
 }
 
-const insertParticipant = (participant: Participant) => {
-  chosenParticipants.value.push(participant)
-}
-
-const removeParticipant = (participant: Participant) => {
-  chosenParticipants.value = chosenParticipants.value.filter(p => p.id !== participant.id)
-}
 
 </script>
 
@@ -198,77 +172,12 @@ const removeParticipant = (participant: Participant) => {
     width: 100%
     height: 100%
     object-fit: cover
-.icon
-  img
-    +block_size(100%)
-    object-fit: cover
-
-.editor
-  &__participants
-    .participants-list
-      align-items: center
-      display: flex
-      gap: 10px
-      padding: 10px 16px
-      border-top: 2px solid rgba(#929292, 0.3)
-      border-bottom: 2px solid rgba(#929292, 0.3)
-    .label
-      color: #D5D5D5
-      font-weight: $font-weight-bold
-      height: 34px
-      align-content: center
-    .participants-item
-      align-items: center
-      display: flex
-      justify-content: space-between
-      gap: 8px
-      margin-right: 8px
-      border: 1px solid #929292
-      border-radius: 24px
-      padding: 6px 10px 6px 8px
-      .avatar
-        +block_size(20px)
-        border: 1px solid #000
-      .name
-        color: #929292
-        font-size: .9rem
-        margin-right: 5px
-      .remove
-        +block_size(10px)
-        cursor: pointer
-        opacity: 0.3
-        font-size: 0
-        img
-          width: 100%
-          height: 100%
-          object-fit: cover
-    
-    // todo: 加上展開時的過渡效果，可能改用 grid 來實作？
-    .recommend-participants
-      max-height: 0
-      opacity: 0
-      position: absolute
-      left: 0
-      right: 0
-      bottom: 0
-      transform: translateY(100%)
-      overflow: hidden
-      transition: max-height .3s ease, opacity .3s ease
-      background-color: #fff
-      z-index: 20
-      .recommend-item
-        display: flex
-        align-items: center
-        gap: 10px
-        border-bottom: 1px solid #D5D5D5
-        padding: 10px 16px
-        
-      .avatar
-        border: 1px solid #929292
-      span
-        color: #929292
+// .icon
+//   img
+//     +block_size(100%)
+//     object-fit: cover
   
-
+.editor
   &__body
     padding: 0px 16px 
     width: 80%
@@ -428,11 +337,6 @@ const removeParticipant = (participant: Participant) => {
     span.no_exist
       color: rgba(#929292, 1)
 
-
-.recommend-participants
-  &.active
-    max-height: 999vh
-    opacity: 1
 
 .currency-list
   &.active

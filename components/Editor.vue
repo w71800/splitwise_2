@@ -24,7 +24,6 @@ const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
 const isEditorScrolled = ref(false)
 const editorHeight = ref('100vh')
 provide('isEditorScrolled', isEditorScrolled)
-
 const recordData = reactive<Record>({
   id: '1',
   title: '晚餐',
@@ -47,6 +46,10 @@ const recordData = reactive<Record>({
     members: [fakeUser, ...fakeFriends]
   }
 })
+provide('currentRecord', recordData)
+
+
+
 
 // const fakeRecord = computed<Record>(() => ({
 //   ...recordData,
