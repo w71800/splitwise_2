@@ -3,6 +3,7 @@
   - 首頁顯示最新動態之類的東西，沒登入的話（例如沒有 token），顯示登入頁面。且不顯示 topbar 和 navbar
   - 實作紀錄增加功能
   - 一些還款、欠款、應支付、可回收等狀態的顯示優化。目前的版本看到會有點不直觀。例如說群組或朋友頁面中。小華：應支付 152 元。這樣應該是指我欠小華 152 元。但字面上看起來是小華要給我 152 元。
+  
 -->
 
 <template lang="pug">
@@ -11,11 +12,40 @@ NuxtLayout
 </template>
 
 <script setup lang="ts">
-import { provide } from 'vue'
+import { provide, ref, onErrorCaptured, reactive } from 'vue'
+import type { Record } from '@/types/types'
+const createEmptyRecord = (): Record => ({
+  id: '',
+  title: '',
+  value: 0,
+  currency: 'TWD',
+  fullDate: new Date().toISOString().split('T')[0],
+  participants: [],
+  payers: {
+    id: '',
+    displayName: '',
+    email: '',
+    avatar: '',
+    paid: 0
+  },
+  divisions: [],
+  splitor: 'equal',
+  group: null
+})
+const isEditorShowing = ref(false) as Ref<boolean>
+const currentRecord = ref(createEmptyRecord()) as Ref<Record> // 紀錄當下的 record
 
-const isEditorShowing: Ref<boolean> = ref(false)
+const openEditor = (record: Record | null = null) => {
+  currentRecord.value = record || createEmptyRecord()
+  console.log(currentRecord.value)
+  isEditorShowing.value = true
+}
+
+
 
 provide('isEditorShowing', isEditorShowing)
+provide('currentRecord', currentRecord.value)
+provide('openEditor', openEditor)
 
 onErrorCaptured((error) => {
   console.log(error)

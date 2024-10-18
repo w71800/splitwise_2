@@ -10,20 +10,22 @@
   //- todo: 但想要把滾動的結構改成 container
   .scroll-container 
     .scroll-contents(:class="{ 'scrolled': isEditorScrolled }")
-      EditorLeft(:record="recordData")
-      EditorRight(:record="recordData")
+      EditorLeft
+      EditorRight
 </template>
 
 
 <script setup lang="ts">
-import { ref, inject, provide } from 'vue'
+import { ref, inject, provide, reactive } from 'vue'
 import type { Record } from '@/types/types'
 import { fakeUser, fakeFriends } from '@/data'
 
 const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
+const currentRecord = inject('currentRecord') as Record
 const isEditorScrolled = ref(false)
 const editorHeight = ref('100vh')
-provide('isEditorScrolled', isEditorScrolled)
+console.log(currentRecord.id)
+
 const recordData = reactive<Record>({
   id: '1',
   title: '晚餐',
@@ -46,7 +48,9 @@ const recordData = reactive<Record>({
     members: [fakeUser, ...fakeFriends]
   }
 })
-provide('currentRecord', recordData)
+
+provide('isEditorScrolled', isEditorScrolled)
+provide('editingRecord', currentRecord)
 
 
 

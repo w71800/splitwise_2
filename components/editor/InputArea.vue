@@ -30,11 +30,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
+import type { Record } from '@/types/types'
 
 const currencyList = ref(['TWD', 'USD', 'JPY'])
 const currentCurrency = ref('TWD')
 const isCurrencyListActive = ref(false)
+
+const editingRecord = inject('editingRecord') as Record
+const currentRecord = inject('currentRecord') as Record
+
+const { title, value, fullDate, participants, payers, splitor, group } = toRefs(currentRecord)
 
 const setCurrency = (currency: string) => {
   currentCurrency.value = currency

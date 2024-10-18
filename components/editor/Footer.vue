@@ -4,7 +4,7 @@
     .icon
       img(:src="groupIconSrc")
     span.no_exist(v-if="isGroupEmpty") 無
-    span.group_name(v-else) {{ group.name }}
+    span.group_name(v-else) {{ group?.name }}
   .tags(:class="{ 'inactive': isTagsEmpty }")
     .icon
       img(:src="tagIconSrc")
@@ -20,8 +20,8 @@
 import { ref, computed, inject } from 'vue'
 import type { Record } from '@/types/types'
 
-const currentRecord = inject('currentRecord') as Record
-const { group, participants, payers, splitor } = toRefs(currentRecord)
+const editingRecord = inject('editingRecord') as Record
+const { group, participants, payers, splitor } = toRefs(editingRecord)
 const tags = ref<string[]>([])
 
 const isTagsEmpty = computed(() => tags.value.length === 0)

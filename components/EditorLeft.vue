@@ -23,18 +23,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, inject, computed, reactive } from 'vue'
-import type { Participant, Record, User } from '@/types/types'
-import { fakeUser, fakeFriends } from '@/data'
 import ParticipantsList from '@/components/editor/ParticipantsList.vue'
 import InputArea from '@/components/editor/InputArea.vue'
 import DivideInfo from '@/components/editor/DivideInfo.vue'
 import Footer from '@/components/editor/Footer.vue'
+import { inject } from 'vue'
+import type { Record } from '@/types/types'
 
-const props = defineProps<{
-  record: Record
-}>()
-const { title, value, fullDate, participants, payers, splitor, group } = toRefs(props.record)
+
+const record = inject('editingRecord') as Record
 
 const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
 const isEditorScrolled = inject('isEditorScrolled') as Ref<boolean>

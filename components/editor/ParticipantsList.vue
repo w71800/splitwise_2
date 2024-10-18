@@ -24,8 +24,8 @@ import { ref, toRefs, inject } from 'vue'
 import { fakeFriends } from '@/data'
 import type { Participant, Record } from '@/types/types'
 
-const currentRecord = inject('currentRecord') as Record
-const { participants } = toRefs(currentRecord)
+const editingRecord = inject('editingRecord') as Record
+const { participants } = toRefs(editingRecord)
 const isRecommendListActive = ref(false)
 const recommendParticipants = ref(fakeFriends)
 const chosenParticipants = ref<Participant[]>([])
