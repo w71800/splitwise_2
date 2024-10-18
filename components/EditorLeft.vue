@@ -17,7 +17,7 @@
   ParticipantsList
   .editor__body
     InputArea
-    //- DivideInfo
+    DivideInfo
   .editor__footer
     .group(:class="{ 'inactive': isGroupEmpty }")
       .icon
@@ -72,20 +72,7 @@ const topbarConfig = {
   }
 }
 
-const splitorText = computed(() => {
-  switch (splitor.value) {
-    case 'equal':
-      return '均等分配'
-    case 'fixed':
-      return '固定金額'
-    case 'percentage':
-      return '百分比'
-    case 'ratio':
-      return '比例'
-    default:
-      return '均等分配'
-  }
-})
+
 
 const setAdjustWidth = (el: HTMLInputElement) => {
   // 創建一個隱藏的 span 元素來測量文字寬度
@@ -151,23 +138,6 @@ const addTag = () => {
   padding: 0px 16px 
   width: 80%
   margin: 0 auto
-    
-  .divide_info
-    padding: 8px 20px
-    border: 1px solid #929292
-    border-radius: 8px
-    font-size: 19px
-    cursor: pointer
-    text-align: center
-    // margin: 0 auto
-    span
-      color: #929292
-      font-weight: $font-weight-regular
-      &.highlight
-        display: inline-block
-        color: $color-primary
-        padding: 0px 5px
-        font-weight: $font-weight-bold
 
 // bug: 以目前的狀況，發現在手機上 footer 會跑到螢幕下面，為什麼會這樣
 .editor__footer
