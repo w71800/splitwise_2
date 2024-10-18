@@ -16,4 +16,8 @@ import { provide } from 'vue'
 const isEditorShowing: Ref<boolean> = ref(false)
 
 provide('isEditorShowing', isEditorShowing)
+
+onErrorCaptured((error) => {
+  console.log(error)
+})
 </script>

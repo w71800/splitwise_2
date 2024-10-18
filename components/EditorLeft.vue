@@ -16,35 +16,8 @@
   )
   ParticipantsList
   .editor__body
-    .user_inputs
-      .input_wrapper.item-name
-        input(type="text" v-model="title" placeholder="項目名稱")
-      .input_wrapper.value
-        .icon.currency-btn(@click="isCurrencyListActive = !isCurrencyListActive")
-          img(:src="'/icons/currency.png'")
-          .currency-list(:class="{ 'active': isCurrencyListActive }")
-            .currency-item(
-              v-for="currency in currencyList" 
-              :key="currency" 
-              @click="setCurrency(currency)" 
-              :class="{ 'active': currentCurrency === currency }"
-            ) {{ currency }}
-        input(
-          type="text"
-          v-model.number="value"
-          placeholder="金額"
-        )
-        span.currency {{ currentCurrency }}
-      .input_wrapper.date
-        .icon
-          img(:src="'/icons/calendar.png'")
-        input(placeholder="2024-10-26")
-    .divide_info(@click="isEditorScrolled = !isEditorScrolled")
-      span 先由
-      span.highlight {{ payers.displayName }}
-      span 支付
-      br
-      span.highlight {{ splitorText }}
+    InputArea
+    //- DivideInfo
   .editor__footer
     .group(:class="{ 'inactive': isGroupEmpty }")
       .icon
@@ -68,6 +41,8 @@ import { ref, inject, computed, reactive } from 'vue'
 import type { Participant, Record, User } from '@/types/types'
 import { fakeUser, fakeFriends } from '@/data'
 import ParticipantsList from '@/components/editor/ParticipantsList.vue'
+import InputArea from '@/components/editor/InputArea.vue'
+import DivideInfo from '@/components/editor/DivideInfo.vue'
 
 const props = defineProps<{
   record: Record
@@ -79,9 +54,6 @@ const isEditorScrolled = inject('isEditorScrolled') as Ref<boolean>
 
 
 const tags = ref<string[]>([])
-const currencyList = ref(['TWD', 'USD', 'JPY'])
-const currentCurrency = ref('TWD')
-const isCurrencyListActive = ref(false)
 const isTagsEmpty = computed(() => tags.value.length === 0)
 const tagIconSrc = computed(() => isTagsEmpty.value ? '/icons/tag_inactive.png' : '/icons/tag_active.png')
 const isGroupEmpty = computed(() => group.value?.name.trim() == "")
@@ -152,9 +124,7 @@ const addTag = () => {
   tags.value.push('')
 }
 
-const setCurrency = (currency: string) => {
-  currentCurrency.value = currency
-}
+
 
 
 </script>
@@ -177,97 +147,27 @@ const setCurrency = (currency: string) => {
 //     +block_size(100%)
 //     object-fit: cover
   
-.editor
-  &__body
-    padding: 0px 16px 
-    width: 80%
-    margin: 0 auto
+.editor__body
+  padding: 0px 16px 
+  width: 80%
+  margin: 0 auto
     
-    .user_inputs
-      padding: 40px 0px
-      display: flex
-      flex-direction: column
-      gap: 40px
-      margin-bottom: 10px
-
-      .input_wrapper
-        display: flex
-        align-items: center
-        .icon
-          +block_size(35px)
-          margin-right: 20px
-          flex-shrink: 0
-        .icon.currency-btn
-          cursor: pointer
-          border: 2px solid #5E5E5E
-          border-radius: 10px
-          padding: 5px
-        input
-          font-size: 23px
-          font-weight: $font-weight-bold
-          border-bottom: 1px solid #5E5E5E
-          text-align: left
-          min-width: 100px
-        input::placeholder
-          color: rgba(#5e5e5e, 0.3)
-      
-      .input_wrapper 
-        &.item-name
-          input
-            width: 100%
-            text-align: center
-        &.value, &.date
-          margin-left: 10px
-
-        &.value
-          input
-            width: 100%
-          .currency
-            font-weight: $font-weight-regular
-            color: #5E5E5E
-            font-size: 1rem
-            margin-left: 20px
-
-        &.date
-          input
-            width: 100%
-      
-      .currency-list
-        display: none
-        position: absolute
-        border: 1px solid #000
-        border-radius: 6px
-        bottom: 0px
-        left: 50%
-        transform: translateX(-50%) translateY(calc(100% + 10px))
-        font-size: 1rem
-        flex-direction: column
-        gap: 10px
-        padding: 10px 0px
-        background-color: #fff
-        z-index: 99
-        .currency-item
-          padding: 0 10px
-          cursor: pointer
-          text-align: left
-
-
-    .divide_info
-      padding: 8px 20px
-      border: 1px solid #929292
-      border-radius: 8px
-      font-size: 19px
-      cursor: pointer
-      text-align: center
-      // margin: 0 auto
-      span
-        color: #929292
-        font-weight: $font-weight-regular
-        &.highlight
-          display: inline-block
-          color: $color-primary
-          padding: 0px 5px
-          font-weight: $font-weight-bold
+  .divide_info
+    padding: 8px 20px
+    border: 1px solid #929292
+    border-radius: 8px
+    font-size: 19px
+    cursor: pointer
+    text-align: center
+    // margin: 0 auto
+    span
+      color: #929292
+      font-weight: $font-weight-regular
+      &.highlight
+        display: inline-block
+        color: $color-primary
+        padding: 0px 5px
+        font-weight: $font-weight-bold
 
 // bug: 以目前的狀況，發現在手機上 footer 會跑到螢幕下面，為什麼會這樣
 .editor__footer
@@ -337,12 +237,4 @@ const setCurrency = (currency: string) => {
     span.no_exist
       color: rgba(#929292, 1)
 
-
-.currency-list
-  &.active
-    display: flex !important
-  .currency-item
-    &.active
-      font-weight: $font-weight-bold
-      color: $color-primary
 </style>
