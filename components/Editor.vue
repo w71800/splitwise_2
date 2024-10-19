@@ -21,10 +21,8 @@ import type { Record } from '@/types/types'
 import { fakeUser, fakeFriends } from '@/data'
 
 const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
-const currentRecord = inject('currentRecord') as Record
 const isEditorScrolled = ref(false)
 const editorHeight = ref('100vh')
-console.log(currentRecord.id)
 
 const recordData = reactive<Record>({
   id: '1',
@@ -50,7 +48,6 @@ const recordData = reactive<Record>({
 })
 
 provide('isEditorScrolled', isEditorScrolled)
-provide('editingRecord', currentRecord)
 
 
 

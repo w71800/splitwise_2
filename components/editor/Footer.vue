@@ -20,8 +20,8 @@
 import { ref, computed, inject } from 'vue'
 import type { Record } from '@/types/types'
 
-const editingRecord = inject('editingRecord') as Record
-const { group, participants, payers, splitor } = toRefs(editingRecord)
+const record = inject('currentRecord') as Ref<Record>
+const { group, participants, payers, splitor } = toRefs(record.value)
 const tags = ref<string[]>([])
 
 const isTagsEmpty = computed(() => tags.value.length === 0)

@@ -6,7 +6,7 @@
 <template lang="pug">
 .user_inputs
   .input_wrapper.item-name
-    input(type="text" v-model="title" placeholder="項目名稱")
+    input(type="text" v-model="localRecord.title" placeholder="項目名稱")
   .input_wrapper.value
     .icon.currency-btn(@click="isCurrencyListActive = !isCurrencyListActive")
       img(:src="'/icons/currency.png'")
@@ -15,36 +15,55 @@
           v-for="currency in currencyList" 
           :key="currency" 
           @click="setCurrency(currency)" 
-          :class="{ 'active': currentCurrency === currency }"
+          :class="{ 'active': localRecord.currency === currency }"
         ) {{ currency }}
     input(
       type="text"
-      v-model.number="value"
+      v-model.number="localRecord.value"
       placeholder="金額"
     )
-    span.currency {{ currentCurrency }}
+    span.currency {{ localRecord.currency }}
   .input_wrapper.date
     .icon
       img(:src="'/icons/calendar.png'")
-    input(placeholder="2024-10-26")
+    input(placeholder="2024-10-26" v-model="localRecord.fullDate")
 </template>
 
 <script setup lang="ts">
-import { ref, inject } from 'vue'
-import type { Record } from '@/types/types'
+import { ref, inject, reactive } from 'vue'
+import type { Record, Participant, Payer } from '@/types/types'
 
+const record = inject('currentRecord') as Ref<Record>
 const currencyList = ref(['TWD', 'USD', 'JPY'])
-const currentCurrency = ref('TWD')
 const isCurrencyListActive = ref(false)
-
-const editingRecord = inject('editingRecord') as Record
-const currentRecord = inject('currentRecord') as Record
-
-const { title, value, fullDate, participants, payers, splitor, group } = toRefs(currentRecord)
+const localRecord = reactive({
+  title: '',
+  value: 0,
+  currency: 'TWD',
+  fullDate: '',
+  participants: [] as Participant[],
+  payers: {} as Payer,
+  splitor: 'equal',
+  group: null as { 
+    id: string;
+    name: string;
+    members: Participant[];
+  } | null
+})
 
 const setCurrency = (currency: string) => {
-  currentCurrency.value = currency
+  localRecord.currency = currency
 }
+
+watch(() => record.value, (newRecord) => {
+  localRecord.title = newRecord.title
+  localRecord.value = newRecord.value
+  localRecord.fullDate = newRecord.fullDate
+  localRecord.participants = newRecord.participants
+  localRecord.payers = newRecord.payers
+  localRecord.splitor = newRecord.splitor
+  localRecord.group = newRecord.group
+})
 </script>
 
 <style scoped lang="sass">

@@ -18,14 +18,20 @@
 import { ref, onMounted, onUnmounted, computed, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import configMapper, { type Config, type Icon, type Text } from '@/utils/topbarConfig'
+import type { Record } from '@/types/types'
+import { useRecordsStore } from '@/store/records'
+
 
 const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
 const isEditorScrolled = inject('isEditorScrolled') as Ref<boolean>
+const handleEditRecord = inject('handleEditRecord') as (record: Record) => void
 const props = defineProps<Config>()
 const route = useRoute()
 const router = useRouter()
 const currentPath = ref(route.path)
 const previousRoute = ref('')
+const { id: editingRecordId } = route.params
+const { getRecordById } = useRecordsStore()
 
 const pathList = computed(() => currentPath.value.split("/"))
 
@@ -55,7 +61,13 @@ const methodsMapper = {
     router.push(previousRoute.value)
   },
   'edit': () => {
-    isEditorShowing.value = true
+    const record = getRecordById(editingRecordId as string)!
+    if (record) { 
+      handleEditRecord(record)
+      console.log(record)
+    } else {
+      console.error('Record not found')
+    }
   },
   'close': () => {
     isEditorShowing.value = false

@@ -37,15 +37,21 @@ const currentRecord = ref(createEmptyRecord()) as Ref<Record> // 紀錄當下的
 
 const openEditor = (record: Record | null = null) => {
   currentRecord.value = record || createEmptyRecord()
-  console.log(currentRecord.value)
   isEditorShowing.value = true
 }
 
+const handleAddNewRecord = (): void => {
+  openEditor()
+}
 
+const handleEditRecord = (record: Record): void => {
+  openEditor(record)
+}
 
 provide('isEditorShowing', isEditorShowing)
-provide('currentRecord', currentRecord.value)
-provide('openEditor', openEditor)
+provide('currentRecord', currentRecord)
+provide('handleAddNewRecord', handleAddNewRecord)
+provide('handleEditRecord', handleEditRecord)
 
 onErrorCaptured((error) => {
   console.log(error)
