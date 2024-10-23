@@ -16,12 +16,14 @@
     "@vitejs/plugin-vue": "^5.1.4",
     "nuxt": "^3.13.0",
     "pinia": "^2.2.2",
+    "uuid": "^10.0.0",
     "vue": "latest",
     "vue-router": "latest"
   },
   "devDependencies": {
     "@nuxtjs/style-resources": "^1.2.2",
     "@types/jest": "^29.5.13",
+    "@types/uuid": "^10.0.0",
     "@vue/test-utils": "^2.4.6",
     "jest": "^29.7.0",
     "jsdom": "^25.0.0",
