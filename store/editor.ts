@@ -18,7 +18,7 @@ const createEmptyRecord = (): Record => {
     id: uuidv4(),
     title: '',
     value: 0,
-    currency: '',
+    currency: 'TWD',
     fullDate: new Date().toISOString().split('T')[0],
     participants: [ userData ],
     divisions: [ { ...userData, value: 0 } ],

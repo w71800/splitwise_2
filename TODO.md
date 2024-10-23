@@ -5,7 +5,6 @@
 - 首頁顯示最新動態之類的東西，沒登入的話（例如沒有 token），顯示登入頁面。且不顯示 topbar 和 navbar
 實作紀錄增加功能
 一些還款、欠款、應支付、可回收等狀態的顯示優化。目前的版本看到會有點不直觀。例如說群組或朋友頁面中。小華：應支付 152 元。這樣應該是指我欠小華 152 元。但字面上看起來是小華要給我 152 元。
->
 
 
 ## `components/Editor.vue`
@@ -18,11 +17,10 @@
 ## `components/EditorLeft.vue`
 
 - 如何將這個地方也吃到一些 Editor 中的共用樣式？
-如何讓推薦參與者列表展開？
-點擊推薦參與者時，如何將其加入到 chosenParticipants 中？
 或許將 body 和 footer 拆成兩個元件？
 把日期拉到 body 中做，並用套件做一個選單
 根據新的稿子進行調整（尤其是 body 中的 user_inputs 內部結構的命名有點混亂）
+推薦者一旦被選了，就要消失
 >
 
 
@@ -75,6 +73,19 @@
 >
 
 
+## `components/editor/Footer.vue`
+
+- s:
+目前 tags
+>
+
+
+## `components/editor/InputArea.vue`
+
+- 還沒有引入資料的繫結
+>
+
+
 ## `layouts/default.vue`
 
 - 將 friends 和 groups 的頁面合併為一個共用的 layout
@@ -98,6 +109,7 @@
 
 - 要了解一下這邊原先使用 nextTick 的意義（這邊的 DOM 是怎麼更新的，更新循環是什麼）
 加上 Topbar
+會有個奇怪的高度變化，比其餘頁面的高度還高一些
 >
 
 
@@ -112,11 +124,6 @@
 - 要不要把 store 集中起來管理？
 這邊可能要用到另一個 layout
 >
-
-
-## `store/userData.ts`
-
-- 在沒有回傳一整包物件的狀況，要如何抓到這個 User 資料？
 
 
 ## `types/types.ts`
