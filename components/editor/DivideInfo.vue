@@ -1,43 +1,38 @@
 <template lang="pug">
 .divide_info(@click="isEditorScrolled = !isEditorScrolled")
   span 先由
-  span.highlight {{ localRecord.payers?.displayName }}
+  span.highlight {{ record.payers?.displayName }}
   span 支付
   br
   span.highlight {{ splitorText }}
 </template>
 
 <script setup lang="ts">
-import { ref, inject, computed, reactive } from 'vue'
-import type { Participant, Record, User, Payer } from '@/types/types'
-import { fakeUser, fakeFriends } from '@/data'
+import { ref, computed } from 'vue'
+import { useEditorStore } from '@/store/editor'
 
-const record = inject('currentRecord') as Ref<Record>
+const editorStore = useEditorStore()
+
+const { record } = storeToRefs(editorStore)
 const isEditorScrolled = inject('isEditorScrolled') as Ref<boolean>
-const localRecord = reactive({
-  payers: {} as Payer,
-  splitor: '' as 'equal' | 'fixed' | 'percentage' | 'ratio'
-})
-
 
 const splitorText = computed(() => {
-  switch (localRecord.splitor) {
+  switch (record.value.splitor) {
     case 'equal':
-      return '均等分配'
+      return '均等分擔'
     case 'fixed':
-      return '固定金額'
+      return '固定金額分擔'
     case 'percentage':
-      return '百分比'
+      return '百分比分擔'
     case 'ratio':
-      return '比例'
+      return '比例分擔'
     default:
-      return '均等分配'
+      return '均等分擔'
   }
 })
 
 watch(() => record.value, (newRecord) => {
-  localRecord.payers = newRecord.payers
-  localRecord.splitor = newRecord.splitor
+  console.log(newRecord)
 })
 
 </script>
