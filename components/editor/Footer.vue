@@ -1,10 +1,15 @@
+<!-- 
+  @todos:
+    - 目前 tags
+-->
+
 <template lang="pug">
 .editor__footer
   .group(:class="{ 'inactive': isGroupEmpty }")
     .icon
       img(:src="groupIconSrc")
     span.no_exist(v-if="isGroupEmpty") 無
-    span.group_name(v-else) {{ group?.name }}
+    span.group_name(v-else) {{ record.group?.name }}
   .tags(:class="{ 'inactive': isTagsEmpty }")
     .icon
       img(:src="tagIconSrc")
@@ -17,16 +22,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, inject } from 'vue'
-import type { Record } from '@/types/types'
+import { ref, computed } from 'vue'
+import { useEditorStore } from '@/store/editor'
+import { useUserDataStore } from '@/store/userData'
+import { storeToRefs } from 'pinia'
 
-const record = inject('currentRecord') as Ref<Record>
-const { group, participants, payers, splitor } = toRefs(record.value)
-const tags = ref<string[]>([])
+const editorStore = useEditorStore()
+const userDataStore = useUserDataStore()
+const { id: userId } = userDataStore
 
-const isTagsEmpty = computed(() => tags.value.length === 0)
+const { record } = storeToRefs(editorStore)
+
+const tags = computed<string[]>(() => record.value.participants?.find(p => p.id == userId)?.tags || []) // 取得一個 tags 的參考，用以渲染畫面
+const isTagsEmpty = computed(() => tags.value?.length === 0)
 const tagIconSrc = computed(() => isTagsEmpty.value ? '/icons/tag_inactive.png' : '/icons/tag_active.png')
-const isGroupEmpty = computed(() => group.value?.name.trim() == "")
+const isGroupEmpty = computed(() => record.value.group?.name.trim() == "" || !record.value.group)
 const groupIconSrc = computed(() => isGroupEmpty.value ? '/icons/group_inactive.png' : '/icons/group_active.png')
 
 
@@ -59,12 +69,22 @@ const setAdjustWidth = (el: HTMLInputElement) => {
   document.body.removeChild(span)
 }
 
+
 const removeEmptyTag = () => {
-  tags.value = tags.value.filter(tag => tag.trim() !== '')
+  let userTags = record.value.participants?.find(p => p.id === userId)?.tags
+  if (userTags) {
+    userTags = userTags.filter(tag => tag.trim() !== '')
+  }
 }
 
+// 直接去加入當下 user 的 tags
 const addTag = () => {
-  tags.value.push('')
+  let userTags = record.value.participants?.find(p => p.id === userId)?.tags
+  if (userTags) {
+    userTags.push('')
+  } else {
+    userTags = ['']
+  }
 }
 
 </script>

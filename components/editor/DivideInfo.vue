@@ -8,8 +8,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, inject } from 'vue'
 import { useEditorStore } from '@/store/editor'
+import { storeToRefs } from 'pinia'
 
 const editorStore = useEditorStore()
 

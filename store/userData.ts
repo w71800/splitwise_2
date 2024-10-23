@@ -1,6 +1,6 @@
 /*
   @todo:
-  - 在沒有回傳一整包物件的狀況，要如何抓到這個 User 資料？
+  - 目前是 user 的資料各個屬性分散為不同的 state。我不太喜歡這樣，想要直接回傳的是一個固定的 userData state。
 */
 
 import { defineStore } from 'pinia'
