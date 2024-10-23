@@ -20,8 +20,10 @@ import { useRoute, useRouter } from 'vue-router'
 import configMapper, { type Config, type Icon, type Text } from '@/utils/topbarConfig'
 import type { Record } from '@/types/types'
 import { useRecordsStore } from '@/store/records'
+import { useEditorStore } from '@/store/editor'
 
-
+const editorStore = useEditorStore()
+const { setRecord } = editorStore
 const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
 const isEditorScrolled = inject('isEditorScrolled') as Ref<boolean>
 const handleEditRecord = inject('handleEditRecord') as (record: Record) => void
@@ -64,7 +66,7 @@ const methodsMapper = {
     const record = getRecordById(editingRecordId as string)!
     if (record) { 
       handleEditRecord(record)
-      console.log(record)
+      setRecord(record)
     } else {
       console.error('Record not found')
     }

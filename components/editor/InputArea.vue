@@ -6,7 +6,7 @@
 <template lang="pug">
 .user_inputs
   .input_wrapper.item-name
-    input(type="text" v-model="localRecord.title" placeholder="項目名稱")
+    input(type="text" v-model="record.title" placeholder="項目名稱")
   .input_wrapper.value
     .icon.currency-btn(@click="isCurrencyListActive = !isCurrencyListActive")
       img(:src="'/icons/currency.png'")
@@ -15,54 +15,38 @@
           v-for="currency in currencyList" 
           :key="currency" 
           @click="setCurrency(currency)" 
-          :class="{ 'active': localRecord.currency === currency }"
+          :class="{ 'active': currency === record.currency }"
         ) {{ currency }}
     input(
       type="text"
-      v-model.number="localRecord.value"
+      v-model.number="record.value"
       placeholder="金額"
     )
-    span.currency {{ localRecord.currency }}
+    span.currency {{ record.currency }}
   .input_wrapper.date
     .icon
       img(:src="'/icons/calendar.png'")
-    input(placeholder="2024-10-26" v-model="localRecord.fullDate")
+    input(placeholder="2024-10-26" v-model="record.fullDate")
 </template>
 
 <script setup lang="ts">
-import { ref, inject, reactive } from 'vue'
-import type { Record, Participant, Payer } from '@/types/types'
+import { ref, inject, reactive, watch } from 'vue'
+import type { Record } from '@/types/types'
+import { useEditorStore } from '@/store/editor'
+import { storeToRefs } from 'pinia'
 
-const record = inject('currentRecord') as Ref<Record>
+const editorStore = useEditorStore()
+const { record } = storeToRefs(editorStore) // NOTE: 從 store（整包為 reactive） 中取出屬性 state 時，為了要能夠保持響應性，必須使用 storeToRefs。不然會不被 Proxy 包裹
 const currencyList = ref(['TWD', 'USD', 'JPY'])
 const isCurrencyListActive = ref(false)
-const localRecord = reactive({
-  title: '',
-  value: 0,
-  currency: 'TWD',
-  fullDate: '',
-  participants: [] as Participant[],
-  payers: {} as Payer,
-  splitor: 'equal',
-  group: null as { 
-    id: string;
-    name: string;
-    members: Participant[];
-  } | null
-})
 
 const setCurrency = (currency: string) => {
-  localRecord.currency = currency
+  record.value.currency = currency
 }
 
-watch(() => record.value, (newRecord) => {
-  localRecord.title = newRecord.title
-  localRecord.value = newRecord.value
-  localRecord.fullDate = newRecord.fullDate
-  localRecord.participants = newRecord.participants
-  localRecord.payers = newRecord.payers
-  localRecord.splitor = newRecord.splitor
-  localRecord.group = newRecord.group
+
+watch(() => record, (newRecord) => {
+  console.log(newRecord)
 })
 </script>
 
