@@ -30,14 +30,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, inject, reactive, watch } from 'vue'
-import type { Record } from '@/types/types'
+import { ref, watch } from 'vue'
 import { useEditorStore } from '@/store/editor'
 import { storeToRefs } from 'pinia'
 
+const currencyList = ['TWD', 'USD', 'JPY']
 const editorStore = useEditorStore()
-const { record } = storeToRefs(editorStore) // NOTE: 從 store（整包為 reactive） 中取出屬性 state 時，為了要能夠保持響應性，必須使用 storeToRefs。不然會不被 Proxy 包裹
-const currencyList = ref(['TWD', 'USD', 'JPY'])
+
+const { record } = storeToRefs(editorStore)
 const isCurrencyListActive = ref(false)
 
 const setCurrency = (currency: string) => {

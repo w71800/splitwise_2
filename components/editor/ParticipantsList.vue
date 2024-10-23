@@ -2,7 +2,7 @@
 .editor__participants
   .participants-list(@click="toggleRecommendList")
     .label 和：
-    .participants-item(v-for="participant in localRecord.participants" :key="participant.id") 
+    .participants-item(v-for="participant in record.participants" :key="participant.id") 
       .avatar
         img(:src="participant.avatar")
       .name {{ participant.displayName }}
@@ -20,25 +20,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref, toRefs, inject } from 'vue'
+import { ref } from 'vue'
 import { fakeFriends } from '@/data'
-import type { Participant, Record } from '@/types/types'
+import type { Participant } from '@/types/types'
+import { useEditorStore } from '@/store/editor'
 
-const record = inject('currentRecord') as Ref<Record>
+const editorStore = useEditorStore()
+
+const { record } = storeToRefs(editorStore)
 const isRecommendListActive = ref(false)
 const recommendParticipants = ref(fakeFriends)
 const chosenParticipants = ref<Participant[]>([])
-const localRecord = reactive({
-  participants: [] as Participant[]
-})
 
 
 const insertParticipant = (participant: Participant) => {
-  localRecord.participants.push(participant)
+  record.value.participants.push(participant)
 }
 
 const removeParticipant = (participant: Participant) => {
-  localRecord.participants = localRecord.participants.filter(p => p.id !== participant.id)
+  record.value.participants = record.value.participants.filter(p => p.id !== participant.id)
 }
 
 const toggleRecommendList = () => {
@@ -47,7 +47,7 @@ const toggleRecommendList = () => {
 }
 
 watch(() => record.value, (newRecord) => {
-  localRecord.participants = newRecord.participants
+  console.log(newRecord)
 })
 </script>
 
