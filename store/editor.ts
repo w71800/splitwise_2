@@ -19,7 +19,7 @@ const createEmptyRecord = (): Record => {
     title: '',
     value: 0,
     currency: 'TWD',
-    fullDate: new Date().toISOString().split('T')[0],
+    fullDate: new Date(),
     participants: [ userData ],
     divisions: [ { ...userData, value: 0 } ],
     payers: { ...userData, paid: 0 },

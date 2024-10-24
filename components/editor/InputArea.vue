@@ -29,8 +29,9 @@
     DatePicker(
       v-model="record.fullDate" 
       hide-input-icon
+      auto-apply
       :time-picker="false"
-      :format="dateFormat"
+      :format="displayDate"
       :ui=`{
         input: 'datepicker__input'
       }`
@@ -51,8 +52,11 @@ const { record } = storeToRefs(editorStore)
 const isCurrencyListActive = ref(false)
 
 
-const dateFormat = computed(() => {
-  return (date: Date) => date.toISOString().split('T')[0]
+const displayDate = computed(() => {
+  return (date: Date) => {
+    const isToday = date.toDateString() === new Date().toDateString()
+    return isToday ? '今天' : date.toISOString().split('T')[0]
+  }
 })
 
 const setCurrency = (currency: string) => {

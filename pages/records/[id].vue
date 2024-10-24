@@ -58,7 +58,7 @@ const isLoading = ref(true)
 
 const displayDate = computed(() => {
   const [ year, month, day ] = record.value?.fullDate?.toISOString().split("T")[0].split('-') || ["1900", "1", "1"]
-  return `${year} 年 ${getSingleDigitMonth(month)} 月 ${day} 日`
+  return `${year} 年 ${month} 月 ${day} 日`
 })
 
 onMounted(() => {
