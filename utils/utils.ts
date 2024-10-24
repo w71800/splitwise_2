@@ -344,7 +344,7 @@ function getPartialSummary(debts: Debt[], userId: string): {
   return partialSummary
 }
 
-function getComplement(source: any[], target: any[]): any[] {
+export function getComplement(source: any[], target: any[]): any[] {
   return source.filter(item => !target.includes(item))
 }
 
