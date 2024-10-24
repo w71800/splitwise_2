@@ -24,15 +24,24 @@
     )
     span.currency {{ record.currency }}
   .input_wrapper.date
-    .icon
+    .icon 
       img(:src="'/icons/calendar.png'")
-    input(placeholder="2024-10-26" v-model="record.fullDate")
+    DatePicker(
+      v-model="record.fullDate" 
+      hide-input-icon
+      :format="dateFormat"
+      :ui=`{
+        input: 'datepicker__input'
+      }`
+    )
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useEditorStore } from '@/store/editor'
 import { storeToRefs } from 'pinia'
+import DatePicker from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css';
 
 const currencyList = ['TWD', 'USD', 'JPY']
 const editorStore = useEditorStore()
@@ -40,9 +49,15 @@ const editorStore = useEditorStore()
 const { record } = storeToRefs(editorStore)
 const isCurrencyListActive = ref(false)
 
+
+const dateFormat = computed(() => {
+  return (date: Date) => date.toISOString().split('T')[0]
+})
+
 const setCurrency = (currency: string) => {
   record.value.currency = currency
 }
+
 
 
 watch(() => record, (newRecord) => {
@@ -94,9 +109,6 @@ watch(() => record, (newRecord) => {
         color: #5E5E5E
         font-size: 1rem
         margin-left: 20px
-    &.date
-      input
-        width: 100%
   
   .currency-list
     display: none
