@@ -29,6 +29,7 @@
     DatePicker(
       v-model="record.fullDate" 
       hide-input-icon
+      :time-picker="false"
       :format="dateFormat"
       :ui=`{
         input: 'datepicker__input'

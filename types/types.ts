@@ -27,7 +27,7 @@ export interface Record {
   title: string;
   value: number;
   currency: string;
-  fullDate: string;  // 新增這一行
+  fullDate: Date;
   participants: Participant[];
   divisions: Division[];
   payers: Payer;

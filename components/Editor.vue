@@ -29,7 +29,7 @@ const recordData = reactive<Record>({
   title: '晚餐',
   value: 1200,
   currency: 'TWD',
-  fullDate: '2024-03-15',
+  fullDate: new Date('2024-03-15'),
   participants: [fakeUser, fakeFriends[0]],
   payers: {
     id: "1",

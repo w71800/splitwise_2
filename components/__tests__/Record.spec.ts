@@ -19,7 +19,7 @@ describe('Record.vue', () => {
         record: {
           id: '1',
           value: 400,
-          fullDate: "2024-08-01",
+          fullDate: new Date("2024-08-01"),
           participants: [{ id: "1", displayName: 'Alice' }, { id: "2", displayName: 'Bob' }],
           payers: { id: "1", displayName: 'Alice', paid: 400 },
           title: '火鍋聚餐',

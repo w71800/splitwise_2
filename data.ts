@@ -24,7 +24,7 @@ export const fakeRecords: Record[] = [
     title: '午餐',
     value: 300,
     currency: 'TWD',
-    fullDate: '2024-03-15',
+    fullDate: new Date('2024-03-15'),
     participants: [
       { id: "1", displayName: '威利', email: 'william@gmail.com', tags: ['未結清', '聚餐'], avatar: '/avatars/profile.jpg' },
       { id: '2', displayName: '小華', email: 'xiaohua@example.com', tags: ['未結清', '午餐'], avatar: '/avatars/profile.jpg' }
@@ -50,7 +50,7 @@ export const fakeRecords: Record[] = [
     title: '電影票',
     value: 500,
     currency: 'TWD',
-    fullDate: '2024-03-20',
+    fullDate: new Date('2024-03-20'),
     participants: [
       { id: "1", displayName: '威利', email: 'william@gmail.com', tags: ['待整理', '娛樂'], avatar: '/avatars/profile.jpg' },
       { id: '2', displayName: '小華', email: 'xiaohua@example.com', tags: ['待整理', '電影'], avatar: '/avatars/profile.jpg' },
@@ -78,7 +78,7 @@ export const fakeRecords: Record[] = [
     title: '生日禮物',
     value: 120,
     currency: 'TWD',
-    fullDate: '2024-04-01',
+    fullDate: new Date('2024-04-01'),
     participants: [
       { id: "1", displayName: '威利', email: 'william@gmail.com', tags: ['未結清', '禮物'], avatar: '/avatars/profile.jpg' },
       { id: '2', displayName: '小華', email: 'xiaohua@example.com', tags: ['未結清', '生日'], avatar: '/avatars/profile.jpg' },
@@ -106,7 +106,7 @@ export const fakeRecords: Record[] = [
     title: '晚餐',
     value: 200,
     currency: 'TWD',
-    fullDate: '2024-04-05',
+    fullDate: new Date('2024-04-05'),
     participants: [
       { id: "1", displayName: '威利', email: 'william@gmail.com', tags: ['待整理', '晚餐'], avatar: '/avatars/profile.jpg' },
       { id: '2', displayName: '小華', email: 'xiaohua@example.com', tags: ['待整理', '聚會'], avatar: '/avatars/profile.jpg' },

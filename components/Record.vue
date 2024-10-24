@@ -41,7 +41,7 @@ const titleClass = computed(() => ({
   'title--to-pay': !isPayer.value,
   'title--to-receive': isPayer.value
 }))
-const [ _, month, date ] = fullDate.value.split('-')
+const [ _, month, date ] = fullDate.value.toISOString().split("T")[0].split('-')
 // const payerStr = computed(() => payers.value.map(payer => payer.displayName).join('、') + ' 付了')
 const payerStr = computed(() => `${payers.value.displayName} 付了 ${value.value} 元`)
 // 取得這筆紀錄中，目前使用者於這筆紀錄的 debt
