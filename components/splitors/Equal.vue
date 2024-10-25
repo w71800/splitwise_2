@@ -16,24 +16,24 @@
             type='checkbox' 
             name='division' 
             :id="`division${division.id}`" 
-            :checked="isChecked(division.value)" 
+            :checked="isActive(division.value)" 
             @change="setValue(division, $event)"
           )
   .splitor__hinter
     .title 
-      span {{ validPeopleNum }} 人分擔，每人分擔 ${{ eachValue }}
+      span {{ activePeopleCount }} 人分擔，每人分擔 ${{ eachValue }}
     .divider
     .select_all
       span 全選
       input(
         type='checkbox' 
         @click="selectAll($event)"
-        :checked="isAllChecked"
+        :checked="isAllActive"
       )
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { useEditorStore } from '@/store/editor'
 import { storeToRefs } from 'pinia'
 import type { Division } from '@/types/types'
@@ -41,14 +41,14 @@ import type { Division } from '@/types/types'
 const editorStore = useEditorStore()
 const { record } = storeToRefs(editorStore)
 
-const isAllChecked = computed(() => record.value.divisions.every((division) => division.value !== 0))
-const validPeopleNum = computed(() => record.value.divisions.filter((division) => division.value !== 0).length)
+const isAllActive = computed(() => record.value.divisions.every((division) => division.value !== 0))
+const activePeopleCount = computed(() => record.value.divisions.filter((division) => division.value !== 0).length)
 const eachValue = computed(() => {
-  if (validPeopleNum.value === 0) return 0
-  return parseFloat((record.value.value / validPeopleNum.value).toFixed(2))
+  if (activePeopleCount.value === 0) return 0
+  return parseFloat((record.value.value / activePeopleCount.value).toFixed(2))
 })
 
-const isChecked = (value: number) => {
+const isActive = (value: number) => {
   return value !== 0
 }
 
@@ -60,10 +60,10 @@ const setValue = (division: Division, event: Event) => {
     division.value = 0
   }
   
-  let validPeopleNum = record.value.divisions.filter((division) => division.value !== 0).length
+  let activePeopleCount = record.value.divisions.filter((division) => division.value !== 0).length
   record.value.divisions.forEach((division) => {
     if(division.value !== 0) {
-      division.value = record.value.value / validPeopleNum
+      division.value = record.value.value / activePeopleCount
     }
   })
 }
