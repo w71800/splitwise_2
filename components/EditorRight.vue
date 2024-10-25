@@ -1,6 +1,4 @@
 <!-- 
-  @todo: 
-  - 所有的 input 在 safari ，下邊框樣式都很奇怪，或許要改用 outline 來處理？
 -->
 
 <template lang="pug">
@@ -18,9 +16,9 @@
 </template>
 
 <script setup lang="ts">
-import { inject, defineAsyncComponent } from 'vue'
+import { defineAsyncComponent } from 'vue'
 
-const splitorList = ref([
+const splitorList = [
   {
     name: 'Equal',
     icon: '/icons/equal.png',
@@ -41,10 +39,10 @@ const splitorList = ref([
     icon: '/icons/percent.png',
     iconActive: '/icons/percent_active.png'
   }
-])
+]
 const currentSplitor = ref('Equal')
 const nowSplitor = computed(() => {
-  const now = splitorList.value.find(splitor => splitor.name === currentSplitor.value)
+  const now = splitorList.find(splitor => splitor.name === currentSplitor.value)
 
   switch (now?.name) {
     case 'Equal':
