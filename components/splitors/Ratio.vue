@@ -24,7 +24,7 @@ import type { Division } from '@/types/types'
 
 const editorStore = useEditorStore()
 const { record, divisionsMapper } = storeToRefs(editorStore)
-const divisions = ref(divisionsMapper.value.ratio)
+const divisions = ref(divisionsMapper.value.ratio) // NOTE: 這邊更動之後，store 裡面的 divisions 會跟著更動嗎？
 const totalDevidedCount = ref(0)
 
 const activePeopleCount = computed(() => divisions.value.filter((division) => division.value !== 0).length)

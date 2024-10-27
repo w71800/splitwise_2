@@ -2,32 +2,53 @@
 #splitor
   .splitor__content
     .participants
-      .participant(v-for="i in 10" :key="i")
+      .participant(v-for="(division, index) in divisions" :key="division.id")
         .avatar
           img(:src="'/avatars/profile.jpg'")
-        .name 威利
+        .name {{ division.displayName }}
         .input_wrapper.value_is_exist
           label(for="participant") $
-          input(type='number' name='participant' placeholder='30')
+          input(type='number' name='participant' placeholder='30' v-model="divisions[index].value")
   .splitor__hinter
     .title 
       span 已分配 
-      span $180 
-      span 中的 
-      span $150
+      span ${{ totalValue }}
+      span &nbsp;中的&nbsp;
+      span ${{ tempTotalValue }}
     .subtitle(v-if="!settled") 
       span 剩餘 
-      span $30 
-      span 未分配
+      span ${{ remainingValue }}
+      span &nbsp;未分配
     .settled(v-else) 全部分配完了！
   </template>
   
-  <script setup lang="ts">
-  import { ref } from 'vue'
-  const settled = ref(false)
-  
-  </script>
-  
-  <style scoped lang="sass">
-  
-  </style>
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useEditorStore } from '@/store/editor'
+import { storeToRefs } from 'pinia'
+import type { Division } from '@/types/types'
+
+const editorStore = useEditorStore()
+const { record, divisionsMapper } = storeToRefs(editorStore)
+const divisions = ref(divisionsMapper.value.fixed)
+const totalValue = ref(record.value.value)
+
+const tempTotalValue = computed(() => divisions.value.reduce((acc, curr) => acc + curr.value, 0))
+const remainingValue = computed(() => totalValue.value - tempTotalValue.value)
+const settled = computed(() => remainingValue.value === 0)
+
+watch(
+  () => [ record.value.participants, record.value.value ], 
+  () => {
+    divisions.value = record.value.participants.map((participant): Division => ({
+      ...participant,
+      value: 0
+    }))
+  },
+  { deep: true }
+)
+</script>
+
+<style scoped lang="sass">
+
+</style>
