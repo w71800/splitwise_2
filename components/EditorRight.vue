@@ -54,7 +54,7 @@ const splitorList = [
     iconActive: '/icons/ratio_active.png'
   },
   {
-    name: 'Percent',
+    name: 'Percentage',
     icon: '/icons/percent.png',
     iconActive: '/icons/percent_active.png'
   }
@@ -71,7 +71,7 @@ const nowSplitor = computed(() => {
       return '定值分擔'
     case 'Ratio':
       return '比例分擔'
-    case 'Percent':
+    case 'Percentage':
       return '百分比分擔'
     default:
       return '有點出錯了'

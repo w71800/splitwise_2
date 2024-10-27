@@ -6,22 +6,20 @@
         .avatar
           img(:src="'/avatars/profile.jpg'")
         .name {{ division.displayName }}
-        .input_wrapper.value_is_exist
-          label(for="participant") $
+        .input_wrapper
           input(type='number' name='participant' placeholder='30' v-model="divisions[index].value")
+          label(for="participant") %
   .splitor__hinter
     .title 
       span 已分配 
-      span ${{ totalValue }}
-      span &nbsp;中的&nbsp;
-      span ${{ tempTotalValue }}
+      span {{ tempTotalValue }}%
     .subtitle(v-if="!settled") 
-      span 剩餘 
-      span ${{ remainingValue }}
-      span &nbsp;未分配
+      span 還剩 
+      span {{ remainingValue }}% 
+      span 未分配
     .settled(v-else) 全部分配完了！
-  </template>
-  
+</template>
+
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
 import { useEditorStore } from '@/store/editor'
@@ -34,7 +32,7 @@ const divisions = ref(divisionsMapper.value.fixed)
 const totalValue = ref(record.value.value)
 
 const tempTotalValue = computed(() => divisions.value.reduce((acc, curr) => acc + curr.value, 0))
-const remainingValue = computed(() => totalValue.value - tempTotalValue.value)
+const remainingValue = computed(() => 100 - tempTotalValue.value)
 const settled = computed(() => remainingValue.value === 0)
 
 watch(
@@ -51,4 +49,7 @@ watch(
 
 <style scoped lang="sass">
 
+.subtitle
+  span:nth-child(2)
+    color: $color_secondary
 </style>
