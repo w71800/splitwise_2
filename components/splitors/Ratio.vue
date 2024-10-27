@@ -2,21 +2,50 @@
 #splitor
   .splitor__content
     .participants
-      .participant(v-for="i in 10" :key="i")
+      .participant(v-for="(division, index) in record.divisions" :key="division.id")
         .avatar
-          img(:src="'/avatars/profile.jpg'")
-        .name 威利
-          .value-hinter $30
+          img(:src="division.avatar")
+        .name {{ division.displayName }}
+          .value-hinter ${{ hinterValue(division.value) }}
         .input_wrapper
-          input(type='number' name='participant' placeholder='1')
-          label(for="participant") 份
+          input(type='number' name='division' placeholder='1' v-model="record.divisions[index].value")
+          label(for="division") 份
   .splitor__hinter
-    .title 分擔人數 1 人，共 
-      span.settled 1 
-      span 份
+    .title 分擔人數 {{ activePeopleCount }} 人，共 
+      span.settled {{ totalRatio }}
+      span &nbsp;份
 </template>
 
 <script setup lang="ts">
+
+import { ref, watch, computed } from 'vue'
+import { useEditorStore } from '@/store/editor'
+import { storeToRefs } from 'pinia'
+import type { Division } from '@/types/types'
+
+const activePeopleCount = computed(() => record.value.divisions.filter((division) => division.value !== 0).length)
+const totalDevidedCount = ref(0)
+
+const editorStore = useEditorStore()
+const { record } = storeToRefs(editorStore)
+
+const totalRatio = computed(() => record.value.divisions.reduce((acc, curr) => acc + curr.value, 0))
+
+const hinterValue = (ratio: number) => {
+  if(totalRatio.value === 0) return 0
+  return record.value.value * (ratio / totalRatio.value)
+}
+
+watch(
+  () => [ record.value.participants, record.value.value ], 
+  () => {
+    record.value.divisions = record.value.participants.map((participant): Division => ({
+      ...participant,
+      value: 1
+    }))
+  },
+  { deep: true }
+)
 
 </script>
 

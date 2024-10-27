@@ -6,7 +6,7 @@
 #splitor
   .splitor__content
     .participants
-      .participant(v-for="division in record.divisions" :key="division.id")
+      .participant(v-for="division in divisions" :key="division.id")
         label(:for="`division${division.id}`")
         .avatar
           img(:src="division.avatar")
@@ -39,18 +39,20 @@ import { storeToRefs } from 'pinia'
 import type { Division } from '@/types/types'
 
 const editorStore = useEditorStore()
-const { record } = storeToRefs(editorStore)
+const { record, divisionsMapper } = storeToRefs(editorStore)
+const divisions = ref(divisionsMapper.value.equal) // 註冊 divisions 為 ref（其值為一個 reactive 的 array）。
+// NOTE: 那就算我這邊不用 ref 去註冊，我這邊的 divisions 也會是 reactive 的嗎？意味者我直接去更改 divisions 的值，也會被 vue 監聽到嗎？
 
-const isAllActive = computed(() => record.value.divisions.every((division) => division.value !== 0))
-const activePeopleCount = computed(() => record.value.divisions.filter((division) => division.value !== 0).length)
+const isAllActive = computed(() =>  divisions.value.every((division) => division.value !== 0))
+const activePeopleCount = computed(() => divisions.value.filter((division) => division.value !== 0).length)
 const eachValue = computed(() => {
   if (activePeopleCount.value === 0) return 0
   return parseFloat((record.value.value / activePeopleCount.value).toFixed(2))
 })
 
-const isActive = (value: number) => {
-  return value !== 0
-}
+
+const isActive = (value: number) => value !== 0 
+
 
 const setValue = (division: Division, event: Event) => {
   const isChecked = (event.target as HTMLInputElement).checked
@@ -60,32 +62,34 @@ const setValue = (division: Division, event: Event) => {
     division.value = 0
   }
   
-  let activePeopleCount = record.value.divisions.filter((division) => division.value !== 0).length
-  record.value.divisions.forEach((division) => {
+  let activePeopleCount = divisions.value.filter((division) => division.value !== 0).length
+  divisions.value.forEach((division) => {
     if(division.value !== 0) {
       division.value = record.value.value / activePeopleCount
     }
   })
 }
 
+
 const selectAll = (event: Event) => {
   const isChecked = (event.target as HTMLInputElement).checked
   if (isChecked) {
-    record.value.divisions.forEach((division) => {
+    divisions.value.forEach((division) => {
       division.value = record.value.value / record.value.participants.length
     })
   } else {
-    record.value.divisions.forEach((division) => {
+    divisions.value.forEach((division) => {
       division.value = 0
     })
   }
 }
 
+
 // 在參與者變多或變少時、總金額變動時，重新生成 divisions
 watch(
   () => [ record.value.participants, record.value.value ], 
   () => {
-    record.value.divisions = record.value.participants.map((participant): Division => ({
+    divisions.value = record.value.participants.map((participant): Division => ({
       ...participant,
       value: record.value.value / record.value.divisions.length
     }))

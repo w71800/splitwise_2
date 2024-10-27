@@ -18,6 +18,20 @@
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue'
 
+const topbarConfig = {
+  left: {
+    type: 'text',
+    text: '取消',
+    method: 'scrollBack'
+  },
+  middle: '分擔方式選擇',
+  right: {
+    type: 'text',
+    text: '確定',
+    method: 'save'
+  }
+}
+
 const splitorList = [
   {
     name: 'Equal',
@@ -41,6 +55,7 @@ const splitorList = [
   }
 ]
 const currentSplitor = ref('Equal')
+
 const nowSplitor = computed(() => {
   const now = splitorList.find(splitor => splitor.name === currentSplitor.value)
 
@@ -57,20 +72,6 @@ const nowSplitor = computed(() => {
       return '有點出錯了'
   }
 })
-
-const topbarConfig = {
-  left: {
-    type: 'text',
-    text: '取消',
-    method: 'scrollBack'
-  },
-  middle: '分擔方式選擇',
-  right: {
-    type: 'text',
-    text: '確定',
-    method: 'save'
-  }
-}
 
 const changeSplitor = (splitor: { name: string, icon: string, iconActive: string }) => {
   currentSplitor.value = splitor.name
