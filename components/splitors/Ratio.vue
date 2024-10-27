@@ -2,13 +2,13 @@
 #splitor
   .splitor__content
     .participants
-      .participant(v-for="(division, index) in record.divisions" :key="division.id")
+      .participant(v-for="(division, index) in divisions" :key="division.id")
         .avatar
           img(:src="division.avatar")
         .name {{ division.displayName }}
           .value-hinter ${{ hinterValue(division.value) }}
         .input_wrapper
-          input(type='number' name='division' placeholder='1' v-model="record.divisions[index].value")
+          input(type='number' name='division' placeholder='1' v-model="divisions[index].value")
           label(for="division") 份
   .splitor__hinter
     .title 分擔人數 {{ activePeopleCount }} 人，共 
@@ -17,36 +17,34 @@
 </template>
 
 <script setup lang="ts">
-
 import { ref, watch, computed } from 'vue'
 import { useEditorStore } from '@/store/editor'
 import { storeToRefs } from 'pinia'
 import type { Division } from '@/types/types'
 
-const activePeopleCount = computed(() => record.value.divisions.filter((division) => division.value !== 0).length)
+const editorStore = useEditorStore()
+const { record, divisionsMapper } = storeToRefs(editorStore)
+const divisions = ref(divisionsMapper.value.ratio)
 const totalDevidedCount = ref(0)
 
-const editorStore = useEditorStore()
-const { record } = storeToRefs(editorStore)
-
-const totalRatio = computed(() => record.value.divisions.reduce((acc, curr) => acc + curr.value, 0))
+const activePeopleCount = computed(() => divisions.value.filter((division) => division.value !== 0).length)
+const totalRatio = computed(() => divisions.value.reduce((acc, curr) => acc + curr.value, 0))
 
 const hinterValue = (ratio: number) => {
   if(totalRatio.value === 0) return 0
-  return record.value.value * (ratio / totalRatio.value)
+  return (record.value.value * (ratio / totalRatio.value)).toFixed(2)
 }
 
 watch(
   () => [ record.value.participants, record.value.value ], 
   () => {
-    record.value.divisions = record.value.participants.map((participant): Division => ({
+    divisions.value = record.value.participants.map((participant): Division => ({
       ...participant,
       value: 1
     }))
   },
   { deep: true }
 )
-
 </script>
 
 <style scoped lang="sass">

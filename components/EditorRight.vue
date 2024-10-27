@@ -17,6 +17,11 @@
 
 <script setup lang="ts">
 import { defineAsyncComponent } from 'vue'
+import { useEditorStore } from '@/store/editor'
+import { storeToRefs } from 'pinia'
+
+const editorStore = useEditorStore()
+const { record } = storeToRefs(editorStore)
 
 const topbarConfig = {
   left: {
@@ -75,6 +80,7 @@ const nowSplitor = computed(() => {
 
 const changeSplitor = (splitor: { name: string, icon: string, iconActive: string }) => {
   currentSplitor.value = splitor.name
+  record.value.splitor = splitor.name.toLowerCase() as 'equal' | 'fixed' | 'percentage' | 'ratio'
 }
 // @todo: 元件的渲染改成靜態的，避免載入時的跳閃
 const getSplitorComponent = (splitorName: string) => {
