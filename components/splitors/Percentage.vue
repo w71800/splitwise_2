@@ -6,6 +6,7 @@
         .avatar
           img(:src="'/avatars/profile.jpg'")
         .name {{ division.displayName }}
+          .value-hinter ${{ hinterValue(division.value) }}
         .input_wrapper
           input(type='number' name='participant' placeholder='30' v-model="divisions[index].value")
           label(for="participant") %
@@ -35,6 +36,10 @@ const tempTotalValue = computed(() => divisions.value.reduce((acc, curr) => acc 
 const remainingValue = computed(() => 100 - tempTotalValue.value)
 const settled = computed(() => remainingValue.value === 0)
 
+const hinterValue = (value: number) => {
+  return (record.value.value * (value / 100)).toFixed(2)
+}
+
 watch(
   () => [ record.value.participants, record.value.value ], 
   () => {
@@ -48,6 +53,13 @@ watch(
 </script>
 
 <style scoped lang="sass">
+.value-hinter
+  position: absolute
+  bottom: 0
+  transform: translateY(100%)
+  font-size: 12px
+  color: #D5D5D5
+  font-weight: $font-weight-regular
 
 .subtitle
   span:nth-child(2)
