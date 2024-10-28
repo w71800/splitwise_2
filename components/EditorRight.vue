@@ -12,8 +12,6 @@
           //- @todo: 這邊要計算條件縮成一個 function
           img(:src="currentSplitor === splitor.name ? splitor.iconActive : splitor.icon")
     .splitor-component-wrapper
-      //- component(:is="getSplitorComponent(currentSplitor)" :currentSplitor="currentSplitor")
-      //- 
       Equal(v-show="currentSplitor === 'Equal'")
       Fixed(v-show="currentSplitor === 'Fixed'")
       Ratio(v-show="currentSplitor === 'Ratio'")

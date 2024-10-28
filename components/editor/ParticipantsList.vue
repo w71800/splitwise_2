@@ -24,7 +24,7 @@ import { ref, computed } from 'vue'
 import { fakeFriends } from '@/data'
 import type { Participant } from '@/types/types'
 import { useEditorStore } from '@/store/editor'
-import { getComplement } from '@/utils/utils'
+import { getComplementParticipants } from '@/utils/utils'
 import { useUserDataStore } from '@/store/userData'
 
 const userData = useUserDataStore().$state
@@ -33,7 +33,7 @@ const editorStore = useEditorStore()
 const { record } = storeToRefs(editorStore)
 const isRecommendListActive = ref(false)
 
-const recommendParticipants = computed(() => getComplement([ ...fakeFriends, userData ], record.value.participants))
+const recommendParticipants = computed(() => getComplementParticipants([ ...fakeFriends, userData ], record.value.participants))
 
 const insertParticipant = (participant: Participant) => {
   record.value.participants.push(participant)
