@@ -353,3 +353,26 @@ export enum DebtStatus {
   Payable = '應支付',
   Settled = '無欠款'
 }
+
+export const splitorList = [
+  {
+    name: 'Equal',
+    icon: '/icons/equal.png',
+    iconActive: '/icons/equal_active.png'
+  },
+  {
+    name: 'Fixed',
+    icon: '/icons/fixed.png',
+    iconActive: '/icons/fixed_active.png'
+  },
+  {
+    name: 'Ratio',
+    icon: '/icons/ratio.png',
+    iconActive: '/icons/ratio_active.png'
+  },
+  {
+    name: 'Percentage',
+    icon: '/icons/percent.png',
+    iconActive: '/icons/percent_active.png'
+  }
+]

@@ -15,11 +15,11 @@
       span ${{ totalValue }}
       span &nbsp;中的&nbsp;
       span ${{ tempTotalValue }}
-    .subtitle(v-if="!settled") 
+    .settled(v-if="settled") 全部分配完了！
+    .subtitle(v-else) 
       span 剩餘 
       span ${{ remainingValue }}
       span &nbsp;未分配
-    .settled(v-else) 全部分配完了！
   </template>
   
 <script setup lang="ts">
@@ -31,8 +31,8 @@ import type { Division } from '@/types/types'
 const editorStore = useEditorStore()
 const { record, divisionsMapper } = storeToRefs(editorStore)
 const divisions = ref(divisionsMapper.value.fixed)
-const totalValue = ref(record.value.value)
 
+const totalValue = computed(() => record.value.value)
 const tempTotalValue = computed(() => divisions.value.reduce((acc, curr) => acc + curr.value, 0))
 const remainingValue = computed(() => totalValue.value - tempTotalValue.value)
 const settled = computed(() => remainingValue.value === 0)

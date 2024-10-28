@@ -28,7 +28,7 @@ import type { Division } from '@/types/types'
 
 const editorStore = useEditorStore()
 const { record, divisionsMapper } = storeToRefs(editorStore)
-const divisions = ref(divisionsMapper.value.fixed)
+const divisions = ref(divisionsMapper.value.percentage)
 const totalValue = ref(record.value.value)
 
 const tempTotalValue = computed(() => divisions.value.reduce((acc, curr) => acc + curr.value, 0))

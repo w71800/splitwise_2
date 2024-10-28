@@ -5,65 +5,43 @@
 .scroll-contents__right
   Topbar(:left="topbarConfig.left" :middle="topbarConfig.middle" :right="topbarConfig.right")
   .content__body
-    .now_splitor {{ nowSplitor }}
+    .now_splitor {{ displayNowSplitor }}
     .splitor-list
       .splitor-item(v-for="splitor in splitorList" :key="splitor" @click="changeSplitor(splitor)")
         .icon
           //- @todo: 這邊要計算條件縮成一個 function
           img(:src="currentSplitor === splitor.name ? splitor.iconActive : splitor.icon")
     .splitor-component-wrapper
-      component(:is="getSplitorComponent(currentSplitor)")
+      //- component(:is="getSplitorComponent(currentSplitor)" :currentSplitor="currentSplitor")
+      //- 
+      Equal(v-show="currentSplitor === 'Equal'")
+      Fixed(v-show="currentSplitor === 'Fixed'")
+      Ratio(v-show="currentSplitor === 'Ratio'")
+      Percentage(v-show="currentSplitor === 'Percentage'")
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent } from 'vue'
 import { useEditorStore } from '@/store/editor'
 import { storeToRefs } from 'pinia'
+import { splitorList } from '@/utils/utils'
+import Equal from './splitors/Equal.vue'
+import Fixed from './splitors/Fixed.vue'
+import Ratio from './splitors/Ratio.vue'
+import Percentage from './splitors/Percentage.vue'
+
+const splitorComponents = {
+  Equal,
+  Fixed,
+  Ratio,
+  Percentage
+}
 
 const editorStore = useEditorStore()
 const { record } = storeToRefs(editorStore)
-
-const topbarConfig = {
-  left: {
-    type: 'text',
-    text: '取消',
-    method: 'scrollBack'
-  },
-  middle: '分擔方式選擇',
-  right: {
-    type: 'text',
-    text: '確定',
-    method: 'save'
-  }
-}
-
-const splitorList = [
-  {
-    name: 'Equal',
-    icon: '/icons/equal.png',
-    iconActive: '/icons/equal_active.png'
-  },
-  {
-    name: 'Fixed',
-    icon: '/icons/fixed.png',
-    iconActive: '/icons/fixed_active.png'
-  },
-  {
-    name: 'Ratio',
-    icon: '/icons/ratio.png',
-    iconActive: '/icons/ratio_active.png'
-  },
-  {
-    name: 'Percentage',
-    icon: '/icons/percent.png',
-    iconActive: '/icons/percent_active.png'
-  }
-]
 const currentSplitor = ref('Equal')
 
-const nowSplitor = computed(() => {
+const displayNowSplitor = computed(() => {
   const now = splitorList.find(splitor => splitor.name === currentSplitor.value)
-
   switch (now?.name) {
     case 'Equal':
       return '平均分擔'
@@ -80,11 +58,20 @@ const nowSplitor = computed(() => {
 
 const changeSplitor = (splitor: { name: string, icon: string, iconActive: string }) => {
   currentSplitor.value = splitor.name
-  record.value.splitor = splitor.name.toLowerCase() as 'equal' | 'fixed' | 'percentage' | 'ratio'
 }
-// @todo: 元件的渲染改成靜態的，避免載入時的跳閃
-const getSplitorComponent = (splitorName: string) => {
-  return defineAsyncComponent(() => import(`./splitors/${splitorName}.vue`))
+
+const topbarConfig = {
+  left: {
+    type: 'text',
+    text: '取消',
+    method: 'scrollBack'
+  },
+  middle: '分擔方式選擇',
+  right: {
+    type: 'text',
+    text: '確定',
+    method: 'save'
+  }
 }
 </script>
 
