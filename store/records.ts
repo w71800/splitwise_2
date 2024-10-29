@@ -17,7 +17,9 @@ export const useRecordsStore = defineStore('records', {
     deleteRecord(recordId: string) { // 刪除紀錄
       this.records = this.records.filter(record => record.id !== recordId)
     },
-    putRecord(recordId: string, updatedRecord: Partial<Record>) { // 替換紀錄
+    putRecord(record: Record) {  // 替換紀錄
+      const { id: targetId } = record
+      this.records = this.records.map(r => r.id == targetId ? record : r)
     }
   },
   getters: {

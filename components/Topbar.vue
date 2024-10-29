@@ -78,8 +78,8 @@ const methodsMapper = {
     setRecord()
     loadDivisionsMapper()
   },
-  'submit': (mode: 'add' | 'edit') => {
-    if (mode === 'add') {
+  'submit': (mode: 'post' | 'put') => {
+    if (mode === 'post') {
       addRecord()
     } else {
       putRecord()
