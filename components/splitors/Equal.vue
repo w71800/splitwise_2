@@ -40,8 +40,12 @@ import type { Division } from '@/types/types'
 
 const editorStore = useEditorStore()
 const { record, divisionsMapper } = storeToRefs(editorStore)
-const divisions = ref(divisionsMapper.value.equal) // 註冊 divisions 為 ref（其值為一個 reactive 的 array）。
-// NOTE: 那就算我這邊不用 ref 去註冊，我這邊的 divisions 也會是 reactive 的嗎？意味者我直接去更改 divisions 的值，也會被 vue 監聽到嗎？
+const divisions = computed({
+  get: () => divisionsMapper.value.equal,
+  set: (newDivisions) => {
+    divisionsMapper.value.equal = newDivisions
+  }
+})
 
 const isAllActive = computed(() =>  divisions.value.every((division) => division.value !== 0))
 const activePeopleCount = computed(() => divisions.value.filter((division) => division.value !== 0).length)

@@ -24,9 +24,14 @@ import type { Division } from '@/types/types'
 
 const editorStore = useEditorStore()
 const { record, divisionsMapper } = storeToRefs(editorStore)
-const divisions = ref(divisionsMapper.value.ratio) // NOTE: 這邊更動之後，store 裡面的 divisions 會跟著更動嗎？
-const totalDevidedCount = ref(0)
 
+// NOTE: 透過 computed 去註冊 divisions，這樣 divisions 的值改變時，vue 會自動監聽到，並且更新 store 裡面的 divisionsMapper
+const divisions = computed({
+  get: () => divisionsMapper.value.ratio,
+  set: (newDivisions) => {
+    divisionsMapper.value.ratio = newDivisions
+  }
+})
 const activePeopleCount = computed(() => divisions.value.filter((division) => division.value !== 0).length)
 const totalRatio = computed(() => divisions.value.reduce((acc, curr) => acc + curr.value, 0))
 
@@ -45,6 +50,7 @@ watch(
   },
   { deep: true }
 )
+
 </script>
 
 <style scoped lang="sass">

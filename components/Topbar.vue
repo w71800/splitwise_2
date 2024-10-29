@@ -17,23 +17,24 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed, inject } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import configMapper, { type Config, type Icon, type Text } from '@/utils/topbarConfig'
+import configMapper, { type Config } from '@/utils/topbarConfig'
 import type { Record } from '@/types/types'
 import { useRecordsStore } from '@/store/records'
 import { useEditorStore } from '@/store/editor'
 
 const editorStore = useEditorStore()
-const { setRecord } = editorStore
+const { setRecord, loadDivisionsMapper } = editorStore
 const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
 const isEditorScrolled = inject('isEditorScrolled') as Ref<boolean>
 const handleEditRecord = inject('handleEditRecord') as (record: Record) => void
 const props = defineProps<Config>()
 const route = useRoute()
 const router = useRouter()
-const currentPath = ref(route.path)
-const previousRoute = ref('')
 const { id: editingRecordId } = route.params
 const { getRecordById } = useRecordsStore()
+
+const currentPath = ref(route.path)
+const previousRoute = ref('')
 
 const pathList = computed(() => currentPath.value.split("/"))
 
@@ -67,6 +68,7 @@ const methodsMapper = {
     if (record) { 
       handleEditRecord(record)
       setRecord(record)
+      loadDivisionsMapper() // 載入分擔方式，但目前沒有成功載入到該 ratio 元件中？
     } else {
       console.error('Record not found')
     }
@@ -79,7 +81,6 @@ const methodsMapper = {
   },
   'scrollBack': () => {
     isEditorScrolled.value = false
-    console.log("scrollBack")
   },
   'save': () => {
     // todo: 將分擔方式寫入 temp obj 中

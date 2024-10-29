@@ -30,7 +30,12 @@ import type { Division } from '@/types/types'
 
 const editorStore = useEditorStore()
 const { record, divisionsMapper } = storeToRefs(editorStore)
-const divisions = ref(divisionsMapper.value.fixed)
+const divisions = computed({
+  get: () => divisionsMapper.value.fixed,
+  set: (newDivisions) => {
+    divisionsMapper.value.fixed = newDivisions
+  }
+})
 
 const totalValue = computed(() => record.value.value)
 const tempTotalValue = computed(() => divisions.value.reduce((acc, curr) => acc + curr.value, 0))

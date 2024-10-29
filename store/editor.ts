@@ -92,8 +92,8 @@ export const useEditorStore = defineStore('editor', {
     saveDivisions() { // 抓到該紀錄的 splitor 所對應的 divisions，並將 division 加入該 array
       this.record.divisions = this.divisionsMapper[this.record.splitor]
     },
-    loadDivisionsMapper() {
-      this.divisionsMapper = initializeDivisionHistory(this.record)
+    async loadDivisionsMapper() {
+      this.divisionsMapper = await initializeDivisionHistory(this.record)
     }
   }
 })
