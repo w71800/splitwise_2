@@ -9,7 +9,7 @@
   .topbar__left(@click="methodsMapper[config.left?.method]")
     NavigationButton(v-if="config.left" :option="config.left" class="left")
   .topbar__title
-    .text {{ config.middle }}
+    .text {{ displayTitle }}
   .topbar__right(@click="methodsMapper[config.right?.method]")
     NavigationButton(v-if="config.right" :option="config.right" class="right")
 </template>
@@ -23,6 +23,7 @@ import { useRecordsStore } from '@/store/records'
 import { useEditorStore } from '@/store/editor'
 
 const editorStore = useEditorStore()
+const { record: currentRecord, editorMode } = storeToRefs(editorStore)
 const { setRecord, loadDivisionsMapper, saveDivisions } = editorStore
 const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
 const isEditorScrolled = inject('isEditorScrolled') as Ref<boolean>
@@ -51,6 +52,15 @@ const config = computed(() => {
   }
 })
 
+const displayTitle = computed(() => {
+  return config.value.middle 
+  ? config.value.middle 
+  : editorMode.value === 'add' 
+    ? "新增"
+    : "編輯"
+    
+})
+
 
 watch(() => route.path, (newPath, oldPath) => {
   currentPath.value = newPath
@@ -65,6 +75,7 @@ const methodsMapper = {
   },
   'edit': () => {
     const record = getRecordById(editingRecordId as string)!
+    editorMode.value = 'put'
     if (record) { 
       handleEditRecord(record)
       setRecord(record)
@@ -78,11 +89,14 @@ const methodsMapper = {
     setRecord()
     loadDivisionsMapper()
   },
-  'submit': (mode: 'post' | 'put') => {
-    if (mode === 'post') {
-      addRecord()
+  'submit': () => {
+    const mode = editorMode.value
+    if (mode === 'add') {
+      console.log('add');
+      // addRecord(currentRecord.value)
     } else {
-      putRecord()
+      console.log('put');
+      // putRecord(currentRecord.value)
     }
   },
   'scrollBack': () => {

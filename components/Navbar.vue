@@ -33,10 +33,14 @@ nav.navbar
 <script setup lang="ts">
 import { inject } from 'vue'
 import type { Record } from '@/types/types'
-const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
+import { useEditorStore } from '@/store/editor';
+
 const route = useRoute()
 const userId = 3 
+const { editorMode } = storeToRefs(useEditorStore())
 
+
+const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
 const handleAddNewRecord = inject('handleAddNewRecord')
 
 const navItems = [
@@ -79,6 +83,7 @@ const isActive = (pathString: string) => route.path.includes(pathString)
 
 const handleAdd = () => {
   isEditorShowing.value = true
+  editorMode.value = 'add'
 }
 </script>
 

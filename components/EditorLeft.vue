@@ -11,7 +11,6 @@
 .scroll-contents__left
   Topbar(
     :left="topbarConfig.left" 
-    :middle="topbarConfig.middle" 
     :right="topbarConfig.right"
   )
   ParticipantsList

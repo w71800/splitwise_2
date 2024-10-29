@@ -84,7 +84,8 @@ export const useEditorStore = defineStore('editor', {
   state: () => ({
     record: createEmptyRecord(),
     divisionsMapper: initializeDivisionHistory(),
-    currentSplitor: 'Equal'
+    currentSplitor: 'Equal',
+    editorMode: 'add'
   }),
   actions: {
     setRecord(record: Record | null = null) {
