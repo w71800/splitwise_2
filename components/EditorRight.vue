@@ -7,7 +7,7 @@
   .content__body
     .now_splitor {{ displayNowSplitor }}
     .splitor-list
-      .splitor-item(v-for="splitor in splitorList" :key="splitor" @click="changeSplitor(splitor)")
+      .splitor-item(v-for="splitor in splitorList" :key="splitor" @click="changeSplitor(splitor.name)")
         .icon
           //- @todo: 這邊要計算條件縮成一個 function
           img(:src="currentSplitor === splitor.name ? splitor.iconActive : splitor.icon")
@@ -35,8 +35,7 @@ const splitorComponents = {
 }
 
 const editorStore = useEditorStore()
-const { record } = storeToRefs(editorStore)
-const currentSplitor = ref('Equal')
+const { record, currentSplitor } = storeToRefs(editorStore)
 
 const displayNowSplitor = computed(() => {
   const now = splitorList.find(splitor => splitor.name === currentSplitor.value)
@@ -54,8 +53,8 @@ const displayNowSplitor = computed(() => {
   }
 })
 
-const changeSplitor = (splitor: { name: string, icon: string, iconActive: string }) => {
-  currentSplitor.value = splitor.name
+const changeSplitor = (splitor: string) => {
+  currentSplitor.value = splitor
 }
 
 const topbarConfig = {

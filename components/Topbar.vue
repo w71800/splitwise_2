@@ -23,7 +23,7 @@ import { useRecordsStore } from '@/store/records'
 import { useEditorStore } from '@/store/editor'
 
 const editorStore = useEditorStore()
-const { setRecord, loadDivisionsMapper } = editorStore
+const { setRecord, loadDivisionsMapper, saveDivisions } = editorStore
 const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
 const isEditorScrolled = inject('isEditorScrolled') as Ref<boolean>
 const handleEditRecord = inject('handleEditRecord') as (record: Record) => void
@@ -31,7 +31,7 @@ const props = defineProps<Config>()
 const route = useRoute()
 const router = useRouter()
 const { id: editingRecordId } = route.params
-const { getRecordById } = useRecordsStore()
+const { getRecordById, addRecord, putRecord } = useRecordsStore()
 
 const currentPath = ref(route.path)
 const previousRoute = ref('')
@@ -68,22 +68,29 @@ const methodsMapper = {
     if (record) { 
       handleEditRecord(record)
       setRecord(record)
-      loadDivisionsMapper() // 載入分擔方式，但目前沒有成功載入到該 ratio 元件中？
+      loadDivisionsMapper(record)
     } else {
       console.error('Record not found')
     }
   },
   'close': () => {
     isEditorShowing.value = false
+    setRecord()
+    loadDivisionsMapper()
   },
-  'submit': () => {
-    // todo: 與 store 溝通，將資料存入
+  'submit': (mode: 'add' | 'edit') => {
+    if (mode === 'add') {
+      addRecord()
+    } else {
+      putRecord()
+    }
   },
   'scrollBack': () => {
     isEditorScrolled.value = false
   },
   'save': () => {
-    // todo: 將分擔方式寫入 temp obj 中
+    saveDivisions()
+    isEditorScrolled.value = false
   }
 }
 

@@ -83,17 +83,19 @@ const initializeDivisionHistory = (record: Record | null = null) => {
 export const useEditorStore = defineStore('editor', {
   state: () => ({
     record: createEmptyRecord(),
-    divisionsMapper: initializeDivisionHistory()
+    divisionsMapper: initializeDivisionHistory(),
+    currentSplitor: 'Equal'
   }),
   actions: {
-    setRecord(record: Record) {
-      this.record = record
+    setRecord(record: Record | null = null) {
+      this.record = record || createEmptyRecord()
     },
-    saveDivisions() { // 抓到該紀錄的 splitor 所對應的 divisions，並將 division 加入該 array
-      this.record.divisions = this.divisionsMapper[this.record.splitor]
+    saveDivisions() {
+      this.record.divisions = this.divisionsMapper[this.currentSplitor.toLowerCase() as keyof typeof this.divisionsMapper]
+      this.record.splitor = this.currentSplitor.toLowerCase() as 'equal' | 'fixed' | 'percentage' | 'ratio'
     },
-    async loadDivisionsMapper() {
-      this.divisionsMapper = await initializeDivisionHistory(this.record)
+    async loadDivisionsMapper(record: Record | null = null) {
+      this.divisionsMapper = await initializeDivisionHistory(record)
     }
   }
 })
