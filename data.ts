@@ -4,17 +4,20 @@ export const fakeGroups = [
 	{
     id: '1',
     name: '家裡事項',
-    avatar: '/avatars/profile.jpg'
+    avatar: '/avatars/profile.jpg',
+    members: []
 	},
 	{
 		id: '2',
 		name: '日本行',
-		avatar: '/avatars/profile.jpg'
+		avatar: '/avatars/profile.jpg',
+    members: []
 	},
   {
     id: '3',
     name: '朋友聚會',
-    avatar: '/avatars/profile.jpg'
+    avatar: '/avatars/profile.jpg',
+    members: []
   }
 ]
 
@@ -131,24 +134,31 @@ export const fakeRecords: Record[] = [
   }
 ]
 
-export const fakeUser: User = {
-  id: "1",
-  displayName: '威利',
-  email: 'william@gmail.com',
-  avatar: '/avatars/profile.jpg'
-}
 
 export const fakeFriends: User[] = [
   {
     id: '2',
     displayName: '小華',
     email: 'xiaohua@example.com',
-    avatar: '/avatars/profile.jpg'
+    avatar: '/avatars/profile.jpg',
+    groups: [],
+    friends: []
   },
   {
     id: '3',
     displayName: '小芳',
     email: 'xiaofang@example.com',
-    avatar: '/avatars/profile.jpg'
+    avatar: '/avatars/profile.jpg',
+    groups: [],
+    friends: []
   }
 ]
+
+export const fakeUser: User = {
+  id: "1",
+  displayName: '威利',
+  email: 'william@gmail.com',
+  avatar: '/avatars/profile.jpg',
+  groups: fakeGroups,
+  friends: fakeFriends
+}

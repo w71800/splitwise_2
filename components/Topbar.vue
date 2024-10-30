@@ -23,7 +23,6 @@ import { useRecordsStore } from '@/store/records'
 import { useEditorStore } from '@/store/editor'
 
 const editorStore = useEditorStore()
-const { record: currentRecord, editorMode } = storeToRefs(editorStore)
 const { setRecord, loadDivisionsMapper, saveDivisions } = editorStore
 const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
 const isEditorScrolled = inject('isEditorScrolled') as Ref<boolean>
@@ -34,11 +33,11 @@ const router = useRouter()
 const { id: editingRecordId } = route.params
 const { getRecordById, addRecord, putRecord } = useRecordsStore()
 
+const { record: currentRecord, editorMode } = storeToRefs(editorStore)
 const currentPath = ref(route.path)
 const previousRoute = ref('')
 
 const pathList = computed(() => currentPath.value.split("/"))
-
 // 優先使用 props 以串接從父元件來的組態設定。若沒有的話，使用從路由對照取得的組態
 const config = computed(() => {
   if (props.left) {
@@ -51,14 +50,12 @@ const config = computed(() => {
       : temp
   }
 })
-
 const displayTitle = computed(() => {
   return config.value.middle 
   ? config.value.middle 
   : editorMode.value === 'add' 
     ? "新增"
     : "編輯"
-    
 })
 
 
@@ -92,12 +89,13 @@ const methodsMapper = {
   'submit': () => {
     const mode = editorMode.value
     if (mode === 'add') {
-      console.log('add');
-      // addRecord(currentRecord.value)
+      addRecord(currentRecord.value)
     } else {
-      console.log('put');
-      // putRecord(currentRecord.value)
+      putRecord(currentRecord.value)
     }
+    isEditorShowing.value = false
+    // @todo: 要跳轉到該紀錄
+    // 然後將編輯器的紀錄全部初始化
   },
   'scrollBack': () => {
     isEditorScrolled.value = false

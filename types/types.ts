@@ -3,11 +3,20 @@
  * - 將 payers 改為多人
  */
 
+export interface Group {
+  id: string;
+  name: string;
+  avatar?: string;
+  members: User[];
+}
+
 export interface User {
   id: string;
   displayName: string;
   email?: string;
   avatar?: string;
+  groups?: Group[];
+  friends?: User[];
 }
 
 export interface Participant extends User {

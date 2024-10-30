@@ -5,11 +5,15 @@
 
 <template lang="pug">
 .editor__footer
-  .group(:class="{ 'inactive': isGroupEmpty }")
+  .recommend-groups(v-if="isGroupRecommendActive")
+    .recommend-item(v-for="group in recommendGroups" :key="group.id" @click="setGroup(group)")
+      .avatar
+        img(:src="group.avatar")
+      span {{ group.name }}
+  .group(:class="{ 'inactive': isGroupEmpty }" @click="isGroupRecommendActive = !isGroupRecommendActive")
     .icon
       img(:src="groupIconSrc")
-    span.no_exist(v-if="isGroupEmpty") 無
-    span.group_name(v-else) {{ record.group?.name }}
+    .group_name {{ record.group?.name || '無' }}
   .tags(:class="{ 'inactive': isTagsEmpty }")
     .icon
       img(:src="tagIconSrc")
@@ -26,18 +30,24 @@ import { ref, computed } from 'vue'
 import { useEditorStore } from '@/store/editor'
 import { useUserDataStore } from '@/store/userData'
 import { storeToRefs } from 'pinia'
+import { getComplement } from '@/utils/utils'
 
 const editorStore = useEditorStore()
 const userDataStore = useUserDataStore()
-const { id: userId } = userDataStore
+const { id: userId, groups } = userDataStore
 
 const { record } = storeToRefs(editorStore)
+const isGroupRecommendActive = ref(false)
 
 const tags = computed<string[]>(() => record.value.participants?.find(p => p.id == userId)?.tags || []) // 取得一個 tags 的參考，用以渲染畫面
 const isTagsEmpty = computed(() => tags.value?.length === 0)
 const tagIconSrc = computed(() => isTagsEmpty.value ? '/icons/tag_inactive.png' : '/icons/tag_active.png')
 const isGroupEmpty = computed(() => record.value.group?.name.trim() == "" || !record.value.group)
 const groupIconSrc = computed(() => isGroupEmpty.value ? '/icons/group_inactive.png' : '/icons/group_active.png')
+const recommendGroups = computed(() => {
+  if (!record.value.group) return groups
+  else return groups ? getComplement(groups, [ record.value.group ]) : []
+}) 
 
 
 const setAdjustWidth = (el: HTMLInputElement) => {
@@ -87,6 +97,11 @@ const addTag = () => {
   }
 }
 
+const setGroup = (group) => {
+  record.value.group = group
+  isGroupRecommendActive.value = false
+}
+
 </script>
 
 <style scoped lang="sass">
@@ -128,6 +143,10 @@ const addTag = () => {
       &:focus
         border: 1px solid $color-primary
   
+  .group
+    input
+      width: 70px
+  
   .tags
     input
       color: $color-primary
@@ -157,5 +176,34 @@ const addTag = () => {
       color: $color-primary
     span.no_exist
       color: rgba(#929292, 1)
+    input
+      &:focus
+        border: 1px solid rgba(#929292, 0.3)
+  .group.inactive
+    color: rgba(#929292, 1)
+
+.recommend-groups
+  position: absolute
+  left: 8px
+  bottom: calc(100% + 10px)
+  display: block
+  border: 1px solid rgba(#929292, 0.3)
+  .recommend-item
+    cursor: pointer
+    display: flex
+    padding: 5px 8px
+    padding-right: 100px
+    gap: 8px
+    border-bottom: 1px solid rgba(#929292, 0.3)
+    color: #5E5E5E
+  img
+    +block_size(100%)
+    object-fit: cover
+  .avatar
+    border-radius: 50%
+    overflow: hidden
+    +block_size(20px)
+    border: 1px solid #000
+
 
 </style>

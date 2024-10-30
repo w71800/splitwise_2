@@ -30,7 +30,11 @@ const createEmptyRecord = (): Record => ({
   },
   divisions: [],
   splitor: 'equal',
-  group: null
+  group: {
+    id: '',
+    name: '',
+    members: []
+  }
 })
 const isEditorShowing = ref(false) as Ref<boolean>
 const currentRecord = ref(createEmptyRecord()) as Ref<Record> // 紀錄當下的 record
@@ -49,7 +53,7 @@ const handleEditRecord = (record: Record): void => {
 }
 
 provide('isEditorShowing', isEditorShowing)
-provide('currentRecord', currentRecord)
+// provide('currentRecord', currentRecord)
 provide('handleAddNewRecord', handleAddNewRecord)
 provide('handleEditRecord', handleEditRecord)
 

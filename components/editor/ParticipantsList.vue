@@ -24,7 +24,7 @@ import { ref, computed } from 'vue'
 import { fakeFriends } from '@/data'
 import type { Participant } from '@/types/types'
 import { useEditorStore } from '@/store/editor'
-import { getComplementParticipants } from '@/utils/utils'
+import { getComplement as getComplementParticipants } from '@/utils/utils'
 import { useUserDataStore } from '@/store/userData'
 
 const userData = useUserDataStore().$state

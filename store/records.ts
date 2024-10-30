@@ -13,6 +13,7 @@ export const useRecordsStore = defineStore('records', {
     },
     addRecord(record: Record) { // 新增紀錄
       this.records.push(record)
+      return record.id
     },
     deleteRecord(recordId: string) { // 刪除紀錄
       this.records = this.records.filter(record => record.id !== recordId)
@@ -20,6 +21,7 @@ export const useRecordsStore = defineStore('records', {
     putRecord(record: Record) {  // 替換紀錄
       const { id: targetId } = record
       this.records = this.records.map(r => r.id == targetId ? record : r)
+      return targetId
     }
   },
   getters: {
