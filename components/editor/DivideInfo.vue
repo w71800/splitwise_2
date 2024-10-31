@@ -1,7 +1,7 @@
 <template lang="pug">
 .divide_info(@click="isEditorScrolled = !isEditorScrolled")
   span 先由
-  span.highlight {{ record.payers?.displayName }}
+  span.highlight {{ displayPayer }}
   span 支付
   br
   span.highlight {{ splitorText }}
@@ -10,11 +10,15 @@
 <script setup lang="ts">
 import { ref, computed, inject } from 'vue'
 import { useEditorStore } from '@/store/editor'
+import { useUserDataStore } from '@/store/userData'
 import { storeToRefs } from 'pinia'
 
 const editorStore = useEditorStore()
-
 const { record } = storeToRefs(editorStore)
+const { id: userId } = storeToRefs(useUserDataStore())
+
+const displayPayer = computed(() => userId.value === record.value.payers.id ? "你" : record.value.payers.displayName)
+
 const isEditorScrolled = inject('isEditorScrolled') as Ref<boolean>
 
 const splitorText = computed(() => {

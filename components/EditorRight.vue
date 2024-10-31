@@ -55,7 +55,7 @@ const userDataStore = useUserDataStore()
 const userData = userDataStore.$state
 
 const isRecommendPayerActive = ref(false)
-const recommendPayers = computed(() => getComplementParticipant([ ...record.value.participants ], [ record.value.payers ]))
+const recommendPayers = computed(() => getComplementParticipant(record.value.participants, [ record.value.payers ]))
 
 const displayNowSplitor = computed(() => {
   const now = splitorList.find(splitor => splitor.name === currentSplitor.value)
