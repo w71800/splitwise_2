@@ -6,6 +6,19 @@
   Topbar(:left="topbarConfig.left" :middle="topbarConfig.middle" :right="topbarConfig.right")
   .content__body
     .now_splitor {{ displayNowSplitor }}
+    .payer-wrapper
+      .payer-info
+        span 由
+        .payer(@click="toggleRecommendPayers")
+          .avatar
+            img(:src="record.payers.avatar")
+          .name {{ record.payers.displayName }}
+        span 支付
+      .recommend-payers(v-if="isRecommendPayerActive")
+        .recommend-payer(v-for="payer in recommendPayers" :key="payer.id" @click="setPayer(payer)")
+          .avatar
+            img(:src="payer.avatar")
+          .name {{ payer.displayName }}
     .splitor-list
       .splitor-item(v-for="splitor in splitorList" :key="splitor" @click="changeSplitor(splitor.name)")
         .icon
@@ -20,8 +33,10 @@
 
 <script setup lang="ts">
 import { useEditorStore } from '@/store/editor'
+import { useUserDataStore } from '@/store/userData'
 import { storeToRefs } from 'pinia'
-import { splitorList } from '@/utils/utils'
+import { splitorList, getComplement as getComplementParticipant } from '@/utils/utils'
+import type { Payer } from '@/types/types'
 import Equal from './splitors/Equal.vue'
 import Fixed from './splitors/Fixed.vue'
 import Ratio from './splitors/Ratio.vue'
@@ -36,6 +51,11 @@ const splitorComponents = {
 
 const editorStore = useEditorStore()
 const { record, currentSplitor } = storeToRefs(editorStore)
+const userDataStore = useUserDataStore()
+const userData = userDataStore.$state
+
+const isRecommendPayerActive = ref(false)
+const recommendPayers = computed(() => getComplementParticipant([ ...record.value.participants ], [ record.value.payers ]))
 
 const displayNowSplitor = computed(() => {
   const now = splitorList.find(splitor => splitor.name === currentSplitor.value)
@@ -55,6 +75,15 @@ const displayNowSplitor = computed(() => {
 
 const changeSplitor = (splitor: string) => {
   currentSplitor.value = splitor
+}
+
+const toggleRecommendPayers = () => {
+  isRecommendPayerActive.value = !isRecommendPayerActive.value
+}
+
+const setPayer = (payer: Payer) => {
+  record.value.payers = { ...payer, paid: record.value.value }
+  isRecommendPayerActive.value = false
 }
 
 const topbarConfig = {
@@ -121,6 +150,7 @@ const topbarConfig = {
 
 
 <style lang="sass">
+// 所有 splitor 的共用 style
 #splitor
   display: flex
   flex-direction: column
@@ -179,7 +209,67 @@ const topbarConfig = {
       color: rgba(#5E5E5E, 0.2)
       font-size: 16px
       text-align: right
+</style>
 
+<style lang="sass" scoped>
+.avatar
+  +block-size(25px)
+  border: 1px solid #000
+  border-radius: 50%
+  overflow: hidden
+  img
+    +block-size(100%)
+    object-fit: cover
+
+.payer-wrapper
+  width: fit-content
+  margin: 0 auto
+  // +debug()
+
+  // .avatar
+  //   +block-size(25px)
+  //   border: 1px solid #000
+  //   border-radius: 50%
+  //   overflow: hidden
+  //   img
+  //     +block-size(100%)
+  //     object-fit: cover
+
+  .payer-info
+    display: flex
+    align-items: center
+    justify-content: center
+    gap: 10px
+
+  .payer
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: 8px
+    margin-right: 8px
+    border: 1px solid #929292
+    border-radius: 24px
+    padding: 4px 14px 4px 12px
+    color: #929292
   
-      
+  span
+    color: #D5D5D5
+    font-weight: $font-weight-regular
+
+
+.recommend-payers
+  position: absolute
+  top: calc(100% + 10px)
+  border: 1px solid #929292
+  border-radius: 4px
+  background-color: #fff
+  z-index: 20
+  
+  .recommend-payer
+    display: flex
+    align-items: center
+    gap: 8px
+    padding: 6px 30px 6px 12px
+    color: #929292
+
 </style>

@@ -101,6 +101,9 @@ watch(
   { deep: true } // 也監聽到 participants 內元素的變化
 )
 
+watch(() => record.value.value, () => {
+  record.value.payers.paid = record.value.value
+})
 </script>
 
 <style scoped lang="sass">
