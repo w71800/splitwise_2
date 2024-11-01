@@ -6,7 +6,7 @@
   Topbar(:left="topbarConfig.left" :middle="topbarConfig.middle" :right="topbarConfig.right")
   .content__body
     .now_splitor {{ displayNowSplitor }}
-    .payer-wrapper
+    .payer-wrapper(v-if="record.participants.length > 1")
       .payer-info
         span 由
         .payer(@click="toggleRecommendPayers")
