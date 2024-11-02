@@ -35,11 +35,11 @@ const displayInfo = computed(() => {
     return `${displayName}先付了 $${Math.abs(paid)}`
   } else {
     const { id, displayName, debt, creditor, shouldPay } = debtObj
-    if(id === creditor.id) {
-      return `${displayName} 應負擔 $${Math.abs(debt)}`
-    } else {
-      return `${displayName} 欠款 $${Math.abs(debt)}`
-    }
+    console.log(debtObj);
+    
+    return id === creditor.id 
+      ? `${displayName} 應負擔 $${Math.abs(shouldPay)}` 
+      : `${displayName} 欠款 $${Math.abs(shouldPay)}`
   }
 })
 </script>

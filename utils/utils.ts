@@ -49,15 +49,12 @@ export const splitors = {
     shouldPay: number;
   }[] {
     const { divisions, value } = record
-    const shouldPay = value / divisions.length
-    const debts: {
-      id: string;
-      displayName: string;
-      shouldPay: number;
-    }[] = divisions.map(division => ({
+    const activeDivisions = divisions.filter(division => division.value > 0)
+    const shouldPay = value / activeDivisions.length
+    const debts = divisions.map(division => ({
       id: division.id,
       displayName: division.displayName,
-      shouldPay
+      shouldPay: division.value > 0 ? shouldPay : 0
     }))
     
     return debts
@@ -73,11 +70,7 @@ export const splitors = {
     shouldPay: number;
   }[] {
     const { divisions } = record
-    const debts: {
-      id: string;
-      displayName: string;
-      shouldPay: number;
-    }[] = divisions.map(division => ({
+    const debts = divisions.map(division => ({
       id: division.id,
       displayName: division.displayName,
       shouldPay: division.value
@@ -96,11 +89,7 @@ export const splitors = {
     shouldPay: number;
   }[] {
     const { divisions, value } = record
-    const debts: {
-      id: string;
-      displayName: string;
-      shouldPay: number;
-    }[] = divisions.map(division => ({
+    const debts = divisions.map(division => ({
       id: division.id,
       displayName: division.displayName,
       shouldPay: value * (division.value / 100)
@@ -120,11 +109,7 @@ export const splitors = {
   }[] {
     const { divisions, value } = record
     const totalRatio = divisions.reduce((sum, division) => sum + division.value, 0)
-    const debts: {
-      id: string;
-      displayName: string;
-      shouldPay: number;
-    }[] = divisions.map(division => ({
+    const debts = divisions.map(division => ({
       id: division.id,
       displayName: division.displayName,
       shouldPay: value * (division.value / totalRatio)
@@ -183,11 +168,11 @@ export const getDebts = (record: Record, userId?: string): Debt[] => {
     shouldPay: number;
   }[] = splitors[splitor](record)
 
-
   // 計算每一個參與者的債務
   debts = owes.map(owe => {
+    
     let debt = owe.id === payers.id
-      ? owe.shouldPay
+      ? payers.paid - owe.shouldPay
       : -1 * owe.shouldPay
     
     return {
@@ -210,7 +195,6 @@ export const getDebts = (record: Record, userId?: string): Debt[] => {
     if (b.id === b.creditor.id) return 1
     return 0
   })
-  console.log(debts);
   return debts
 }
 
@@ -235,10 +219,11 @@ export const getTags = (records: Record[]): string[] => {
 
 export const getSummary = (records: Record[], userId: string): Summary => {
   const debts = records.map(record => getDebts(record)).flat()
-  console.log(records);
   const totalSummary = getTotalSummary(debts, userId)
-  
   const partialSummary = getPartialSummary(debts, userId)
+  console.log("totalSummary", totalSummary);
+  console.log("partialSummary", partialSummary);
+
   return {
     total: totalSummary,
     partial: partialSummary
