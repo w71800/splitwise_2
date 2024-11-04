@@ -14,6 +14,11 @@ NuxtLayout
 <script setup lang="ts">
 import { provide, ref, onErrorCaptured, reactive } from 'vue'
 import type { Record } from '@/types/types'
+import { useRecordsStore } from '@/store/records'
+
+const recordsStore = useRecordsStore()
+const { fetchRecords } = recordsStore
+
 const createEmptyRecord = (): Record => ({
   id: '',
   title: '',
@@ -56,6 +61,10 @@ provide('isEditorShowing', isEditorShowing)
 // provide('currentRecord', currentRecord)
 provide('handleAddNewRecord', handleAddNewRecord)
 provide('handleEditRecord', handleEditRecord)
+
+onMounted(() => {
+  fetchRecords()
+})
 
 onErrorCaptured((error) => {
   console.log(error)

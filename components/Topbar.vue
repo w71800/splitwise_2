@@ -30,7 +30,7 @@ const handleEditRecord = inject('handleEditRecord') as (record: Record) => void
 const props = defineProps<Config>()
 const route = useRoute()
 const router = useRouter()
-const { id: editingRecordId } = route.params
+const { id: editingRecordId } = route.params // NOTE: 這邊的 id 是從 records/:id 來的。但僅限從編輯模式才能抓到，從新增模式中是抓不到的。
 const { getRecordById, addRecord, putRecord } = useRecordsStore()
 
 const { record: currentRecord, editorMode } = storeToRefs(editorStore)
@@ -94,8 +94,8 @@ const methodsMapper = {
       putRecord(currentRecord.value)
     }
     isEditorShowing.value = false
-    // @todo: 要跳轉到該紀錄
-    // 然後將編輯器的紀錄全部初始化
+    router.push(`/records/${currentRecord.value.id}`) // NOTE: 看看要不要讓以上的 editingRecordId 統一為 currentRecord.value.id？
+    setRecord()
   },
   'scrollBack': () => {
     isEditorScrolled.value = false

@@ -19,5 +19,10 @@ export default defineNuxtConfig({
         }
       }
     }
+  },
+  runtimeConfig: {
+    public: {
+      strapiTokenDev: process.env.NUXT_PUBLIC_STRAPI_TOKEN_DEV
+    }
   }
 })
