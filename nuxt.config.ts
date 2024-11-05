@@ -22,7 +22,9 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      strapiTokenDev: process.env.NUXT_PUBLIC_STRAPI_TOKEN_DEV
+      strapiTokenDev: process.env.NUXT_PUBLIC_STRAPI_TOKEN_DEV,
+      strapiUserToken: process.env.NUXT_PUBLIC_STRAPI_USER_TOKEN,
+      strapiHost: process.env.NUXT_PUBLIC_STRAPI_HOST
     }
   }
 })

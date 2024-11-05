@@ -22,8 +22,8 @@
 
 <script setup lang="ts">
 import { computed, ref, toRefs } from 'vue'
-import { setPaddingZero, getSingleDigitMonth, getDebts } from '@/utils/utils'
-import type { Record as RecordProps, Payer } from '@/types/types'
+import { getSingleDigitMonth, getDebts } from '@/utils/utils'
+import type { Record as RecordProps } from '@/types/types'
 import { useUserDataStore } from '@/store/userData'
 import { useRouter } from 'vue-router'
 

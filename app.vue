@@ -18,9 +18,12 @@
 import { provide, ref, onErrorCaptured, reactive } from 'vue'
 import type { Record } from '@/types/types'
 import { useRecordsStore } from '@/store/records'
-
+import { useUserDataStore } from '@/store/userData'
 const recordsStore = useRecordsStore()
+
 const { fetchRecords, isLoading } = recordsStore
+const userDataStore = useUserDataStore()
+const { setUserData } = userDataStore
 
 const createEmptyRecord = (): Record => ({
   id: '',
@@ -61,12 +64,12 @@ const handleEditRecord = (record: Record): void => {
 }
 
 provide('isEditorShowing', isEditorShowing)
-// provide('currentRecord', currentRecord)
 provide('handleAddNewRecord', handleAddNewRecord)
 provide('handleEditRecord', handleEditRecord)
 
 onMounted(() => {
   fetchRecords()
+  setUserData()
 })
 
 onErrorCaptured((error) => {
