@@ -6,7 +6,9 @@ import { fetchRecordDatas } from '@/utils/api'
 
 export const useRecordsStore = defineStore('records', {
   state: () => ({
-    records: fakeRecords as Record[]
+    records: [] as Record[],
+    isLoading: false,
+    error: null
   }),
   actions: {
     setRecords(newRecords: Record[]) { // 載入紀錄s
@@ -25,8 +27,11 @@ export const useRecordsStore = defineStore('records', {
       return targetId
     },
     async fetchRecords() {
+      this.isLoading = true
       const recordDatas = await fetchRecordDatas()
       const formattedRecords = recordDatas.map(formatApiRecord)
+      this.records = formattedRecords
+      this.isLoading = false
     }
   },
   getters: {

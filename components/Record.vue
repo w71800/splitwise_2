@@ -11,7 +11,7 @@
   NuxtLink(:to="`/records/${recordId}`")
   .record__date
     .month {{ getSingleDigitMonth(month) }}月
-    .day {{ setPaddingZero(date) }}
+    .day {{ date }}
   .record__content
     h2.title {{ title }}
     p.description {{ payerStr }}
@@ -32,17 +32,19 @@ const props = defineProps<{
   record: RecordProps
 }>()
 
-const userId = ref(useUserDataStore().id)
+// const userId = ref(useUserDataStore().id)
+const userId = ref("kmi4kmbqwn8z46e33987ktjt")
 
 const { value, payers, fullDate, title, id: recordId } = toRefs(props.record)
+const [ _, month, date ] = fullDate.value.toISOString().split("T")[0].split('-')
+
 const isPayer = ref(payers.value.id === userId.value)
+
 const hintTitle = computed(() => isPayer.value ? '可回收' : '應支付')
 const titleClass = computed(() => ({
   'title--to-pay': !isPayer.value,
   'title--to-receive': isPayer.value
 }))
-const [ _, month, date ] = fullDate.value.toISOString().split("T")[0].split('-')
-// const payerStr = computed(() => payers.value.map(payer => payer.displayName).join('、') + ' 付了')
 const payerStr = computed(() => `${payers.value.displayName} 付了 ${value.value} 元`)
 // 取得這筆紀錄中，目前使用者於這筆紀錄的 debt
 const displayDebt = computed(() => getDebts(props.record, userId.value)[0].debt)

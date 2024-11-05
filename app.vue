@@ -7,8 +7,11 @@
 -->
 
 <template lang="pug">
-NuxtLayout
-  NuxtPage
+.app(v-if="isLoading")
+  .loading 載入中...
+.app(v-else)
+  NuxtLayout
+    NuxtPage
 </template>
 
 <script setup lang="ts">
@@ -17,7 +20,7 @@ import type { Record } from '@/types/types'
 import { useRecordsStore } from '@/store/records'
 
 const recordsStore = useRecordsStore()
-const { fetchRecords } = recordsStore
+const { fetchRecords, isLoading } = recordsStore
 
 const createEmptyRecord = (): Record => ({
   id: '',

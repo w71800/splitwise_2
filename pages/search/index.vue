@@ -18,14 +18,17 @@ import { filterRecords } from '@/utils/utils'
 definePageMeta({
   layout: 'search'
 })
-
 const { records } = useRecordsStore()
+
 const parentActiveTags = ref<string[]>([]) // stop: 做到選擇標籤這邊
+
+const displayRecords = computed(() => filterRecords(records, { tags: parentActiveTags.value }))
+
+
 watch(parentActiveTags, (newTags) => {
   console.log('Active tags changed:', newTags)
   // 在這裡你可以進行任何需要的操作，比如過濾記錄等
 })
-const displayRecords = computed(() => filterRecords(records, { tags: parentActiveTags.value }))
 
 </script>
 <style scoped lang="sass">

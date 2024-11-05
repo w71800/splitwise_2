@@ -27,10 +27,10 @@ export const setPaddingZero = (num: number | string): string => {
  * @returns {string} 單個數字的月份
  */
 export const getSingleDigitMonth = (month : string): string => {
-  if (month.length === 1) { 
-    return month
-  } else {  
+  if (month.length === 2 && month[0] === '0') { 
     return month.slice(1)
+  } else {  
+    return month
   }
 }
 
