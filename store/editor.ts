@@ -97,7 +97,13 @@ export const useEditorStore = defineStore('editor', {
       this.record.splitor = this.currentSplitor.toLowerCase() as 'equal' | 'fixed' | 'percentage' | 'ratio'
     },
     async loadDivisionsMapper(record: Record | null = null) {
-      this.divisionsMapper = await initializeDivisionHistory(record)
+      try {
+        this.divisionsMapper = await initializeDivisionHistory(record)
+        return true
+      } catch (error) {
+        console.error(error)
+        return false
+      }
     },
     async initializeEditor() {
       const userDataStore = useUserDataStore()

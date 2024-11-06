@@ -30,3 +30,19 @@ export const fetchRecordDatas = () => {
       throw new Error(error.message)
     })
 }
+
+export const fetchUserData = () => {
+  const runtimeConfig = useRuntimeConfig()
+  
+  const token = useCookie('token').value || runtimeConfig.public.strapiUserToken
+  const endpoint = `http://localhost:1337/api/users/me?populate[friends][populate]=*&populate[groups][populate]=*&populate[avatar][fields]=url`
+  return fetch(endpoint, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+  .then(res => res.json())
+  .catch(error => {
+    throw error
+  })
+}

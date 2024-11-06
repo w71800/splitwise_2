@@ -33,7 +33,7 @@ const editorStore = useEditorStore()
 const { record } = storeToRefs(editorStore)
 const isRecommendListActive = ref(false)
 
-const recommendParticipants = computed(() => getComplementParticipants([ ...fakeFriends, userData ], record.value.participants))
+const recommendParticipants = computed(() => getComplementParticipants([ ...userData.friends!, userData ], record.value.participants))
 
 const insertParticipant = (participant: Participant) => {
   record.value.participants.push(participant)
