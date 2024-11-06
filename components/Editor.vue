@@ -5,7 +5,7 @@
 -->
 
 <template lang="pug">
-.editor(:class="{ 'showing': isEditorShowing }" :style="{ height: editorHeight }")
+.editor(v-if="editorStore.isInitialized" :class="{ 'showing': isEditorShowing }" :style="{ height: editorHeight }")
   //- container 不動，改變的是 contents 的位置
   //- todo: 但想要把滾動的結構改成 container
   .scroll-container 
@@ -19,6 +19,9 @@
 import { ref, inject, provide, reactive } from 'vue'
 import type { Record } from '@/types/types'
 import { fakeUser, fakeFriends } from '@/data'
+import { useEditorStore } from '@/store/editor'
+
+const editorStore = useEditorStore()
 
 const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
 const isEditorScrolled = ref(false)

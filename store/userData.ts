@@ -3,18 +3,15 @@ import type { User } from '@/types/types'
 import { fakeUser } from '@/data'
 
 export const useUserDataStore = defineStore('userData', {
-  state: (): User => ({
-    id: '',
-    displayName: '',
-    email: '',
-    avatar: ''
-  }),
+  state: (): User => fakeUser,
   actions: {
     async setUserData() {
       try {
         this.$state = this.dataFormatter(await this.fetchUserData())
+        return true 
       } catch (error) {
         console.error(error)
+        return false
       }
     },
     async fetchUserData() {
@@ -40,7 +37,11 @@ export const useUserDataStore = defineStore('userData', {
         email: data.email,
         avatar: avatarUrl,
         groups: data.groups,
-        friends: data.friends
+        friends: data.friends.map((friend: any) => ({
+          id: friend.documentId,
+          displayName: friend.username,
+          // avatar: runtimeConfig.public.strapiHost + friend.avatar.url
+        }))
       }
     }
   }

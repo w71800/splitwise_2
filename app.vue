@@ -19,7 +19,9 @@ import { provide, ref, onErrorCaptured, reactive } from 'vue'
 import type { Record } from '@/types/types'
 import { useRecordsStore } from '@/store/records'
 import { useUserDataStore } from '@/store/userData'
+import { useEditorStore } from '@/store/editor'
 const recordsStore = useRecordsStore()
+const editorStore = useEditorStore()
 
 const { fetchRecords, isLoading } = recordsStore
 const userDataStore = useUserDataStore()
@@ -67,9 +69,10 @@ provide('isEditorShowing', isEditorShowing)
 provide('handleAddNewRecord', handleAddNewRecord)
 provide('handleEditRecord', handleEditRecord)
 
-onMounted(() => {
-  fetchRecords()
-  setUserData()
+onMounted(async () => {
+  await setUserData()
+  await fetchRecords()
+  editorStore.initializeEditor()
 })
 
 onErrorCaptured((error) => {

@@ -82,10 +82,11 @@ const initializeDivisionHistory = (record: Record | null = null) => {
 
 export const useEditorStore = defineStore('editor', {
   state: () => ({
-    record: createEmptyRecord(),
+    record: createEmptyRecord() as Record,
     divisionsMapper: initializeDivisionHistory(),
     currentSplitor: 'Equal',
-    editorMode: 'add'
+    editorMode: 'add',
+    isInitialized: false
   }),
   actions: {
     setRecord(record: Record | null = null) {
@@ -97,6 +98,15 @@ export const useEditorStore = defineStore('editor', {
     },
     async loadDivisionsMapper(record: Record | null = null) {
       this.divisionsMapper = await initializeDivisionHistory(record)
+    },
+    async initializeEditor() {
+      const userDataStore = useUserDataStore()
+      
+      await userDataStore.setUserData()
+      await this.loadDivisionsMapper()
+      this.setRecord()
+      
+      this.isInitialized = true
     }
   }
 })

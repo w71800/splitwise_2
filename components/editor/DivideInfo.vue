@@ -17,7 +17,7 @@ const editorStore = useEditorStore()
 const { record } = storeToRefs(editorStore)
 const { id: userId } = storeToRefs(useUserDataStore())
 
-const displayPayer = computed(() => userId.value === record.value.payers.id ? "你" : record.value.payers.displayName)
+const displayPayer = computed(() => userId.value === record.value.payers?.id ? "你" : record.value.payers?.displayName)
 
 const isEditorScrolled = inject('isEditorScrolled') as Ref<boolean>
 
