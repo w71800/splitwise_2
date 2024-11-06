@@ -4,9 +4,9 @@
 <template lang="pug">
 .scroll-contents__right
   Topbar(:left="topbarConfig.left" :middle="topbarConfig.middle" :right="topbarConfig.right")
-  .content__body
+  .content__body(:class="{ '--has-other-participants': hasOtherParticipants }")
     .now_splitor {{ displayNowSplitor }}
-    .payer-wrapper(v-if="record.participants.length > 1")
+    .payer-wrapper(v-if="hasOtherParticipants")
       .payer-info
         span 由
         .payer(@click="toggleRecommendPayers")
@@ -56,6 +56,7 @@ const userData = userDataStore.$state
 
 const isRecommendPayerActive = ref(false)
 const recommendPayers = computed(() => getComplementParticipant(record.value.participants, [ record.value.payers ]))
+const hasOtherParticipants = computed(() => record.value.participants.length > 1)
 
 const displayNowSplitor = computed(() => {
   const now = splitorList.find(splitor => splitor.name === currentSplitor.value)
@@ -111,6 +112,8 @@ const topbarConfig = {
   display: grid
   grid-template-rows: auto auto 1fr
   height: calc(100% - 43px)
+  &.--has-other-participants
+    grid-template-rows: auto auto auto 1fr
 
 .now_splitor
   padding: 60px 0
@@ -224,23 +227,12 @@ const topbarConfig = {
 .payer-wrapper
   width: fit-content
   margin: 0 auto
-  // +debug()
-
-  // .avatar
-  //   +block-size(25px)
-  //   border: 1px solid #000
-  //   border-radius: 50%
-  //   overflow: hidden
-  //   img
-  //     +block-size(100%)
-  //     object-fit: cover
-
+  margin-bottom: 40px
   .payer-info
     display: flex
     align-items: center
     justify-content: center
     gap: 10px
-
   .payer
     display: flex
     align-items: center
@@ -251,7 +243,6 @@ const topbarConfig = {
     border-radius: 24px
     padding: 4px 14px 4px 12px
     color: #929292
-  
   span
     color: #D5D5D5
     font-weight: $font-weight-regular
@@ -264,7 +255,6 @@ const topbarConfig = {
   border-radius: 4px
   background-color: #fff
   z-index: 20
-  
   .recommend-payer
     display: flex
     align-items: center
