@@ -1,4 +1,4 @@
-export const fetchRecordDatas = () => {
+const fetchRecordDatas = () => {
   const config = useRuntimeConfig()
   const { strapiHost } = config.public
 
@@ -29,7 +29,7 @@ export const fetchRecordDatas = () => {
     })
 }
 
-export const fetchUserData = () => {
+const fetchUserData = () => {
   const config = useRuntimeConfig()
   const { strapiHost } = config.public
   const token = useCookie('token').value || config.public.strapiUserToken
@@ -53,4 +53,11 @@ export const fetchUserData = () => {
   .catch(error => {
     throw error
   })
+}
+
+
+
+export {
+  fetchRecordDatas,
+  fetchUserData
 }

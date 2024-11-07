@@ -1,18 +1,18 @@
 <template lang="pug">
 .friends
   ListItem(
-    v-for="friend in friends" 
-    :key="friend.id" :id="friend.id" 
-    :avatar="friend.avatar" 
-    :name="friend.displayName"
+    v-for="friend in userDataStore.friends"
+    :key="friend?.id"
+    :name="friend?.displayName"
+    :avatar="friend?.avatar"
   )
 </template>
 
 <script setup lang="ts">
-import { useFriendsStore } from '@/store/friends'
+import { useUserDataStore } from '@/store/userData'
 
-const friendsStore = useFriendsStore()
-const friends = friendsStore.friends
+const userDataStore = useUserDataStore()
+
 </script>
 
 <style scoped lang="sass">

@@ -9,7 +9,6 @@ export const useUserDataStore = defineStore('userData', {
     async setUserData() {
       try {
         this.$state = this.dataFormatter(await fetchUserData())
-        console.log(this.$state)
         return true 
       } catch (error) {
         console.error(error)
