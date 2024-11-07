@@ -1,6 +1,11 @@
-const fetchRecordDatas = () => {
+const endpointUrl = (resource: string, populates: string[]) => {
   const config = useRuntimeConfig()
   const { strapiHost } = config.public
+  return `${strapiHost}/api/${resource}?${populates.join('&')}`
+}
+
+const fetchRecordDatas = () => {
+  const config = useRuntimeConfig()
 
   const populateParams = [
     'populate[participants][populate][participant][populate][avatar][fields]=url',
@@ -9,13 +14,14 @@ const fetchRecordDatas = () => {
     'populate[divisions][populate][participant][populate][avatar][fields]=url',
     'populate[group][populate][members][fields]=id, documentId, username, email',
     'populate[group][populate][members][populate][avatar][fields]=url'
-  ].join('&')
+  ]
 
-  const endpoint = `${strapiHost}/api/records?${populateParams}`
+  const endpoint = endpointUrl('records', populateParams)
+  const token = config.public.strapiTokenDev
 
   return fetch(endpoint, {
     headers: {
-      Authorization: `Bearer ${config.public.strapiTokenDev}`
+      Authorization: `Bearer ${token}`
     }
   })
     .then((res) => {
@@ -31,7 +37,6 @@ const fetchRecordDatas = () => {
 
 const fetchUserData = () => {
   const config = useRuntimeConfig()
-  const { strapiHost } = config.public
   const token = useCookie('token').value || config.public.strapiUserToken
 
   const populateParams = [
@@ -40,9 +45,9 @@ const fetchUserData = () => {
     'populate[avatar][fields]=url',
     'populate[groups][populate][members][populate][avatar][fields]=url',
     'populate[groups][populate][avatar][fields]=url'
-  ].join('&')
+  ]
 
-  const endpoint = `${strapiHost}/api/users/me?${populateParams}`
+  const endpoint = endpointUrl('users/me', populateParams)
 
   return fetch(endpoint, {
     headers: {

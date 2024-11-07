@@ -10,11 +10,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useGroupsStore } from '@/store/groups'
+import { useUserDataStore } from '@/store/userData'
+import { storeToRefs } from 'pinia'
 
-const groupsStore = useGroupsStore()
-const groups = ref(groupsStore.groups)
+const userDataStore = useUserDataStore()
+const { groups } = storeToRefs(userDataStore)
 
 
 </script>
