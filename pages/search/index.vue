@@ -18,11 +18,11 @@ import { filterRecords } from '@/utils/utils'
 definePageMeta({
   layout: 'search'
 })
-const { records } = useRecordsStore()
+const { records } = storeToRefs(useRecordsStore())
 
 const parentActiveTags = ref<string[]>([]) // stop: 做到選擇標籤這邊
 
-const displayRecords = computed(() => filterRecords(records, { tags: parentActiveTags.value }))
+const displayRecords = computed(() => filterRecords(records.value, { tags: parentActiveTags.value }))
 
 
 watch(parentActiveTags, (newTags) => {

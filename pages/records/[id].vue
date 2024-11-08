@@ -15,10 +15,10 @@
     .header__date {{ displayDate }}
     .bottom
       .left
-        .header__group(v-if="group")
+        .header__group(v-if="record.group")
           .icon
             img(src="/icons/group_active.png")
-          span {{ group }}
+          span {{ record.group?.name }}
         .header__tags(v-if="tags && tags.length > 0")
           .icon
             img(src="/icons/tag_active.png")
@@ -49,8 +49,9 @@ const { id: recordId } = route.params
 const { id: userId } = useUserDataStore()
 
 const { getRecordById } = useRecordsStore()
+const { records } = storeToRefs(useRecordsStore())
 // NOTE: 如果把這些必要的資料，用一包物件包起來管理如何？
-const record = ref<Record | null>(null)
+const record = computed(() => records.value?.find(record => record.id === recordId))
 const debts = ref<Debt[]>([])
 const tags = ref<string[]>([])
 const group = ref<string | null>(null)
