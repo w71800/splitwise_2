@@ -10,15 +10,15 @@
   h1 正在加載...
 .page(v-else-if="record")
   .page__header
-    .header__title {{ record.title }}
-    .header__value ${{ record.value }}
+    .header__title {{ title }}
+    .header__value ${{ value }}
     .header__date {{ displayDate }}
     .bottom
       .left
-        .header__group(v-if="record.group")
+        .header__group(v-if="group")
           .icon
             img(src="/icons/group_active.png")
-          span {{ record.group?.name }}
+          span {{ group }}
         .header__tags(v-if="tags && tags.length > 0")
           .icon
             img(src="/icons/tag_active.png")
@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import Detail from './components/Detail.vue'
-import { ref, onMounted, computed } from 'vue'
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRecordsStore } from '@/store/records'
 import type { Record, Debt } from '@/types/types'
@@ -48,31 +48,22 @@ const route = useRoute()
 const { id: recordId } = route.params
 const { id: userId } = useUserDataStore()
 
-const { getRecordById } = useRecordsStore()
+const { getRecordById } = useRecordsStore() // NOTE: 這邊透過這個 getter 拿出來的紀錄，會保持響應性嗎？
 const { records } = storeToRefs(useRecordsStore())
-// NOTE: 如果把這些必要的資料，用一包物件包起來管理如何？
-const record = computed(() => records.value?.find(record => record.id === recordId))
-const debts = ref<Debt[]>([])
-const tags = ref<string[]>([])
-const group = ref<string | null>(null)
-const isLoading = ref(true)
+
+
+const record = computed(() => getRecordById(recordId as string))
+const title = computed(() => record.value?.title || '')
+const value = computed(() => record.value?.value || 0)
+const debts = computed(() => record.value ? getDebts(record.value) : []) // NOTE: 這邊的 debts 似乎因為是這樣取得，而沒能保持響應性（單向綁定）
+// const debts = computed(() => record.value ? getDebts(record.value) : []) // NOTE: 這邊的 debts 似乎因為是這樣取得，而沒能保持響應性
+const tags = computed(() => record.value?.participants.find(participant => participant.id === userId)?.tags || [])
+const group = computed(() => record.value?.group?.name || null)
+// const isLoading = ref(true)
 
 const displayDate = computed(() => {
   const [ year, month, day ] = record.value?.fullDate?.toISOString().split("T")[0].split('-') || ["1900", "1", "1"]
   return `${year} 年 ${month} 月 ${day} 日`
-})
-
-onMounted(() => {
-  const fetchedRecord = getRecordById(recordId as string)
-  if (fetchedRecord) {
-    record.value = fetchedRecord
-    debts.value = getDebts(fetchedRecord)
-    tags.value = fetchedRecord.participants.find(participant => participant.id === userId)?.tags || []
-    group.value = fetchedRecord.group?.name || null
-  } else {
-    console.error(`找不到 ID 為 ${recordId} 的紀錄`)
-  }
-  isLoading.value = false
 })
 </script>
 

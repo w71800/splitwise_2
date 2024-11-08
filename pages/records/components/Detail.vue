@@ -26,16 +26,15 @@ const props = defineProps<{
 }>()
 
 // const { debt } = toRefs(props) // NOTE: 這邊 debt 是 reactive 的，所以透過 toRefs 轉成 ref
-const { debt: debtObj, isPayer, payer } = props
+const { isPayer } = props
 
 
 const displayInfo = computed(() => {
   if(isPayer) {
-    const { displayName, paid } = payer
+    const { displayName, paid } = props.payer
     return `${displayName}先付了 $${Math.abs(paid)}`
   } else {
-    const { id, displayName, debt, creditor, shouldPay } = debtObj
-    console.log(debtObj);
+    const { id, displayName, debt, creditor, shouldPay } = props.debt
     
     return id === creditor.id 
       ? `${displayName} 應負擔 $${Math.abs(shouldPay)}` 
