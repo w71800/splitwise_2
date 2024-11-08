@@ -13,22 +13,17 @@
 
 <script setup lang="ts">
 import { useRecordsStore } from '@/store/records'
-import { useGroupsStore } from '@/store/groups'
 import { useUserDataStore } from '@/store/userData'
-import { getDebts, getSummary } from '@/utils/utils'
+import { getSummary } from '@/utils/utils'
 
 const { id } = useRoute().params
-const { id: userId } = useUserDataStore()
-
+const userDataStore = useUserDataStore()
 const { getRecordsByGroup } = useRecordsStore()
-const { getGroupById } = useGroupsStore()
+const { id: userId, groups } = storeToRefs(userDataStore)
 
 const records = getRecordsByGroup(id as string)
-const group = getGroupById(id as string)
-const { partial: partialSummary } = getSummary(records, userId as string)
-
-
-
+const { partial: partialSummary } = getSummary(records, userId.value)
+const group = groups.value?.find(group => group.id === id)
 </script>
 
 <style scoped lang="sass">

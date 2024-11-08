@@ -16,23 +16,22 @@
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRecordsStore } from '@/store/records'
-import { useFriendsStore } from '@/store/friends'
 import { useUserDataStore } from '@/store/userData'
 import { getDebts, getSummary } from '@/utils/utils'
 import type { User } from '@/types/types'
 
 const route = useRoute()
 const { id: friendId } = route.params
-const { id: userId } = useUserDataStore()
 
-const { friends } = useFriendsStore()
-const friend: User = friends.find(friend => friend.id === friendId)!
-
-const recordStore = useRecordsStore()
-const { getRecordsByFriend } = recordStore
+const userDataStore = useUserDataStore()
+const { getRecordsByFriend } = useRecordsStore()
 const displayRecords = getRecordsByFriend(friendId as string)
 
-const { partial } = getSummary(displayRecords, userId as string)
+const { id: userId, friends } = storeToRefs(userDataStore)
+const friend: User = friends.value?.find(friend => friend.id === friendId)!
+
+
+const { partial } = getSummary(displayRecords, userId.value)
 const partialSummary = partial.filter(item => item.id === friendId)
 
 // 可以考慮添加一個緩存機制

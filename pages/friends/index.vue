@@ -3,6 +3,7 @@
   ListItem(
     v-for="friend in friends"
     :key="friend?.id"
+    :id="friend?.id"
     :name="friend?.displayName"
     :avatar="friend?.avatar"
   )
