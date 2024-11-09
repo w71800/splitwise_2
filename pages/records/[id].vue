@@ -23,7 +23,7 @@
           .icon
             img(src="/icons/tag_active.png")
           span.tag(v-for="tag in tags" :key="tag.id" :tag="tag") {{ `#${tag}` }}
-      .header__trashcan
+      .header__trashcan(@click="handleDeleteRecord")
         .icon
           img(src="/icons/trashcan.png")
   .page__body
@@ -40,19 +40,19 @@ import Detail from './components/Detail.vue'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRecordsStore } from '@/store/records'
-import type { Record, Debt } from '@/types/types'
 import { getDebts, getSingleDigitMonth } from '@/utils/utils'
 import { useUserDataStore } from '@/store/userData'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const route = useRoute()
-const { id: recordId } = route.params
+const { id: recordId } = route.params as { id: string }
 const { id: userId } = useUserDataStore()
 
-const { getRecordById } = useRecordsStore() // NOTE: 這邊透過這個 getter 拿出來的紀錄，會保持響應性嗎？
+const { getRecordById, deleteRecord } = useRecordsStore() // NOTE: 這邊透過這個 getter 拿出來的紀錄，會保持響應性嗎？
 const { records } = storeToRefs(useRecordsStore())
 
-
-const record = computed(() => getRecordById(recordId as string))
+const record = computed(() => getRecordById(recordId))
 const title = computed(() => record.value?.title || '')
 const value = computed(() => record.value?.value || 0)
 const debts = computed(() => record.value ? getDebts(record.value) : [])
@@ -64,6 +64,19 @@ const displayDate = computed(() => {
   const [ year, month, day ] = record.value?.fullDate?.toISOString().split("T")[0].split('-') || ["1900", "1", "1"]
   return `${year} 年 ${month} 月 ${day} 日`
 })
+
+const handleDeleteRecord = async () => {
+  let yes = confirm('確定要刪除這筆紀錄嗎？')
+  if (yes) {
+    try {
+      await deleteRecord(recordId)
+      await useRecordsStore().deleteRecord(recordId)
+      router.push('/search')
+    } catch (error) {
+      console.error(error)
+    }
+  }
+}
 </script>
 
 <style scoped lang="sass">

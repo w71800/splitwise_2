@@ -2,10 +2,10 @@ import type { Record } from '@/types/types'
 import type { PostRecord } from '@/types/api'
 import { formatPostRecord } from '@/utils/formatters'
 
-const endpointUrl = (resource: string, populates: string[] = []) => {
+const endpointUrl = (resource: string, populates?: string[]) => {
   const config = useRuntimeConfig()
   const { strapiHost } = config.public
-  return `${strapiHost}/api/${resource}?${populates.join('&')}`
+  return `${strapiHost}/api/${resource}${populates ? `?${populates.join('&')}` : ''}`
 }
 
 const fetchRecordDatas = () => {
@@ -69,7 +69,6 @@ const postRecord = async (record: Record): Promise<string> => {
   const token = config.public.strapiUserToken
   const postData = formatPostRecord(record)
 
-  console.log(postData)
   let response = await fetch(endpointUrl('records'), {
     method: 'POST',
     body: JSON.stringify(postData),
@@ -84,12 +83,35 @@ const postRecord = async (record: Record): Promise<string> => {
     }
     return res.json()
   })
+  .catch(error => { // 抓取其餘網路連接錯誤
+    throw error
+  })
   
   return response.data.documentId
+}
+
+const deleteRecord = async (documentId: string) => {
+  const config = useRuntimeConfig()
+  const token = config.public.strapiUserToken
+
+  let response = await fetch(endpointUrl(`records/${documentId}`), {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${token}` }
+  })
+  .then(res => {
+    if (!res.ok) {
+      throw new Error("Failed to delete record from strapi")
+    }
+    return true
+  })
+  .catch(error => { // 抓取其餘網路連接錯誤
+    throw error
+  })
 }
 
 export {
   fetchRecordDatas,
   fetchUserData,
-  postRecord
+  postRecord,
+  deleteRecord
 }

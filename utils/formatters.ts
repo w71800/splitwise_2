@@ -114,24 +114,18 @@ export function formatPostRecord(record: Record): { data: PostRecord } {
     currency: record.currency as 'TWD' | 'USD' | 'JPY',
     fullDate: record.fullDate.toISOString(),
     participants: record.participants.map(p => ({
-      participant: {
-        id: p.strapiId
-      },
+      participant: { id: p.strapiId },
       tags: p.tags ? p.tags.map(t => ({ tag: t })) : []
     })),
     payers: [{
-      payer: {
-        id: record.payers.strapiId
-      },
+      payer: { id: record.payers.strapiId },
       paid: record.payers.paid
     }],
     divisions: record.divisions.map(d => ({
-      participant: {
-        id: d.strapiId
-      },
+      participant: { id: d.strapiId },
       value: d.value
     })),
-    group: record.group ? {id: record.group.strapiId} : null
+    group: record.group ? { id: record.group.strapiId } : null
   }
   return { data: schema }
 }
