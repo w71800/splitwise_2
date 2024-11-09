@@ -21,6 +21,7 @@ import configMapper, { type Config } from '@/utils/topbarConfig'
 import type { Record } from '@/types/types'
 import { useRecordsStore } from '@/store/records'
 import { useEditorStore } from '@/store/editor'
+import { postRecord } from '@/utils/api'
 
 const editorStore = useEditorStore()
 const { setRecord, loadDivisionsMapper, saveDivisions } = editorStore
@@ -86,15 +87,20 @@ const methodsMapper = {
     setRecord()
     loadDivisionsMapper()
   },
-  'submit': () => {
+  'submit': async () => {
     const mode = editorMode.value
     if (mode === 'add') {
-      addRecord(currentRecord.value)
+      try {
+        const documentId = await postRecord(currentRecord.value)
+        addRecord({...currentRecord.value, id: documentId})
+        router.push(`/records/${documentId}`)
+      } catch (error) {
+        console.error(error)
+      }
     } else {
       putRecord(currentRecord.value)
     }
     isEditorShowing.value = false
-    router.push(`/records/${currentRecord.value.id}`) // NOTE: 看看要不要讓以上的 editingRecordId 統一為 currentRecord.value.id？
     setRecord()
   },
   'scrollBack': () => {

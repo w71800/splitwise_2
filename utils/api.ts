@@ -1,4 +1,8 @@
-const endpointUrl = (resource: string, populates: string[]) => {
+import type { Record } from '@/types/types' 
+import type { PostRecord } from '@/types/api'
+import { formatPostRecord } from '@/utils/formatters'
+
+const endpointUrl = (resource: string, populates: string[] = []) => {
   const config = useRuntimeConfig()
   const { strapiHost } = config.public
   return `${strapiHost}/api/${resource}?${populates.join('&')}`
@@ -60,9 +64,32 @@ const fetchUserData = () => {
   })
 }
 
+const postRecord = async (record: Record): Promise<string> => {
+  const config = useRuntimeConfig()
+  const token = config.public.strapiUserToken
+  const postData = formatPostRecord(record)
 
+  console.log(postData)
+  let response = await fetch(endpointUrl('records'), {
+    method: 'POST',
+    body: JSON.stringify(postData),
+    headers: { 
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(res => {
+    if (!res.ok) {
+      throw new Error("Failed to post record to strapi")
+    }
+    return res.json()
+  })
+  
+  return response.data.documentId
+}
 
 export {
   fetchRecordDatas,
-  fetchUserData
+  fetchUserData,
+  postRecord
 }

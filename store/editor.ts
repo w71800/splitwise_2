@@ -6,12 +6,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 const createEmptyRecord = (): Record => {
   const userDataStore = useUserDataStore()
-  const userData = { 
-    id: userDataStore.id,
-    displayName: userDataStore.displayName,
-    email: userDataStore.email,
-    avatar: userDataStore.avatar
-  }
+  const userData = userDataStore.$state
 
 
   return {
@@ -30,12 +25,7 @@ const createEmptyRecord = (): Record => {
 
 const initializeDivisionHistory = (record: Record | null = null) => {
   const userDataStore = useUserDataStore()
-  const userData = { 
-    id: userDataStore.id,
-    displayName: userDataStore.displayName,
-    email: userDataStore.email,
-    avatar: userDataStore.avatar
-  }
+  const userData = userDataStore.$state
 
   switch (record?.splitor) {
     case 'equal':

@@ -20,16 +20,19 @@ export const useUserDataStore = defineStore('userData', {
       const avatarUrl = runtimeConfig.public.strapiHost + data.avatar?.url
       return {
         id: data.documentId,
+        strapiId: data.id,
         displayName: data.username,
         email: data.email,
         avatar: avatarUrl,
         groups: data.groups.map((group: any) => ({
           id: group.documentId,
+          strapiId: group.id,
           name: group.name,
           avatar: runtimeConfig.public.strapiHost + group.avatar?.url
         })),
         friends: data.friends.map((friend: any) => ({
           id: friend.documentId,
+          strapiId: friend.id,
           displayName: friend.username,
           avatar: runtimeConfig.public.strapiHost + friend.avatar?.url
         }))

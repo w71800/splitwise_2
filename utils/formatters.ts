@@ -1,4 +1,5 @@
 import type { Record, Participant, Payer, Division, Group } from '@/types/types'
+import type { PostRecord } from '@/types/api'
 
 interface ApiUser {
   id: number
@@ -14,6 +15,7 @@ interface ApiTag {
 }
 
 interface ApiGroup {
+  id: number
   documentId: string
   name: string
   members: ApiUser[]
@@ -55,32 +57,37 @@ interface ApiRecord {
 
 export function formatApiRecord(apiRecord: ApiRecord): Record {
   // 轉換參與者資料
-  const participants: Participant[] = apiRecord.participants.map(p => ({
+  const participants: Participant[] = apiRecord.participants.map((p: ApiParticipant) => ({
     id: p.participant.documentId,
+    strapiId: p.participant.id,
     email: p.participant.email,
     displayName: p.participant.username,
     tags: p.tags.map(t => t.tag)
   }))
 
   // 轉換付款者資料
-  const payers: Payer[] = apiRecord.payers.map(p => ({
+  const payers: Payer[] = apiRecord.payers.map((p: ApiPayer) => ({
     id: p.payer.documentId,
+    strapiId: p.payer.id,
     displayName: p.payer.username,
     paid: p.paid
   }))
 
   // 轉換分帳資料
-  const divisions: Division[] = apiRecord.divisions.map(d => ({
+  const divisions: Division[] = apiRecord.divisions.map((d: ApiDivision) => ({
     id: d.participant.documentId,
+    strapiId: d.participant.id,
     displayName: d.participant.username,
     value: d.value
   }))
 
   const group: Group | null = apiRecord.group ? {
     id: apiRecord.group.documentId,
+    strapiId: apiRecord.group.id,
     name: apiRecord.group.name,
-    members: apiRecord.group.members.map(m => ({
+    members: apiRecord.group.members.map((m: ApiUser) => ({
       id: m.documentId,
+      strapiId: m.id,
       displayName: m.username
     }))
   } : null
@@ -97,4 +104,34 @@ export function formatApiRecord(apiRecord: ApiRecord): Record {
     payers: payers[0],
     divisions
   }
+}
+
+export function formatPostRecord(record: Record): { data: PostRecord } {
+  const schema = {
+    title: record.title,
+    splitor: record.splitor,
+    value: record.value,
+    currency: record.currency as 'TWD' | 'USD' | 'JPY',
+    fullDate: record.fullDate.toISOString(),
+    participants: record.participants.map(p => ({
+      participant: {
+        id: p.strapiId
+      },
+      tags: p.tags ? p.tags.map(t => ({ tag: t })) : []
+    })),
+    payers: [{
+      payer: {
+        id: record.payers.strapiId
+      },
+      paid: record.payers.paid
+    }],
+    divisions: record.divisions.map(d => ({
+      participant: {
+        id: d.strapiId
+      },
+      value: d.value
+    })),
+    group: record.group ? {id: record.group.strapiId} : null
+  }
+  return { data: schema }
 }

@@ -55,8 +55,7 @@ const { records } = storeToRefs(useRecordsStore())
 const record = computed(() => getRecordById(recordId as string))
 const title = computed(() => record.value?.title || '')
 const value = computed(() => record.value?.value || 0)
-const debts = computed(() => record.value ? getDebts(record.value) : []) // NOTE: 這邊的 debts 似乎因為是這樣取得，而沒能保持響應性（單向綁定）
-// const debts = computed(() => record.value ? getDebts(record.value) : []) // NOTE: 這邊的 debts 似乎因為是這樣取得，而沒能保持響應性
+const debts = computed(() => record.value ? getDebts(record.value) : [])
 const tags = computed(() => record.value?.participants.find(participant => participant.id === userId)?.tags || [])
 const group = computed(() => record.value?.group?.name || null)
 // const isLoading = ref(true)

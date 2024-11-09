@@ -5,6 +5,7 @@
 
 export interface Group {
   id: string;
+  strapiId: number;
   name: string;
   avatar?: string;
   members: User[];
@@ -12,6 +13,7 @@ export interface Group {
 
 export interface User {
   id: string;
+  strapiId: number;
   displayName: string;
   email?: string;
   avatar?: string;
@@ -41,11 +43,7 @@ export interface Record {
   divisions: Division[];
   payers: Payer; // NOTE: 從 strapi 會拿到一個 payers list，但目前只會有一個 payer。
   splitor: 'equal' | 'fixed' | 'percentage' | 'ratio';
-  group: { 
-    id: string;
-    name: string;
-    members: User[];
-  } | null;
+  group: Group | null;
 }
 
 export interface Debt {
