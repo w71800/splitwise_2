@@ -21,7 +21,7 @@ import configMapper, { type Config } from '@/utils/topbarConfig'
 import type { Record } from '@/types/types'
 import { useRecordsStore } from '@/store/records'
 import { useEditorStore } from '@/store/editor'
-import { postRecord, updateRecord } from '@/utils/api'
+import * as strapiApi from '@/utils/api'
 
 const editorStore = useEditorStore()
 const { setRecord, loadDivisionsMapper, saveDivisions } = editorStore
@@ -32,7 +32,7 @@ const props = defineProps<Config>()
 const route = useRoute()
 const router = useRouter()
 const { id: editingRecordId } = route.params // NOTE: 這邊的 id 是從 records/:id 來的。但僅限從編輯模式才能抓到，從新增模式中是抓不到的。
-const { getRecordById, addRecord, putRecord } = useRecordsStore()
+const { getRecordById, addRecord, updateRecord } = useRecordsStore()
 
 const { record: currentRecord, editorMode } = storeToRefs(editorStore)
 const currentPath = ref(route.path)
@@ -91,16 +91,19 @@ const methodsMapper = {
     const mode = editorMode.value
     if (mode === 'add') {
       try {
-        const documentId = await postRecord(currentRecord.value)
-        addRecord({...currentRecord.value, id: documentId})
-        router.push(`/records/${documentId}`)
+        const documentId = await strapiApi.postRecord(currentRecord.value)
+        await addRecord({...currentRecord.value, id: documentId})
+
+        setTimeout(() => {
+          router.push(`/records/${documentId}`)
+        }, 500)
       } catch (error) {
         console.error(error)
       }
     } else {
       try {
-        let documentId = await putRecord(currentRecord.value) // 這邊是 store 的 putRecord，我想要改成 updateRecord 的命名
-        await updateRecord(documentId, currentRecord.value)
+        let documentId = await updateRecord(currentRecord.value)
+        await strapiApi.updateRecord(documentId)
       } catch (error) {
         console.error(error)
       }

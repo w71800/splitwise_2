@@ -1,6 +1,7 @@
 import type { Record } from '@/types/types' 
 import type { PostRecord } from '@/types/api'
 import { formatPostRecord } from '@/utils/formatters'
+import { useRecordsStore } from '@/store/records'
 
 const endpointUrl = (resource: string, populates?: string[]) => {
   const config = useRuntimeConfig()
@@ -113,10 +114,15 @@ const deleteRecord = async (documentId: string) => {
 }
 
 // 成功的話，會回傳該紀錄於 strapi 的 documentId，後續看看如何使用（例如：更新 pinia 的紀錄。但是 pinia 應該已經一起編輯好了）
-const updateRecord = async (documentId: string, record: Record): Promise<string> => {
+const updateRecord = async (documentId: string): Promise<string> => {
   const config = useRuntimeConfig()
   const token = config.public.strapiUserToken
-  const updateData = formatPostRecord(record)
+  const { getRecordById } = useRecordsStore()
+  const updateData = formatPostRecord(getRecordById(documentId)!)
+
+  if (!updateData) {
+    throw new Error("Record not found")
+  }
 
   return await fetch(endpointUrl(`records/${documentId}`), {
     method: 'PUT',
