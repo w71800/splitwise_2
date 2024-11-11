@@ -71,7 +71,7 @@ const postRecord = async (record: Record): Promise<string> => {
   const token = config.public.strapiUserToken
   const postData = formatPostRecord(record)
 
-  console.log(postData)
+  // console.log(postData)
 
   let response = await fetch(endpointUrl('records'), {
     method: 'POST',
@@ -83,7 +83,7 @@ const postRecord = async (record: Record): Promise<string> => {
   })
   .then(res => {
     if (!res.ok) {
-      throw new Error("Failed to post record to strapi")
+      throw new Error("新增紀錄時出現錯誤")
     }
     return res.json()
   })

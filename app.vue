@@ -12,6 +12,7 @@
 .app(v-else)
   NuxtLayout
     NuxtPage
+  SideNotification
 </template>
 
 <script setup lang="ts">
@@ -26,6 +27,11 @@ const editorStore = useEditorStore()
 const { fetchRecords, isLoading } = recordsStore
 const userDataStore = useUserDataStore()
 const { setUserData } = userDataStore
+
+const isNotificationShowing = ref(false)
+const isProcessSuccess = ref(true)
+provide('isNotificationShowing', isNotificationShowing)
+provide('isProcessSuccess', isProcessSuccess)
 
 const createEmptyRecord = (): Record => ({
   id: '',

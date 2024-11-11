@@ -22,7 +22,9 @@ import type { Record } from '@/types/types'
 import { useRecordsStore } from '@/store/records'
 import { useEditorStore } from '@/store/editor'
 import * as strapiApi from '@/utils/api'
+import { useSideNotification } from '@/utils/composable'
 
+const showNotification = useSideNotification()
 const editorStore = useEditorStore()
 const { setRecord, loadDivisionsMapper, saveDivisions } = editorStore
 const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
@@ -93,19 +95,23 @@ const methodsMapper = {
       try {
         const documentId = await strapiApi.postRecord(currentRecord.value)
         await addRecord({...currentRecord.value, id: documentId})
-
+        
         setTimeout(() => {
           router.push(`/records/${documentId}`)
+          showNotification('success')
         }, 500)
       } catch (error) {
         console.error(error)
+        showNotification('error')
       }
     } else {
       try {
         let documentId = await updateRecord(currentRecord.value)
         await strapiApi.updateRecord(documentId)
+        showNotification('success')
       } catch (error) {
         console.error(error)
+        showNotification('error')
       }
     }
     isEditorShowing.value = false
