@@ -64,16 +64,19 @@ const fetchUserData = () => {
   })
 }
 
+// 成功的話，會回傳該紀錄於 strapi 的 documentId，後續用於路由
 const postRecord = async (record: Record): Promise<string> => {
   const config = useRuntimeConfig()
   const token = config.public.strapiUserToken
   const postData = formatPostRecord(record)
 
+  console.log(postData)
+
   let response = await fetch(endpointUrl('records'), {
     method: 'POST',
     body: JSON.stringify(postData),
     headers: { 
-      Authorization: `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     }
   })
@@ -94,12 +97,12 @@ const deleteRecord = async (documentId: string) => {
   const config = useRuntimeConfig()
   const token = config.public.strapiUserToken
 
-  let response = await fetch(endpointUrl(`records/${documentId}`), {
+  await fetch(endpointUrl(`records/${documentId}`), {
     method: 'DELETE',
-    headers: { Authorization: `Bearer ${token}` }
+    headers: { 'Authorization': `Bearer ${token}` }
   })
   .then(res => {
-    if (!res.ok) {
+    if (!res.ok || res.status !== 204) {
       throw new Error("Failed to delete record from strapi")
     }
     return true
@@ -109,9 +112,32 @@ const deleteRecord = async (documentId: string) => {
   })
 }
 
+// 成功的話，會回傳該紀錄於 strapi 的 documentId，後續看看如何使用（例如：更新 pinia 的紀錄。但是 pinia 應該已經一起編輯好了）
+const updateRecord = async (documentId: string, record: Record): Promise<string> => {
+  const config = useRuntimeConfig()
+  const token = config.public.strapiUserToken
+  const updateData = formatPostRecord(record)
+
+  return await fetch(endpointUrl(`records/${documentId}`), {
+    method: 'PUT',
+    body: JSON.stringify(updateData),
+    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
+  })
+  .then(res => {
+    if (!res.ok || res.status !== 200) {
+      throw new Error("Failed to update record in strapi")
+    }
+    return res.json().then(data => data.data.documentId)
+  })
+  .catch(error => {
+    throw error // 抓取其餘網路連接錯誤
+  })
+}
+
 export {
   fetchRecordDatas,
   fetchUserData,
   postRecord,
-  deleteRecord
+  deleteRecord,
+  updateRecord
 }

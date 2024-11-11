@@ -21,7 +21,7 @@ import configMapper, { type Config } from '@/utils/topbarConfig'
 import type { Record } from '@/types/types'
 import { useRecordsStore } from '@/store/records'
 import { useEditorStore } from '@/store/editor'
-import { postRecord } from '@/utils/api'
+import { postRecord, updateRecord } from '@/utils/api'
 
 const editorStore = useEditorStore()
 const { setRecord, loadDivisionsMapper, saveDivisions } = editorStore
@@ -98,7 +98,12 @@ const methodsMapper = {
         console.error(error)
       }
     } else {
-      putRecord(currentRecord.value)
+      try {
+        let documentId = await putRecord(currentRecord.value) // 這邊是 store 的 putRecord，我想要改成 updateRecord 的命名
+        await updateRecord(documentId, currentRecord.value)
+      } catch (error) {
+        console.error(error)
+      }
     }
     isEditorShowing.value = false
     setRecord()
