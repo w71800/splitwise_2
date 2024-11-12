@@ -7,9 +7,9 @@
 -->
 
 <template lang="pug">
-.app(v-if="isLoading")
+#app(v-if="isLoading")
   .loading 載入中...
-.app(v-else)
+#app(v-else)
   NuxtLayout
     NuxtPage
   SideNotification
@@ -24,7 +24,7 @@ import { useEditorStore } from '@/store/editor'
 const recordsStore = useRecordsStore()
 const editorStore = useEditorStore()
 
-const { fetchRecords, isLoading } = recordsStore
+const { loadRecords, isLoading } = recordsStore
 const userDataStore = useUserDataStore()
 const { setUserData } = userDataStore
 
@@ -77,7 +77,7 @@ provide('handleEditRecord', handleEditRecord)
 
 onMounted(async () => {
   await setUserData()
-  await fetchRecords()
+  await loadRecords()
   editorStore.initializeEditor()
 })
 

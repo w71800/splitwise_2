@@ -17,7 +17,7 @@ import { computed, inject  } from 'vue'
 const isSuccess = inject<Ref<boolean>>('isProcessSuccess')
 const isShowing = inject<Ref<boolean>>('isNotificationShowing')
 
-  const config = computed(() => {
+const config = computed(() => {
   return {
     text: isSuccess!.value ? '處理成功！' : '處理失敗！',
     style: isSuccess!.value ? 'success' : 'error',
@@ -38,26 +38,31 @@ const isShowing = inject<Ref<boolean>>('isNotificationShowing')
 @keyframes fadeinout
   0%
     opacity: 0
+    transform: translateY(20px)
   20%
     opacity: 1
+    transform: translateY(0px)
   50%
     opacity: 1
+    transform: translateY(0px)
   80%
     opacity: 1
+    transform: translateY(0px)
   100%
     opacity: 0
+    transform: translateY(20px)
 
 .side-notification
   position: absolute
   top: 54px
-  right: 0
+  right: 0px
   background-color: #fff
   border: 2px solid #D5D5D5
   border-radius: 6px
   overflow: hidden
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)
-  transition: opacity 1s linear
   opacity: 0
+  transform: translateY(20px)
 
 .content
   display: flex
@@ -103,7 +108,7 @@ const isShowing = inject<Ref<boolean>>('isNotificationShowing')
 
 
 .side-notification.showing
-  animation: fadeinout 2.5s linear forwards
+  animation: fadeinout 2.5s cubic-bezier(0.36, 0, 0.76, 1.39) forwards
   .progress
     animation: start 1.4s linear forwards
     animation-delay: .5s

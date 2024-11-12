@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import type { Record } from '@/types/types'
 import { fakeRecords } from '@/data'
-import { fetchRecordDatas } from '@/utils/api'
+import * as api from '@/utils/api'
 
 
 export const useRecordsStore = defineStore('records', {
@@ -26,11 +26,11 @@ export const useRecordsStore = defineStore('records', {
       this.records = this.records.map(r => r.id == targetId ? record : r)
       return targetId
     },
-    async fetchRecords() {
+    async loadRecords() {
       this.isLoading = true
-      const recordDatas = await fetchRecordDatas()
+      const recordDatas = await api.fetchRecords()
       const formattedRecords = recordDatas.map(formatApiRecord)
-      this.records = formattedRecords
+      this.setRecords(formattedRecords)
       this.isLoading = false
     }
   },

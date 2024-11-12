@@ -9,7 +9,7 @@ const endpointUrl = (resource: string, populates?: string[]) => {
   return `${strapiHost}/api/${resource}${populates ? `?${populates.join('&')}` : ''}`
 }
 
-const fetchRecordDatas = () => {
+const fetchRecords = () => {
   const config = useRuntimeConfig()
 
   const populateParams = [
@@ -141,7 +141,7 @@ const updateRecord = async (documentId: string): Promise<string> => {
 }
 
 export {
-  fetchRecordDatas,
+  fetchRecords,
   fetchUserData,
   postRecord,
   deleteRecord,
