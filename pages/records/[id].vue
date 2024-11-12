@@ -43,11 +43,16 @@ import { useRecordsStore } from '@/store/records'
 import { getDebts, getSingleDigitMonth } from '@/utils/utils'
 import { useUserDataStore } from '@/store/userData'
 import { useRouter } from 'vue-router'
+import * as api from '@/utils/api'
+import { useSideNotification } from '@/utils/composable'
+
 
 const router = useRouter()
 const route = useRoute()
 const { id: recordId } = route.params as { id: string }
 const { id: userId } = useUserDataStore()
+
+const showNotification = useSideNotification()
 
 const { getRecordById, deleteRecord } = useRecordsStore() // NOTE: 這邊透過這個 getter 拿出來的紀錄，會保持響應性嗎？
 const { records } = storeToRefs(useRecordsStore())
@@ -69,11 +74,16 @@ const handleDeleteRecord = async () => {
   let yes = confirm('確定要刪除這筆紀錄嗎？')
   if (yes) {
     try {
+      await api.deleteRecord(recordId)
       await deleteRecord(recordId)
-      await useRecordsStore().deleteRecord(recordId)
       router.push('/search')
+      
+      setTimeout(() => {
+        showNotification('success')
+      }, 1000)
     } catch (error) {
       console.error(error)
+      showNotification('error')
     }
   }
 }
