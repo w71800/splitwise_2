@@ -149,7 +149,7 @@ onMounted(() => {
   justify-content: space-between
   align-items: center
   padding: 0 10px
-  z-index: 100
+  z-index: 200
   &__left, &__right
     +block_size(20px)
     cursor: pointer

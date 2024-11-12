@@ -32,5 +32,6 @@ watch(parentActiveTags, (newTags) => {
 
 </script>
 <style scoped lang="sass">
-
+.page
+  padding-bottom: 65px
 </style>

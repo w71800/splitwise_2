@@ -93,8 +93,9 @@ const handleAdd = () => {
   bottom: 0
   right: 0
   left: 0
-  background-color: rgba(#fff, 0.8)
+  background-color: rgba(#fff, 1)
   box-shadow: 0 -2px 10px 0 rgba(0, 0, 0, 0.1)
+  z-index: 100
   // +debug()
 
   &__item
