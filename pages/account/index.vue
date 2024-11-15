@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import { useUserDataStore } from '@/store/userData'
 
-const { id, displayName, email, avatar } = useUserDataStore()
+const { id, displayName, email, avatar } = storeToRefs(useUserDataStore())
 
 
 </script>

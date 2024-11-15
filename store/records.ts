@@ -28,10 +28,15 @@ export const useRecordsStore = defineStore('records', {
     },
     async loadRecords() {
       this.isLoading = true
-      const recordDatas = await api.fetchRecords()
-      const formattedRecords = recordDatas.map(formatApiRecord)
-      this.setRecords(formattedRecords)
-      this.isLoading = false
+      try {
+        const recordDatas = await api.fetchRecords()
+        const formattedRecords = recordDatas.map(formatApiRecord)
+        this.setRecords(formattedRecords)
+      } catch (error) {
+        console.error(error)
+      } finally {
+        this.isLoading = false
+      }
     }
   },
   getters: {

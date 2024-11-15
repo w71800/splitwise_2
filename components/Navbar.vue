@@ -32,11 +32,12 @@ nav.navbar
 
 <script setup lang="ts">
 import { inject } from 'vue'
-import type { Record } from '@/types/types'
 import { useEditorStore } from '@/store/editor';
+import { useUserDataStore } from '@/store/userData';
 
+const userDataStore = useUserDataStore()
+const { id: userId, displayName, avatar } = storeToRefs(userDataStore)
 const route = useRoute()
-const userId = 3 
 const { editorMode } = storeToRefs(useEditorStore())
 
 
@@ -73,8 +74,8 @@ const navItems = [
     name: '帳戶', 
     path: `/account`, 
     icon: {
-      active: '/icons/profile.jpg',
-      inactive: '/icons/profile.jpg'
+      active: avatar?.value,
+      inactive: avatar?.value
     }
   },
 ]

@@ -21,7 +21,7 @@ export const useUserDataStore = defineStore('userData', {
       return {
         id: data.documentId,
         strapiId: data.id,
-        displayName: data.username,
+        displayName: data.displayName,
         email: data.email,
         avatar: avatarUrl,
         groups: data.groups.map((group: any) => ({

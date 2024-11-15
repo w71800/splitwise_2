@@ -2,7 +2,7 @@ import type { Record } from '@/types/types'
 import type { PostRecord } from '@/types/api'
 import { formatPostRecord } from '@/utils/formatters'
 import { useRecordsStore } from '@/store/records'
-
+import { useUserDataStore } from '@/store/userData'
 const endpointUrl = (resource: string, populates?: string[]) => {
   const config = useRuntimeConfig()
   const { strapiHost } = config.public
@@ -11,8 +11,10 @@ const endpointUrl = (resource: string, populates?: string[]) => {
 
 const fetchRecords = () => {
   const config = useRuntimeConfig()
+  const userDataStore = useUserDataStore()
+  const { id: userId } = storeToRefs(userDataStore)
 
-  const populateParams = [
+  const params = [
     'populate[participants][populate][participant][populate][avatar][fields]=url',
     'populate[participants][populate]=tags',
     'populate[payers][populate][payer][populate][avatar][fields]=url',
@@ -20,8 +22,9 @@ const fetchRecords = () => {
     'populate[group][populate][members][fields]=id, documentId, username, email',
     'populate[group][populate][members][populate][avatar][fields]=url'
   ]
+  params.push(`filters[participants][participant][documentId][$eq]=${userId.value}`)
 
-  const endpoint = endpointUrl('records', populateParams)
+  const endpoint = endpointUrl('records', params)
   const token = config.public.strapiTokenDev
 
   return fetch(endpoint, {
