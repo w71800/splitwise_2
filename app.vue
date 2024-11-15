@@ -8,11 +8,12 @@
 
 <template lang="pug">
 #app(v-if="isLoading")
-  .loading 載入中...
+  Loading
 #app(v-else)
   NuxtLayout
     NuxtPage
   SideNotification
+  
 </template>
 
 <script setup lang="ts">
@@ -24,7 +25,7 @@ import { useEditorStore } from '@/store/editor'
 const recordsStore = useRecordsStore()
 const editorStore = useEditorStore()
 
-const { loadRecords, isLoading } = recordsStore
+const { loadRecords } = recordsStore
 const userDataStore = useUserDataStore()
 const { setUserData } = userDataStore
 
@@ -32,6 +33,8 @@ const isNotificationShowing = ref(false)
 const isProcessSuccess = ref(true)
 provide('isNotificationShowing', isNotificationShowing)
 provide('isProcessSuccess', isProcessSuccess)
+const isLoading = ref(false)
+provide('isLoading', isLoading)
 
 const createEmptyRecord = (): Record => ({
   id: '',
@@ -76,9 +79,18 @@ provide('handleAddNewRecord', handleAddNewRecord)
 provide('handleEditRecord', handleEditRecord)
 
 onMounted(async () => {
-  await setUserData()
-  await loadRecords()
-  editorStore.initializeEditor()
+  isLoading.value = true
+  try {
+    await setUserData()
+    await loadRecords()
+    editorStore.initializeEditor()
+  } catch (error) {
+    console.error(error)
+  } finally {
+    setTimeout(() => {
+      isLoading.value = false
+    }, 1000)
+  }
 })
 
 onErrorCaptured((error) => {
