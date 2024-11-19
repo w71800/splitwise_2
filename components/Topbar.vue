@@ -24,23 +24,25 @@ import { useEditorStore } from '@/store/editor'
 import * as strapiApi from '@/utils/api'
 import { useSideNotification } from '@/utils/composable'
 
-const showNotification = useSideNotification()
-const editorStore = useEditorStore()
-const { setRecord, loadDivisionsMapper, saveDivisions } = editorStore
-const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
-const isEditorScrolled = inject('isEditorScrolled') as Ref<boolean>
-const handleEditRecord = inject('handleEditRecord') as (record: Record) => void
-const props = defineProps<Config>()
 const route = useRoute()
 const router = useRouter()
-const { id: editingRecordId } = route.params // NOTE: 這邊的 id 是從 records/:id 來的。但僅限從編輯模式才能抓到，從新增模式中是抓不到的。
-const { getRecordById, addRecord, updateRecord } = useRecordsStore()
+const editorStore = useEditorStore()
+const userRecordsStore = useRecordsStore()
 
-const { record: currentRecord, editorMode } = storeToRefs(editorStore)
+const { id: editingRecordId } = route.params // NOTE: 這邊的 id 是從 records/:id 來的。但僅限從編輯模式才能抓到，從新增模式中是抓不到的。
+const handleEditRecord = inject('handleEditRecord') as (record: Record) => void
+const props = defineProps<Config>()
+
+const { getRecordById, addRecord, updateRecord } = userRecordsStore
+const { setRecord, loadDivisionsMapper, saveDivisions } = editorStore
+const showNotification = useSideNotification()
+
+const { record: currentRecord, editorMode, isEditorShowing, isEditorScrolled } = storeToRefs(editorStore)
 const currentPath = ref(route.path)
 const previousRoute = ref('')
 
 const pathList = computed(() => currentPath.value.split("/"))
+
 // 優先使用 props 以串接從父元件來的組態設定。若沒有的話，使用從路由對照取得的組態
 const config = computed(() => {
   if (props.left) {
@@ -53,6 +55,7 @@ const config = computed(() => {
       : temp
   }
 })
+
 const displayTitle = computed(() => {
   return config.value.middle 
   ? config.value.middle 
@@ -127,15 +130,9 @@ const methodsMapper = {
 }
 
 
-
 onMounted(() => {
   previousRoute.value = `/${pathList.value[1]}`
 })
-
-// onUnmounted(() => {
-//   router.beforeEach(() => {})
-// })
-
 </script>
 
 <style lang="sass" scoped>

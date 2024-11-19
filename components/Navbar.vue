@@ -35,14 +35,16 @@ import { inject } from 'vue'
 import { useEditorStore } from '@/store/editor';
 import { useUserDataStore } from '@/store/userData';
 
-const userDataStore = useUserDataStore()
-const { id: userId, displayName, avatar } = storeToRefs(userDataStore)
 const route = useRoute()
-const { editorMode } = storeToRefs(useEditorStore())
-
-
-const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
 const handleAddNewRecord = inject('handleAddNewRecord')
+
+const userDataStore = useUserDataStore()
+const editorStore = useEditorStore()
+
+const { id: userId, displayName, avatar } = storeToRefs(userDataStore)
+const { editorMode } = storeToRefs(editorStore)
+
+
 
 const navItems = [
   { 
@@ -83,7 +85,7 @@ const navItems = [
 const isActive = (pathString: string) => route.path.includes(pathString)
 
 const handleAdd = () => {
-  isEditorShowing.value = true
+  editorStore.openEditor()
   editorMode.value = 'add'
 }
 </script>

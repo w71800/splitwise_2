@@ -76,7 +76,9 @@ export const useEditorStore = defineStore('editor', {
     divisionsMapper: initializeDivisionHistory(),
     currentSplitor: 'Equal',
     editorMode: 'add',
-    isInitialized: false
+    isInitialized: false,
+    isEditorShowing: false,
+    isEditorScrolled: false
   }),
   actions: {
     setRecord(record: Record | null = null) {
@@ -103,6 +105,10 @@ export const useEditorStore = defineStore('editor', {
       this.setRecord()
       
       this.isInitialized = true
+    },
+    openEditor(record: Record | null = null) {
+      this.record = record || createEmptyRecord()
+      this.isEditorShowing = true
     }
   }
 })

@@ -26,11 +26,9 @@ import ParticipantsList from '@/components/editor/ParticipantsList.vue'
 import InputArea from '@/components/editor/InputArea.vue'
 import DivideInfo from '@/components/editor/DivideInfo.vue'
 import Footer from '@/components/editor/Footer.vue'
-import { inject } from 'vue'
+import { useEditorStore } from '@/store/editor'
 
-
-const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
-const isEditorScrolled = inject('isEditorScrolled') as Ref<boolean>
+const { isEditorShowing, isEditorScrolled } = storeToRefs(useEditorStore())
 
 const topbarConfig = {
   left: {
@@ -45,10 +43,6 @@ const topbarConfig = {
     method: 'submit'
   }
 }
-
-
-
-
 </script>
 
 <style lang="sass" scoped>

@@ -16,58 +16,15 @@
 
 
 <script setup lang="ts">
-import { ref, inject, provide, reactive } from 'vue'
-import type { Record } from '@/types/types'
-import { fakeUser, fakeFriends } from '@/data'
+import { ref, provide } from 'vue'
 import { useEditorStore } from '@/store/editor'
 
 const editorStore = useEditorStore()
 
-const isEditorShowing = inject('isEditorShowing') as Ref<boolean>
-const isEditorScrolled = ref(false)
+const { isEditorShowing, isEditorScrolled } = storeToRefs(editorStore)
 const editorHeight = ref('100vh')
 
-const recordData = reactive<Record>({
-  id: '1',
-  title: '晚餐',
-  value: 1200,
-  currency: 'TWD',
-  fullDate: new Date('2024-03-15'),
-  participants: [fakeUser, fakeFriends[0]],
-  payers: {
-    id: "1",
-    displayName: '威利',
-    email: 'william@gmail.com',
-    avatar: '/avatars/profile.jpg',
-    paid: 1200
-  },
-  divisions: [],
-  splitor: 'equal',
-  group: {
-    id: 'g1',
-    name: '測試群組',
-    members: [fakeUser, ...fakeFriends]
-  }
-})
-
 provide('isEditorScrolled', isEditorScrolled)
-
-
-
-
-// const fakeRecord = computed<Record>(() => ({
-//   ...recordData,
-//   divisions: recordData.participants.map(participant => ({
-//     id: participant.id,
-//     displayName: participant.displayName,
-//     value: recordData.value / recordData.participants.length
-//   })),
-//   payers: {
-//     id: recordData.payers.id,
-//     displayName: recordData.payers.displayName,
-//     paid: recordData.value
-//   }
-// }))
 
 const scrollHandler = () => {
   isEditorScrolled.value = !isEditorScrolled.value

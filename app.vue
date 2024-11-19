@@ -22,74 +22,43 @@ import type { Record } from '@/types/types'
 import { useRecordsStore } from '@/store/records'
 import { useUserDataStore } from '@/store/userData'
 import { useEditorStore } from '@/store/editor'
+
 const recordsStore = useRecordsStore()
 const editorStore = useEditorStore()
-
-const { loadRecords } = recordsStore
 const userDataStore = useUserDataStore()
-const { setUserData } = userDataStore
 
 const isNotificationShowing = ref(false)
 const isProcessSuccess = ref(true)
+const isLoading = ref(false)
+
 provide('isNotificationShowing', isNotificationShowing)
 provide('isProcessSuccess', isProcessSuccess)
-const isLoading = ref(false)
 provide('isLoading', isLoading)
 
-const createEmptyRecord = (): Record => ({
-  id: '',
-  title: '',
-  value: 0,
-  currency: 'TWD',
-  fullDate: new Date(),
-  participants: [],
-  payers: {
-    id: '',
-    displayName: '',
-    email: '',
-    avatar: '',
-    paid: 0
-  },
-  divisions: [],
-  splitor: 'equal',
-  group: {
-    id: '',
-    name: '',
-    members: []
-  }
-})
-const isEditorShowing = ref(false) as Ref<boolean>
-const currentRecord = ref(createEmptyRecord()) as Ref<Record> // 紀錄當下的 record
-
-const openEditor = (record: Record | null = null) => {
-  currentRecord.value = record || createEmptyRecord()
-  isEditorShowing.value = true
-}
-
 const handleAddNewRecord = (): void => {
-  openEditor()
+  console.log('handleAddNewRecord')
+  editorStore.openEditor()
 }
 
 const handleEditRecord = (record: Record): void => {
-  openEditor(record)
+  editorStore.openEditor(record)
 }
 
-provide('isEditorShowing', isEditorShowing)
 provide('handleAddNewRecord', handleAddNewRecord)
 provide('handleEditRecord', handleEditRecord)
 
 onMounted(async () => {
   isLoading.value = true
   try {
-    await setUserData()
-    await loadRecords()
-    editorStore.initializeEditor()
+    await userDataStore.setUserData()
+    await recordsStore.loadRecords()
+    await editorStore.initializeEditor()
   } catch (error) {
     console.error(error)
   } finally {
     setTimeout(() => {
       isLoading.value = false
-    }, 1000)
+    }, 2000)
   }
 })
 
