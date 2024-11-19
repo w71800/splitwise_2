@@ -39,7 +39,7 @@ const showNotification = useSideNotification()
 
 const { record: currentRecord, editorMode, isEditorShowing, isEditorScrolled } = storeToRefs(editorStore)
 const currentPath = ref(route.path)
-const previousRoute = ref('')
+const previousPath = ref('/search')
 
 const pathList = computed(() => currentPath.value.split("/"))
 
@@ -66,15 +66,16 @@ const displayTitle = computed(() => {
 
 
 watch(() => route.path, (newPath, oldPath) => {
+  // 如果是跳到了 records/:id 的話，要抓到上一層的 path
   currentPath.value = newPath
-  previousRoute.value = `/${pathList.value[1]}`
-  // todo: 如果是從 friends 或 gruops 跳轉到 records/id 的話，的確還是要抓到上一層
+  previousPath.value = newPath.includes('records') ? oldPath : `/${pathList.value[1]}`
+  console.log('前一個路徑是：', previousPath.value)
 })
 
 // todo: 調整命名，改成更易讀的方式。例如 back 是什麼東西 back？
 const methodsMapper = {
   'back': () => {
-    router.push(previousRoute.value)
+    router.push(previousPath.value)
   },
   'edit': () => {
     const record = getRecordById(editingRecordId as string)!
@@ -128,11 +129,6 @@ const methodsMapper = {
     isEditorScrolled.value = false
   }
 }
-
-
-onMounted(() => {
-  previousRoute.value = `/${pathList.value[1]}`
-})
 </script>
 
 <style lang="sass" scoped>
