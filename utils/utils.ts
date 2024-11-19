@@ -6,9 +6,7 @@
  * - 摘要的內容值，跟個別 Record 的值總和對不起來。應該是因為 Record 所顯示的債務為在該項可以取回或欠款的數值，並非針對該朋友
  */
 
-
 import type { Record, Division, Debt, Summary } from '@/types/types'
-
 
 
 /**
@@ -199,12 +197,13 @@ export const getDebts = (record: Record, userId?: string): Debt[] => {
 }
 
 // 從現有的 records 中選出 5 個
-export const getTags = (records: Record[]): string[] => {
+export const getTags = (records: Record[], userId: string): string[] => {
   let resultTags: string[] = []
   outerLoop: for(let record of records) {
+    const user = record.participants.filter(p => p.id === userId)[0]
+    const { tags: recordTags } = user
     
-    const { participants } = record
-    let recordTags = participants.reduce((acc, p) => [...acc, ...(p.tags || [])], [] as string[])
+    if(!recordTags) continue
     for(let tag of recordTags) {
       if(resultTags.length >= 6) break outerLoop;
       
@@ -213,6 +212,7 @@ export const getTags = (records: Record[]): string[] => {
       }
     }
   }
+
   return resultTags
 }
 

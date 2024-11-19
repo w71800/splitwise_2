@@ -24,9 +24,10 @@
 import { ref, computed } from 'vue'
 import { useRecordsStore } from '@/store/records'
 import { getTags } from '@/utils/utils';
+import { useUserDataStore } from '@/store/userData';
 
 const { records } = useRecordsStore()
-
+const { id: userId } = useUserDataStore()
 interface Tag {
   name: string
   isActive: boolean
@@ -34,7 +35,7 @@ interface Tag {
 
 const emit = defineEmits(['update:activeTags'])
 
-const tags = ref<Tag[]>(getTags(records).map( tag => ({ name: tag, isActive: false })))
+const tags = ref<Tag[]>(getTags(records, userId).map( tag => ({ name: tag, isActive: false })))
 const activeTags = computed(() => tags.value.filter(tag => tag.isActive).map(tag => tag.name))
 
 const toggleTag = (tag: Tag) => {
