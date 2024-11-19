@@ -31,6 +31,7 @@ const userRecordsStore = useRecordsStore()
 
 const { id: editingRecordId } = route.params // NOTE: 這邊的 id 是從 records/:id 來的。但僅限從編輯模式才能抓到，從新增模式中是抓不到的。
 const handleEditRecord = inject('handleEditRecord') as (record: Record) => void
+const isLoading = inject('isLoading') as Ref<boolean>
 const props = defineProps<Config>()
 
 const { getRecordById, addRecord, updateRecord } = userRecordsStore
@@ -66,16 +67,22 @@ const displayTitle = computed(() => {
 
 
 watch(() => route.path, (newPath, oldPath) => {
-  // 如果是跳到了 records/:id 的話，要抓到上一層的 path
   currentPath.value = newPath
   previousPath.value = newPath.includes('records') ? oldPath : `/${pathList.value[1]}`
-  console.log('前一個路徑是：', previousPath.value)
 })
 
 // todo: 調整命名，改成更易讀的方式。例如 back 是什麼東西 back？
 const methodsMapper = {
-  'back': () => {
-    router.push(previousPath.value)
+  'back': async () => {
+    try {
+      isLoading.value = true
+      await router.push(previousPath.value)
+      setTimeout(() => {
+        isLoading.value = false
+      }, 300)
+    } catch (error) {
+      console.error(error)
+    } 
   },
   'edit': () => {
     const record = getRecordById(editingRecordId as string)!

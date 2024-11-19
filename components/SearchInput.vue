@@ -100,4 +100,7 @@ const toggleTag = (tag: Tag) => {
       opacity: 1
       background-color: $color_secondary
       color: #fff
+
+.search-input.box-shadow
+  box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.1)
 </style>
