@@ -51,7 +51,7 @@ const toggleTag = (tag: Tag) => {
   background-color: $color_primary
   padding: 10px 0px
   padding-top: 15px
-  z-index: 250
+  z-index: 2
   input
     display: block
     margin: 0 auto

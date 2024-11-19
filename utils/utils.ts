@@ -138,7 +138,7 @@ export const filterRecords = (records: Record[], conditions: Filter): Record[] =
     return records.filter(record => {
       const { participants } = record
       return participants.some(p => 
-        p.tags && p.tags.some(tag => tags.includes(tag)) // todo: 消化一下這邊的寫法
+        p.tags && p.tags.some(tag => tags.includes(tag))
       )
     })
   }
