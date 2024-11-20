@@ -8,7 +8,7 @@
 
 <template lang="pug">
 #app(v-if="isLoading")
-  Loading(:spinner-scale="8")
+  Loading
 #app(v-else)
   NuxtLayout
     NuxtPage
@@ -29,7 +29,7 @@ const userDataStore = useUserDataStore()
 
 const isNotificationShowing = ref(false)
 const isProcessSuccess = ref(true)
-const isLoading = ref(false)
+const isLoading = ref(true)
 
 provide('isNotificationShowing', isNotificationShowing)
 provide('isProcessSuccess', isProcessSuccess)

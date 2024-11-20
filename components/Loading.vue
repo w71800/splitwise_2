@@ -8,9 +8,11 @@
 
 <script setup lang="ts">
 let interval: NodeJS.Timeout
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   spinnerScale: number
-}>()
+}>(), {
+  spinnerScale: 8
+})
 
 const dotsNumber = ref(3)
 
