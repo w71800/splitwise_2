@@ -8,7 +8,7 @@
 
 <template lang="pug">
 #app(v-if="isLoading")
-  Loading
+  Loading(:spinner-scale="8")
 #app(v-else)
   NuxtLayout
     NuxtPage

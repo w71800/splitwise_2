@@ -18,7 +18,6 @@ const activeTags = inject<Ref<string[]>>('activeTags')
 const { records } = storeToRefs(useRecordsStore())
 
 const displayRecords = computed(() => filterRecords(records.value, { tags: activeTags.value }))
-// const displayRecords = ref<Record[]>([])
 
 </script>
 <style scoped lang="sass">

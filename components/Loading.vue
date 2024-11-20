@@ -1,18 +1,21 @@
 <template lang="pug">
   #loading
-    .spinner
-      img(src="/icons/spinner.png")
+    .spinner(:style="{ '--spinner-scale': props.spinnerScale }")
+      .spinner-dots(v-for="i in props.spinnerScale" :style="{ '--index': i-1 }")
     .text Loading
       span.dots {{ dots }}
 </template>
 
 <script setup lang="ts">
-const dotsNumber = ref(3)
 let interval: NodeJS.Timeout
+const props = defineProps<{
+  spinnerScale: number
+}>()
 
-const dots = computed(() => {
-  return '.'.repeat(dotsNumber.value)
-})
+const dotsNumber = ref(3)
+
+const dots = computed(() => '.'.repeat(dotsNumber.value))
+
 
 onMounted(() => {
   interval = setInterval(() => {
@@ -26,11 +29,14 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="sass">
-@keyframes spin
-  from
-    transform: rotate(0deg)
-  to
-    transform: rotate(360deg)
+@keyframes pulse
+  $origin-scale: .8
+  0%
+    transform: scale($origin-scale)
+  50%
+    transform: scale(1.2)
+  100%
+    transform: scale($origin-scale)
 
 #loading
   +block_size(100vw, 100vh)
@@ -53,12 +59,31 @@ onUnmounted(() => {
 
 
 .spinner
-  +block_size(80px)
+  --spinner-size: 100px
+  +block_size(var(--spinner-size))
   margin-bottom: 40px
-  animation: spin 2s linear infinite
+  display: flex
+  justify-content: flex-start
+  align-items: center
   img
     +block_size(100%)
     object-fit: contain
+  .spinner-dots
+    --dot-size: 15px
+    position: absolute
+    // 旋轉的 transform 套用在外層元素
+    transform-origin: calc(var(--spinner-size) / 2) calc(var(--dot-size) / 2)
+    transform: rotate(calc(360deg * var(--index) / var(--spinner-scale)))
+    &::after
+      content: ''
+      position: absolute
+      +block_size(var(--dot-size))
+      background-color: $color-primary
+      border-radius: 50%
+      transform-origin: center
+      animation: pulse 1.3s infinite
+      animation-delay: calc(var(--index) * 0.5s)
+  
 
   
 .text
