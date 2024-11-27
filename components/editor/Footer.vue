@@ -17,9 +17,15 @@
   .tags(:class="{ 'inactive': isTagsEmpty }")
     .icon
       img(:src="tagIconSrc")
-    .tag(v-for="(tag,index) in tags" :key="tag")
+    .tag(v-for="(tag, index) in tags" :key="tag")
       label #
-      input(type="text" @input="setAdjustWidth($event.target)" v-model="tags[index]")
+      input(
+        type="text"
+        @input="setAdjustWidth($event.target, index)"
+        v-model="tags[index]"
+        :style="{ width: tagWidths[index] + 'px' }"
+        @blur="removeEmptyTag"
+      )
     .add_tag(@click="addTag")
       .icon
         img(:src="'/icons/add.png'")
@@ -31,6 +37,7 @@ import { useEditorStore } from '@/store/editor'
 import { useUserDataStore } from '@/store/userData'
 import { storeToRefs } from 'pinia'
 import { getComplement } from '@/utils/utils'
+import type { Group } from '@/types/types'
 
 const editorStore = useEditorStore()
 const userDataStore = useUserDataStore()
@@ -38,6 +45,8 @@ const { id: userId, groups } = userDataStore
 
 const { record } = storeToRefs(editorStore)
 const isGroupRecommendActive = ref(false)
+const measureSpan = ref<HTMLSpanElement | null>(null)
+const tagWidths = ref<number[]>([])
 
 const tags = computed<string[]>(() => record.value.participants?.find(p => p.id == userId)?.tags || []) // 取得一個 tags 的參考，用以渲染畫面
 const isTagsEmpty = computed(() => tags.value?.length === 0)
@@ -50,57 +59,61 @@ const recommendGroups = computed(() => {
 }) 
 
 
-const setAdjustWidth = (el: HTMLInputElement) => {
-  // 創建一個隱藏的 span 元素來測量文字寬度
-  const span = document.createElement('span')
-  span.style.visibility = 'hidden'
-  span.style.position = 'absolute'
-  span.style.whiteSpace = 'pre'
+const setAdjustWidth = async (el: HTMLInputElement, index: number) => {
+  if (!measureSpan.value) return
   
-  // 複製 input 的字體樣式到 span
   const styles = window.getComputedStyle(el)
-  span.style.font = styles.font
-  span.style.fontSize = styles.fontSize
-  span.style.fontFamily = styles.fontFamily
-  span.style.fontWeight = styles.fontWeight
-  span.style.letterSpacing = styles.letterSpacing
+  Object.assign(measureSpan.value.style, {
+    font: styles.font,
+    fontSize: styles.fontSize,
+    fontFamily: styles.fontFamily,
+    fontWeight: styles.fontWeight,
+    letterSpacing: styles.letterSpacing
+  })
 
-  // 將 span 添加到文檔中
-  document.body.appendChild(span)
-
-  // 設置 span 的文字內容為 input 的值
-  span.textContent = el.value || el.placeholder
-
-  // 獲取文字寬度並設置 input 的寬度
-  const textWidth = span.offsetWidth
-  el.style.width = `${textWidth + 20}px` // 加 20px 作為緩衝
-
-  // 移除 span
-  document.body.removeChild(span)
+  measureSpan.value.textContent = el.value || el.placeholder
+  const textWidth = measureSpan.value.offsetWidth
+  tagWidths.value[index] = textWidth + 10
 }
 
 
 const removeEmptyTag = () => {
-  let userTags = record.value.participants?.find(p => p.id === userId)?.tags
-  if (userTags) {
-    userTags = userTags.filter(tag => tag.trim() !== '')
+  const participant = record.value.participants?.find(p => p.id === userId)
+  if (participant && participant.tags) {
+    participant.tags = participant.tags.filter(tag => tag.trim() !== '')
   }
 }
 
-// 直接去加入當下 user 的 tags
 const addTag = () => {
   let userTags = record.value.participants?.find(p => p.id === userId)?.tags
   if (userTags) {
     userTags.push('')
   } else {
-    userTags = ['']
+    record.value.participants.find(p => p.id === userId)!.tags = ['']
   }
+  tagWidths.value.push(20)
 }
 
-const setGroup = (group) => {
+
+const setGroup = (group: Group): void => {
   record.value.group = group
   isGroupRecommendActive.value = false
 }
+
+onMounted(() => {
+  const span = document.createElement('span')
+  span.style.visibility = 'hidden'
+  span.style.position = 'absolute'
+  span.style.whiteSpace = 'pre'
+  document.body.appendChild(span)
+  measureSpan.value = span
+})
+
+onUnmounted(() => {
+  if (measureSpan.value) {
+    document.body.removeChild(measureSpan.value)
+  }
+})
 
 </script>
 
@@ -153,13 +166,23 @@ const setGroup = (group) => {
     .tag
       display: flex
       align-items: center
+      margin-right: 10px
       label
         color: rgba($color-primary, 0.7)
         font-weight: $font-weight-bold
         font-size: 12px
       input
         padding-right: 0
-        width: 4rem
+        height: 20px
+      .remove
+        opacity: 0.5
+        +block_size(8px)
+        font-size: 0px
+        cursor: pointer
+        // left: -3px
+        img
+          +block_size(100%)
+          object-fit: cover
     .add_tag
       cursor: pointer
       .icon
