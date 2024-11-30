@@ -1,6 +1,5 @@
 <template lang="pug">
 .page
-  .background
   Auth
 </template>
 
@@ -15,6 +14,9 @@
   height: 100vh
   left: 0
   top: 0
-  backdrop-filter: blur(10px)
+  backdrop-filter: blur(15px)
   z-index: 1000
+  display: flex
+  justify-content: center
+  align-items: center
 </style>
