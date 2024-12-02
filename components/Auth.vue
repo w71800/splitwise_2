@@ -1,27 +1,56 @@
 <template lang="pug">
-  #auth
-    .logo
-      img(:src="'/auth/logo.png'")
-    form(@submit.prevent="handleSubmit")
+#auth
+  .logo
+    img(:src="'/auth/logo.png'")
+  form(@submit.prevent="handleSubmit")
+    .wrapper
+      input(
+        v-model="formData.email" 
+        type="email" 
+        placeholder="電子信箱" 
+        autocomplete="off"
+      )
+    .wrapper
+      input(
+        v-model="formData.password" 
+        :type="isPasswordVisible ? 'text' : 'password'" 
+        placeholder="密碼" 
+        autocomplete="off"
+      )
+      .toggle(
+        v-show="formData.password.trim() !== ''" 
+        @click="isPasswordVisible = !isPasswordVisible"
+      )
+        img(:src="isPasswordVisible ? '/auth/eye_closed.png' : '/auth/eye.png'")
+    template(v-if="isSignup")
       .wrapper
-        input(v-model="email" type="email" placeholder="電子信箱" autocomplete="off")
+        input(
+          v-model="formData.username" 
+          type="text" 
+          placeholder="名字"
+        )
       .wrapper
-        input(v-model="password" :type="isPasswordVisible ? 'text' : 'password'" placeholder="密碼" autocomplete="off")
-        .toggle(@click="isPasswordVisible = !isPasswordVisible")
-          img(:src="isPasswordVisible ? '/auth/eye_closed.png' : '/auth/eye.png'")
-      .wrapper(v-if="isSignup")
-        input(v-model="username" type="text" placeholder="名字")
-      .wrapper(v-if="isSignup")
-        input(v-model="displayName" type="text" placeholder="暱稱")
-      button(type="submit")
-        .icon(v-if="status === Status.PENDING")
-          img(src="/auth/loading.png")
-        .text(v-else) {{ buttonText }}
-    .switch(@click="isSignup = !isSignup") {{ switchText }}
-    .result(v-if="resultMsg" :class="status") {{ resultMsg }}
+        input(
+          v-model="displayName" 
+          type="text" 
+          placeholder="暱稱"
+        )
+    button(type="submit" @click="handleSubmit")
+      .icon(v-if="status === Status.PENDING")
+        img(src="/auth/loading.png")
+      .text(v-else) {{ buttonText }}
+  .switch(@click="isSignup = !isSignup") {{ switchText }}
+  .result(
+    v-if="resultMsg" 
+    :class="status"
+  ) {{ resultMsg }}
 </template>
 
 <script setup lang="ts">
+import { login, signup } from '@/utils/api'
+import { useVuelidate } from '@vuelidate/core'
+import { required, email as isEmail, minLength } from '@vuelidate/validators' // 驗證器
+
 enum Status {
   IDLE = "idle",
   PENDING = "pending",
@@ -30,7 +59,12 @@ enum Status {
 }
 
 const isSignup = ref(true)
-const email = ref('')
+const formData = reactive({
+  email: '',
+  password: '',
+  username: '',
+  displayName: '',
+})
 const isPasswordVisible = ref(false)
 const status = ref<Status>(Status.IDLE)
 
@@ -42,6 +76,57 @@ const resultMsg = computed(() => { // 這邊要做一個函數，能夠根據 st
 const buttonText = computed(() => isSignup.value ? '註冊' : '登入')
 const switchText = computed(() => isSignup.value ? '我要登入' : '我要註冊')
 
+// 根據是否註冊，回傳不同的驗證規則
+const rules = computed(() => isSignup.value ? {
+  username: { required, minLength: minLength(3) },
+  displayName: { required },
+} : {
+  email: { required, isEmail },
+  password: { required, minLength: minLength(4) },
+  }
+)
+
+const handleSubmit = async () => {
+  const v$ = useVuelidate(rules.value, formData)
+  const isValid = await v$.value.$validate()
+  
+  // 表單沒通過驗證
+  if (!isValid) {
+    status.value = Status.ERROR
+    // 生成錯誤訊息
+    return
+  }
+
+  status.value = Status.PENDING
+
+  try {
+    if (isSignup.value) {
+      let data = {
+        identifier: formData.email,
+        password: formData.password,
+        username: formData.username,
+        displayName: formData.displayName,
+      }
+      await signup(data)
+    } else {
+      let data = {
+        identifier: formData.email,
+        password: formData.password,
+      }
+      const res = await login(data)
+      console.log(res)
+    }
+    status.value = Status.SUCCESS
+    console.log("登入成功");
+  } catch (error) {
+    console.log(error)
+    status.value = Status.ERROR
+  } finally {
+    setTimeout(() => {
+      status.value = Status.IDLE
+    }, 2000)
+  }
+}
 </script>
 
 <style scoped lang="sass">
@@ -65,7 +150,7 @@ $color_inactive: #D5D5D5
   grid-template-rows: auto 1fr auto auto
   border-radius: 10px
   box-shadow: 0px 0px 15px 2px rgba(0, 0, 0, 0.1)
-  background-color: darken(white, 1%)
+  background-color: white
   
 
 .logo

@@ -143,10 +143,40 @@ const updateRecord = async (documentId: string): Promise<string> => {
   })
 }
 
+// 成功的話回傳資料（含有 token）；失敗的話拋出狀態碼和錯誤
+const login = async (data: LoginData) => {
+  const config = useRuntimeConfig()
+  const token = config.public.strapiTokenDev
+  const response = await fetch(endpointUrl('auth/local'), {
+    method: 'POST',
+    body: JSON.stringify(data), // 這邊 strapi 是吃 identifier 和 password
+    headers: { 
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  })
+  .then(res => {
+    if (!res.ok) {
+      throw new Error(`登入失敗，請稍後再試（${res.status}）`)
+    }
+    return res.json()
+  })
+  .catch(error => {
+    throw error // 抓取其餘網路連接錯誤
+  })
+}
+
+const signup = async (data: SignupData) => {
+
+}
+
+
 export {
   fetchRecords,
   fetchUserData,
   postRecord,
   deleteRecord,
-  updateRecord
+  updateRecord,
+  login,
+  signup,
 }
