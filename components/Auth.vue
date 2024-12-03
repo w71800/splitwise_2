@@ -50,7 +50,10 @@
 import { login, signup } from '@/utils/api'
 import { useVuelidate } from '@vuelidate/core'
 import { required, email as isEmail, minLength } from '@vuelidate/validators' // 驗證器
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
+const initApp = inject('initApp') as () => Promise<void>
 enum Status {
   IDLE = "idle",
   PENDING = "pending",
@@ -58,7 +61,7 @@ enum Status {
   ERROR = "error",
 }
 
-const isSignup = ref(true)
+const isSignup = ref(false)
 const formData = reactive({
   email: '',
   password: '',
@@ -100,26 +103,20 @@ const handleSubmit = async () => {
   status.value = Status.PENDING
 
   try {
+    const { email, password } = formData
     if (isSignup.value) {
-      let data = {
-        identifier: formData.email,
-        password: formData.password,
-        username: formData.username,
-        displayName: formData.displayName,
-      }
-      await signup(data)
+      await signup(formData)
     } else {
-      let data = {
-        identifier: formData.email,
-        password: formData.password,
-      }
-      const res = await login(data)
-      console.log(res)
+      await login({ identifier: email, password })
+      // 登入成功後，開始重新初始化所有的資料（控制 pinia 中的狀態），過程中會有載入的過渡畫面
+      status.value = Status.SUCCESS
+      
+      setTimeout(async () => {
+        await initApp()
+        router.push('/account')
+      }, 2000)
     }
-    status.value = Status.SUCCESS
-    console.log("登入成功");
   } catch (error) {
-    console.log(error)
     status.value = Status.ERROR
   } finally {
     setTimeout(() => {

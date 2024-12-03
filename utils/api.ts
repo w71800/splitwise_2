@@ -3,6 +3,15 @@ import type { PostRecord } from '@/types/api'
 import { formatPostRecord } from '@/utils/formatters'
 import { useRecordsStore } from '@/store/records'
 import { useUserDataStore } from '@/store/userData'
+import useAuth from '@/composables/auth'
+
+const { getToken, setToken } = useAuth()
+
+interface LoginData {
+  identifier: string
+  password: string
+}
+
 const endpointUrl = (resource: string, populates?: string[]) => {
   const config = useRuntimeConfig()
   const { strapiHost } = config.public
@@ -45,7 +54,7 @@ const fetchRecords = () => {
 
 const fetchUserData = () => {
   const config = useRuntimeConfig()
-  const token = useCookie('token').value || config.public.strapiUserToken
+  const token = getToken() || config.public.strapiUserToken
 
   const populateParams = [
     'populate[friends][populate]=*',
@@ -147,7 +156,8 @@ const updateRecord = async (documentId: string): Promise<string> => {
 const login = async (data: LoginData) => {
   const config = useRuntimeConfig()
   const token = config.public.strapiTokenDev
-  const response = await fetch(endpointUrl('auth/local'), {
+
+  return await fetch(endpointUrl('auth/local'), {
     method: 'POST',
     body: JSON.stringify(data), // 這邊 strapi 是吃 identifier 和 password
     headers: { 
@@ -160,10 +170,16 @@ const login = async (data: LoginData) => {
       throw new Error(`登入失敗，請稍後再試（${res.status}）`)
     }
     return res.json()
+  }).then( data => {
+    const { jwt: token } = data
+    setToken(token)
+    return data
   })
   .catch(error => {
     throw error // 抓取其餘網路連接錯誤
   })
+
+  
 }
 
 const signup = async (data: SignupData) => {

@@ -44,13 +44,10 @@ const handleEditRecord = (record: Record): void => {
   editorStore.openEditor(record)
 }
 
-provide('handleAddNewRecord', handleAddNewRecord)
-provide('handleEditRecord', handleEditRecord)
-
-onMounted(async () => {
+const initApp = async () => {
   isLoading.value = true
   try {
-    await userDataStore.setUserData()
+    await userDataStore.loadUserData()
     await recordsStore.loadRecords()
     await editorStore.initializeEditor()
   } catch (error) {
@@ -60,6 +57,14 @@ onMounted(async () => {
       isLoading.value = false
     }, 2000)
   }
+}
+
+provide('handleAddNewRecord', handleAddNewRecord)
+provide('handleEditRecord', handleEditRecord)
+provide('initApp', initApp)
+
+onMounted(async () => {
+  await initApp()
 })
 
 onErrorCaptured((error) => {

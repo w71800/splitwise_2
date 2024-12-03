@@ -100,7 +100,7 @@ export const useEditorStore = defineStore('editor', {
     async initializeEditor() {
       const userDataStore = useUserDataStore()
       
-      await userDataStore.setUserData()
+      await userDataStore.loadUserData()
       await this.loadDivisionsMapper()
       this.setRecord()
       

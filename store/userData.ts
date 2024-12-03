@@ -6,7 +6,7 @@ import { fetchUserData } from '@/utils/api'
 export const useUserDataStore = defineStore('userData', {
   state: (): User => fakeUser,
   actions: {
-    async setUserData() {
+    async loadUserData() {
       try {
         this.$state = this.dataFormatter(await fetchUserData())
         return true 
