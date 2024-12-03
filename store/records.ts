@@ -26,6 +26,9 @@ export const useRecordsStore = defineStore('records', {
       this.records = this.records.map(r => r.id == targetId ? record : r)
       return targetId
     },
+    clearRecords() {
+      this.$reset()
+    },
     async loadRecords() {
       try {
         const recordDatas = await api.fetchRecords()

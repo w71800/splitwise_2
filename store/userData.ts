@@ -37,6 +37,9 @@ export const useUserDataStore = defineStore('userData', {
           avatar: runtimeConfig.public.strapiHost + friend.avatar?.url
         }))
       }
+    },
+    clearUserData() {
+      this.$reset()
     }
   }
 })
