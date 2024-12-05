@@ -12,6 +12,13 @@ interface LoginData {
   password: string
 }
 
+interface SignupData {
+  username: string
+  displayName?: string
+  email: string
+  password: string
+}
+
 const endpointUrl = (resource: string, populates?: string[]) => {
   const config = useRuntimeConfig()
   const { strapiHost } = config.public
@@ -167,23 +174,60 @@ const login = async (data: LoginData) => {
   })
   .then(res => {
     if (!res.ok) {
-      throw new Error(`登入失敗，請稍後再試（${res.status}）`)
+      const error = new Error(`登入失敗（${res.status}）`)
+      error.cause = { status: res.status, statusText: res.statusText }
+      throw error
     }
     return res.json()
   }).then( data => {
-    const { jwt: token } = data
-    setToken(token)
+    setToken(data.jwt)
     return data
   })
   .catch(error => {
-    throw error // 抓取其餘網路連接錯誤
+    if (error instanceof Error && error.cause) {
+      throw error
+    }
+    else {
+      throw new Error('網路連接異常')
+    }
   })
 
   
 }
 
 const signup = async (data: SignupData) => {
-
+  const config = useRuntimeConfig()
+  const token = config.public.strapiTokenDev
+  return await fetch(endpointUrl('auth/local/register'), {
+    method: 'POST',
+    body: JSON.stringify({
+      username: data.username,
+      email: data.email,
+      password: data.password,
+    }),
+    headers: { 
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  })
+  .then(async res => {
+    if (!res.ok) {
+      const error = new Error(`註冊失敗（${res.status}）`)
+      const errorData = await res.json()
+      error.cause = { status: res.status, statusText: res.statusText }
+      error.message = error.message + `：${errorData.error.message}`
+      throw error
+    }
+    return res.json()
+  })
+  .catch(error => {
+    if (error instanceof Error && error.cause) {
+      throw error
+    }
+    else {
+      throw new Error('網路連接異常')
+    }
+  })
 }
 
 

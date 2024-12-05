@@ -27,14 +27,14 @@
         input(
           v-model="formData.username" 
           type="text" 
-          placeholder="名字"
+          placeholder="名字（至少 3 個字）"
         )
-      .wrapper
-        input(
-          v-model="displayName" 
-          type="text" 
-          placeholder="暱稱"
-        )
+      //- .wrapper
+      //-   input(
+      //-     v-model="formData.displayName" 
+      //-     type="text" 
+      //-     placeholder="暱稱"
+      //-   )
     button(type="submit" @click="handleSubmit")
       .icon(v-if="status === Status.PENDING")
         img(src="/auth/loading.png")
@@ -70,57 +70,72 @@ const formData = reactive({
 })
 const isPasswordVisible = ref(false)
 const status = ref<Status>(Status.IDLE)
+const resultMsg = ref<string>('')
 
-const resultMsg = computed(() => { // 這邊要做一個函數，能夠根據 status 回傳不同的訊息：訊息（狀態碼）
-  if (status.value === Status.SUCCESS) return '註冊成功'
-  if (status.value === Status.ERROR) return '註冊失敗'
-  return false
-})
 const buttonText = computed(() => isSignup.value ? '註冊' : '登入')
 const switchText = computed(() => isSignup.value ? '我要登入' : '我要註冊')
 
 // 根據是否註冊，回傳不同的驗證規則
 const rules = computed(() => isSignup.value ? {
   username: { required, minLength: minLength(3) },
-  displayName: { required },
+  // displayName: { required },
 } : {
   email: { required, isEmail },
   password: { required, minLength: minLength(4) },
   }
 )
+const setStatus = (statusStr: Status) => {
+  status.value = statusStr
+}
+const setResult = (result: string = '') => {
+  resultMsg.value = result
+}
 
 const handleSubmit = async () => {
   const v$ = useVuelidate(rules.value, formData)
   const isValid = await v$.value.$validate()
-  
-  // 表單沒通過驗證
-  if (!isValid) {
-    status.value = Status.ERROR
-    // 生成錯誤訊息
-    return
-  }
-
-  status.value = Status.PENDING
-
   try {
+    // 表單沒通過驗證
+    if (!isValid) {
+      setStatus(Status.ERROR)
+      const error = v$.value.$errors
+      console.log(error);
+      setResult(`輸入有誤，請重新輸入：${error[0].$message}`)
+      return
+    }
+
+    setStatus(Status.PENDING)
+
     const { email, password } = formData
     if (isSignup.value) {
       await signup(formData)
+      setStatus(Status.SUCCESS)
+      setResult('註冊成功，請稍等...')
+      setTimeout(() => {
+        isSignup.value = false
+        Object.assign(formData, {
+          email: formData.email,
+          password: formData.password,
+          username: '',
+          displayName: '',
+        })
+      }, 2000)
     } else {
       await login({ identifier: email, password })
-      // 登入成功後，開始重新初始化所有的資料（控制 pinia 中的狀態），過程中會有載入的過渡畫面
-      status.value = Status.SUCCESS
-      
+      setStatus(Status.SUCCESS)
+      setResult('登入成功，請稍等...')
       setTimeout(async () => {
         await initApp()
         router.push('/account')
       }, 2000)
     }
-  } catch (error) {
-    status.value = Status.ERROR
+  } catch (error: any) {
+    setStatus(Status.ERROR)
+    setResult(error.message)
   } finally {
     setTimeout(() => {
-      status.value = Status.IDLE
+      setStatus(Status.IDLE)
+      setResult('')
     }, 2000)
   }
 }
