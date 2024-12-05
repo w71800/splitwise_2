@@ -60,8 +60,7 @@ const fetchRecords = () => {
 }
 
 const fetchUserData = () => {
-  const config = useRuntimeConfig()
-  const token = getToken() || config.public.strapiUserToken
+  const token = getToken()
 
   const populateParams = [
     'populate[friends][populate]=*',
