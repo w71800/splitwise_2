@@ -15,21 +15,40 @@ import { useRecordsStore } from '@/store/records'
 
 const router = useRouter()
 const { clearToken } = useAuth()
+const isLoading = inject('isLoading') as Ref<boolean>
 
 const { id, displayName, email, avatar } = storeToRefs(useUserDataStore())
 
-const handleSignout = () => {
-  const confirm = window.confirm('確定要登出嗎？')
-  if (confirm) {
-    // 清除所有的資料，含使用者、token、store 的資料
-    clearToken()
-    useRecordsStore().clearRecords()
-    useUserDataStore().clearUserData()
-    router.push('/auth')
+const clearSystemData = async (): Promise<boolean> => {
+  try {
+    await Promise.all([
+      clearToken(),
+      useRecordsStore().clearRecords(),
+      useUserDataStore().clearUserData()
+    ])
+    return true
+  } catch (error) {
+    console.error("清除資料失敗", error)
+    return false
   }
 }
 
-
+const handleSignout = async () => {
+  const confirm = window.confirm('確定要登出嗎？')
+  if (confirm) {
+    try {
+      isLoading.value = true
+      await clearSystemData()
+      router.push('/auth')
+    } catch (error) {
+      alert(`登出失敗，請稍後再試：${error}`)
+    } finally {
+      setTimeout(() => {
+        isLoading.value = false
+      }, 1000)
+    }
+  }
+}
 </script>
 
 <style scoped lang="sass">

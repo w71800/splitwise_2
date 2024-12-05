@@ -22,7 +22,12 @@ import type { Record } from '@/types/types'
 import { useRecordsStore } from '@/store/records'
 import { useUserDataStore } from '@/store/userData'
 import { useEditorStore } from '@/store/editor'
+import { useRouter } from 'vue-router'
+import useAuth from '@/composables/auth'
 
+
+const { isAuthenticated } = useAuth()
+const router = useRouter()
 const recordsStore = useRecordsStore()
 const editorStore = useEditorStore()
 const userDataStore = useUserDataStore()
@@ -65,9 +70,34 @@ provide('initApp', initApp)
 
 onMounted(async () => {
   await initApp()
+  if(!isAuthenticated.value){
+    alert('請先登入！')
+    router.push('/auth')
+  }
 })
 
 onErrorCaptured((error) => {
   console.log(error)
+})
+
+router.beforeEach(async (to, from, next) => {
+  console.log('當前驗證狀態：', isAuthenticated.value)
+  console.log('目標路由：', to.path)
+
+  // 如果已經在 auth 頁面，直接放行
+  if (to.path === '/auth') {
+    next()
+    return
+  }
+
+  // 如果未驗證且不是要去 auth 頁面，則重定向
+  if (!isAuthenticated.value) {
+    alert('請先登入！')
+    next('/auth')
+    return
+  }
+
+  // 其他情況直接放行
+  next()
 })
 </script>
