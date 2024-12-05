@@ -25,7 +25,7 @@ export interface Participant extends User {
   tags?: string[];
 }
 
-export interface Division extends User {
+export interface Division extends Pick<User, 'id' | 'strapiId' | 'displayName' | 'avatar'> {
   value: number;
 }
 
