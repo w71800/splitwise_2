@@ -87,8 +87,42 @@ const rules = computed(() => isSignup.value ? {
 const setStatus = (statusStr: Status) => {
   status.value = statusStr
 }
+
 const setResult = (result: string = '') => {
   resultMsg.value = result
+}
+
+const handleSignup = async () => {
+  try {
+    await signup(formData)
+    setStatus(Status.SUCCESS)
+    setResult('註冊成功，請稍等...')
+    setTimeout(() => {
+      isSignup.value = false
+      Object.assign(formData, {
+        email: formData.email,
+        password: formData.password,
+        username: '',
+        displayName: '',
+      })
+    }, 2000)
+  } catch (error: any) {
+    throw error
+  }
+}
+
+const handleLogin = async () => {
+  try {
+    await login({ identifier: formData.email, password: formData.password })
+    setStatus(Status.SUCCESS)
+    setResult('登入成功，請稍等...')
+    setTimeout(async () => {
+      await initApp()
+      router.push('/account')
+    }, 2000)
+  } catch (error: any) {
+    throw error
+  }
 }
 
 const handleSubmit = async () => {
@@ -99,36 +133,13 @@ const handleSubmit = async () => {
     if (!isValid) {
       setStatus(Status.ERROR)
       const error = v$.value.$errors
-      console.log(error);
       setResult(`輸入有誤，請重新輸入：${error[0].$message}`)
       return
     }
 
     setStatus(Status.PENDING)
-
-    const { email, password } = formData
-    if (isSignup.value) {
-      await signup(formData)
-      setStatus(Status.SUCCESS)
-      setResult('註冊成功，請稍等...')
-      setTimeout(() => {
-        isSignup.value = false
-        Object.assign(formData, {
-          email: formData.email,
-          password: formData.password,
-          username: '',
-          displayName: '',
-        })
-      }, 2000)
-    } else {
-      await login({ identifier: email, password })
-      setStatus(Status.SUCCESS)
-      setResult('登入成功，請稍等...')
-      setTimeout(async () => {
-        await initApp()
-        router.push('/account')
-      }, 2000)
-    }
+    // 註冊或登入
+    isSignup.value ? await handleSignup() : await handleLogin()
   } catch (error: any) {
     setStatus(Status.ERROR)
     setResult(error.message)
