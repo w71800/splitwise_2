@@ -29,7 +29,7 @@ const createEmptyRecord = (): Record => {
   }
 }
 
-// 根據 record 內的 divisions 初始化 divisionMapper。其餘都設置成 value 為 0 的 Division
+// 根據 record 內的 divisions 初始化 divisionMapper。其餘都設置成 value 為 0 的 Division。這部分還要考慮擴充新的分擔方法
 const initializeDivisionMapper = (record: Record | null = null): DivisionMapper => {
   const userDataStore = useUserDataStore()
   const userData = userDataStore.$state

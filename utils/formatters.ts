@@ -56,6 +56,9 @@ interface ApiRecord {
 }
 
 export function formatApiRecord(apiRecord: ApiRecord): Record {
+  const runtimeConfig = useRuntimeConfig()
+  const { strapiHost } = runtimeConfig.public
+
   // 轉換參與者資料
   const participants: Participant[] = apiRecord.participants.map((p: ApiParticipant) => ({
     id: p.participant.documentId,
@@ -78,6 +81,7 @@ export function formatApiRecord(apiRecord: ApiRecord): Record {
     id: d.participant.documentId,
     strapiId: d.participant.id,
     displayName: d.participant.username,
+    avatar: `${strapiHost}${d.participant.avatar.url}`,
     value: d.value
   }))
 
