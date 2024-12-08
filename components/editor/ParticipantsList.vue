@@ -47,10 +47,6 @@ const toggleRecommendList = () => {
   isRecommendListActive.value = !isRecommendListActive.value
   console.log(isRecommendListActive.value)
 }
-
-watch(() => record.value, (newRecord) => {
-  console.log(newRecord)
-})
 </script>
 
 <style scoped lang="sass">

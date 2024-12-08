@@ -221,8 +221,6 @@ export const getSummary = (records: Record[], userId: string): Summary => {
   const debts = records.map(record => getDebts(record)).flat()
   const totalSummary = getTotalSummary(debts, userId)
   const partialSummary = getPartialSummary(debts, userId)
-  console.log("totalSummary", totalSummary);
-  console.log("partialSummary", partialSummary);
 
   return {
     total: totalSummary,

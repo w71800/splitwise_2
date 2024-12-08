@@ -50,18 +50,20 @@ import { useSideNotification } from '@/utils/composable'
 const router = useRouter()
 const route = useRoute()
 const { id: recordId } = route.params as { id: string }
-const { id: userId } = useUserDataStore()
+const userDataStore = useUserDataStore()
+const { id: userId } = storeToRefs(userDataStore)
 
 const showNotification = useSideNotification()
 
-const { getRecordById, deleteRecord } = useRecordsStore() // NOTE: 這邊透過這個 getter 拿出來的紀錄，會保持響應性嗎？
+const { getRecordById, deleteRecord, createDebtTracker } = useRecordsStore() // NOTE: 這邊透過這個 getter 拿出來的紀錄，會保持響應性嗎？
 const { records } = storeToRefs(useRecordsStore())
 
+const debtTracker = computed(() => createDebtTracker(recordId))
 const record = computed(() => getRecordById(recordId))
 const title = computed(() => record.value?.title || '')
 const value = computed(() => record.value?.value || 0)
 const debts = computed(() => record.value ? getDebts(record.value) : [])
-const tags = computed(() => record.value?.participants.find(participant => participant.id === userId)?.tags || [])
+const tags = computed(() => record.value?.participants.find(participant => participant.id === userId.value)?.tags || [])
 const group = computed(() => record.value?.group?.name || null)
 // const isLoading = ref(true)
 

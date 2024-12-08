@@ -35,11 +35,6 @@ const splitorText = computed(() => {
       return '均等分擔'
   }
 })
-
-watch(() => record.value, (newRecord) => {
-  console.log(newRecord)
-})
-
 </script>
 
 <style scoped lang="sass">

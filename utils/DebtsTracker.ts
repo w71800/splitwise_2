@@ -1,69 +1,43 @@
-// const raw = [
-//   {
-//       "id": "kmi4kmbqwn8z46e33987ktjt",
-//       "displayName": "潘威利",
-//       "shouldPay": 0,
-//       "debt": 4360,
-//       "creditor": {
-//           "id": "kmi4kmbqwn8z46e33987ktjt",
-//           "displayName": "潘威利",
-//           "paid": 4360
-//       }
-//   },
-//   {
-//       "id": "ufrj3k2kkeqi6u4qavv3gwwi",
-//       "displayName": "李佩璇",
-//       "shouldPay": 2180,
-//       "debt": -2180,
-//       "creditor": {
-//           "id": "kmi4kmbqwn8z46e33987ktjt",
-//           "displayName": "潘威利",
-//           "paid": 4360
-//       }
-//   },
-//   {
-//       "id": "rovto4ii7b49wsi05xjvaive",
-//       "displayName": "tester",
-//       "shouldPay": 2180,
-//       "debt": -2180,
-//       "creditor": {
-//           "id": "kmi4kmbqwn8z46e33987ktjt",
-//           "displayName": "潘威利",
-//           "paid": 4360
-//       }
-//   }
-// ]
 import type { Record } from '@/types/types'
 import { getDebts } from './utils'
 
 
 class DebtsTracker {
   debts: Map<string, number>
-  debtorId: string
+  userId: string
 
-  constructor(debtorId: string, record: Record) {
-    this.debtorId = debtorId
+  constructor(userId: string, record: Record) {
+    this.userId = userId
     this.debts = new Map()
     getDebts(record).forEach( item => {
       const { 
-        creditor: { id: creditorId }, 
+        creditor: { id: creditorId },
+        id: debtorId,
         debt: debtValue
       } = item
-      this.addDebt(creditorId, debtValue)
+      if (debtorId !== creditorId) {
+        this.addDebt(debtorId, creditorId, debtValue) // 如果是我付款的，debtor 是對方、creditor 是我；但如果是對方付款 debtor 是我、creditor 是對方
+      }
     })
   }
 
-  private addDebt(creditorId: string, debtValue: number) {
-    this.debts.set(this.makeKey(creditorId), debtValue)
+  private addDebt(debtorId: string, creditorId: string, debtValue: number) {
+    this.debts.set(this.makeKey(debtorId, creditorId), debtValue)
   }
 
-  public getDebt(creditorId: string) {
-    let key = this.makeKey(creditorId)
-    return this.debts.get(key)
+  public getDebt(debtorId: string, creditorId: string) {
+    let key = this.makeKey(debtorId, creditorId)
+    return this.debts.get(key) || 0
   }
 
-  private makeKey(creditorId: string) {
-    return `${this.debtorId}-${creditorId}`
+  private makeKey(debtorId: string, creditorId: string) {
+    return `${debtorId}-${creditorId}`
+  }
+  // 取得使用者對某人的債務總和
+  public getBalance(subjectId: string) {
+    const shouldGet = -1 * this.getDebt(subjectId, this.userId)
+    const shouldPay = this.getDebt(this.userId, subjectId)
+    return shouldGet + shouldPay
   }
 }
 

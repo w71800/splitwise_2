@@ -17,19 +17,20 @@ import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRecordsStore } from '@/store/records'
 import { useUserDataStore } from '@/store/userData'
-import { getDebts, getSummary } from '@/utils/utils'
+import { getSummary } from '@/utils/utils'
 import type { User } from '@/types/types'
 
 const route = useRoute()
 const { id: friendId } = route.params
 
 const userDataStore = useUserDataStore()
-const { getRecordsByFriend } = useRecordsStore()
+const { getRecordsByFriend, createDebtTracker } = useRecordsStore()
 const displayRecords = getRecordsByFriend(friendId as string)
 
 const { id: userId, friends } = storeToRefs(userDataStore)
 const friend: User = friends.value?.find(friend => friend.id === friendId)!
-
+const debtTrackers = computed(() => displayRecords.map(record => createDebtTracker(record.id)))
+const balance = computed(() => debtTrackers.value.reduce((acc, debtTracker) => acc + debtTracker.getBalance(friendId as string), 0))
 
 const { partial } = getSummary(displayRecords, userId.value)
 const partialSummary = partial.filter(item => item.id === friendId)

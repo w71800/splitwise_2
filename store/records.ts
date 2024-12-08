@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 import type { Record } from '@/types/types'
-import { fakeRecords } from '@/data'
 import * as api from '@/utils/api'
-
+import DebtsTracker from '@/utils/DebtsTracker'
+import { useUserDataStore } from './userData'
 
 export const useRecordsStore = defineStore('records', {
   state: () => ({
@@ -48,6 +48,14 @@ export const useRecordsStore = defineStore('records', {
     },
     getRecordById: (state) => (recordId: string): Record | undefined => {
       return state.records.find(record => record.id === recordId)
+    },
+    createDebtTracker: (state) => (recordId: string): DebtsTracker => {
+      const record = state.records.find(record => record.id === recordId)
+      const userDataStore = useUserDataStore()
+      const { id: userId } = storeToRefs(userDataStore)
+      
+      if (!record) throw new Error('Record not found')
+      return new DebtsTracker(userId.value, record)
     }
   }
 })
