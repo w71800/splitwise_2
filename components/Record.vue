@@ -7,7 +7,7 @@
 -->
 
 <template lang="pug">
-.record
+.record(v-if="!isSettlement")
   NuxtLink(:to="`/records/${recordId}`")
   .record__date
     .month {{ getSingleDigitMonth(month) }}月
@@ -18,6 +18,11 @@
   .record__hint
     h3.title(:class="titleClass") {{ hintTitle }}
     p.value {{ Math.abs(displayDebt) }} 元
+.record(v-else :class="{ 'record--settlement': isSettlement }")
+  .record__date
+    .month {{ getSingleDigitMonth(month) }}月
+    .day {{ date }}
+  .settlement-content {{ settlementContent }}
 </template>
 
 <script setup lang="ts">
@@ -37,6 +42,7 @@ const userId = ref("kmi4kmbqwn8z46e33987ktjt")
 
 const { value, payers, fullDate, title, id: recordId } = toRefs(props.record)
 const [ _, month, date ] = fullDate.value.toISOString().split("T")[0].split('-')
+const isSettlement = ref(props.record.isSettlement || true) // TODO: 後面的 true 要清掉
 
 const isPayer = ref(payers.value.id === userId.value)
 
@@ -48,6 +54,12 @@ const titleClass = computed(() => ({
 const payerStr = computed(() => `${payers.value.displayName} 付了 ${value.value} 元`)
 // 取得這筆紀錄中，目前使用者於這筆紀錄的 debt
 const displayDebt = computed(() => getDebts(props.record, userId.value)[0].debt)
+const settlementContent = computed(() => {
+  const payer = props.record.payers[0] || props.record.payers //  TODO: 之後多於一個以上 payer 的預先接口
+  const subject = props.record.participants.filter(participant => participant.id !== payer.id)[0]?.displayName || ""
+  const debt = props.record.value
+  return `結算：${payer.displayName} 還付了 ${subject} ${debt} 元`
+})
 </script>
 
 <style lang="sass" scoped>
@@ -63,6 +75,7 @@ const displayDebt = computed(() => getDebts(props.record, userId.value)[0].debt)
   // &__date, &__content, &__hint
   &__date
     flex-shrink: 0
+    width: 35px
     *
       text-align: center
       color: #888
@@ -90,6 +103,14 @@ const displayDebt = computed(() => getDebts(props.record, userId.value)[0].debt)
         color: $color_secondary // 應付款用紅色
     .value
       // 樣式
+  
+  &--settlement
+    justify-content: flex-start
+    .settlement-content
+      font-size: .9rem
+      color: #929292
+    .record__date
+      margin-right: 20px
 
 a
   position: absolute

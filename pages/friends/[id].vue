@@ -8,6 +8,7 @@
 .page
   .container
     Header(:title="friend?.displayName" :summary="partialSummary")
+    .settleup-button(@click="settleUp") 結算
   .records
     Record(v-for="record in displayRecords" :key="record.id" :record="record")
 </template>
@@ -35,6 +36,14 @@ const balance = computed(() => debtTrackers.value.reduce((acc, debtTracker) => a
 const { partial } = getSummary(displayRecords, userId.value)
 const partialSummary = partial.filter(item => item.id === friendId)
 
+const settleUp = () => {
+  // 1. 取得結算的總額
+  // 2. 生成結算用的 record（顯示一個 modal）
+  // 3. 更新本地的 records
+  // 4. 更新遠端的 records
+  console.log('settle up')
+}
+
 // 可以考慮添加一個緩存機制
 // const cachedRecords = useMemo(() => displayRecords.value, [id])
 </script>
@@ -42,4 +51,18 @@ const partialSummary = partial.filter(item => item.id === friendId)
 <style scoped lang="sass">
 .page
   padding-top: 50px // 這裡可以根據 Header 組件的實際高度進行調整
+
+.container
+  // +debug()
+  margin-bottom: 20px
+
+.settleup-button
+  padding: 4px 10px
+  padding-right: 8px
+  background-color: $color_secondary
+  width: fit-content
+  border-radius: 6px
+  color: white
+  letter-spacing: 2px
+  cursor: pointer
 </style>

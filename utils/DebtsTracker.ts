@@ -33,7 +33,7 @@ class DebtsTracker {
   private makeKey(debtorId: string, creditorId: string) {
     return `${debtorId}-${creditorId}`
   }
-  // 取得使用者對某人的債務總和
+  // 取得使用者對某人的債務總和，正值為可回收、負值為欠款
   public getBalance(subjectId: string) {
     const shouldGet = -1 * this.getDebt(subjectId, this.userId)
     const shouldPay = this.getDebt(this.userId, subjectId)

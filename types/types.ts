@@ -44,6 +44,7 @@ export interface Record {
   payers: Payer; // NOTE: 從 strapi 會拿到一個 payers list，但目前只會有一個 payer。
   splitor: 'equal' | 'fixed' | 'percentage' | 'ratio';
   group: Group | null;
+  isSettlement?: boolean;
 }
 
 export interface Debt {

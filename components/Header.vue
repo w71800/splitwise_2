@@ -51,7 +51,7 @@ const statusClass = computed(() => {
   margin-bottom: 16px
   &__container
     padding: 0 16px
-    border-bottom: 1px solid #888
+    // border-bottom: 1px solid #888
   &__title
     font-size: 24px
     font-weight: 700
