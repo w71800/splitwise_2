@@ -1,6 +1,5 @@
 <template lang="pug">
 .test
-  SettlementEditor
 </template>
 
 <script setup lang="ts">

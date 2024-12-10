@@ -2,6 +2,7 @@
 .settlement-editor
   .background
   .editor
+    .editor__close-button(@click="toggleSettlementEditor") 關閉
     .editor__title 結算設定
     .editor__settlements-list
       .editor__settlements-item(v-for="(settlement, index) in settlements" :key="settlement")
@@ -22,6 +23,8 @@ import { useUserDataStore } from '@/store/userData'
 
 const settlementsStore = useSettlementsStore()
 const { settlements } = storeToRefs(settlementsStore)
+const { toggleSettlementEditor } = settlementsStore
+
 const userDataStore = useUserDataStore()
 
 const isUser = (id: string) => {
@@ -50,6 +53,7 @@ $color-simple: #929292
   position: absolute
   left: 0
   top: 0
+  background-color: rgba(white, 0.5)
   backdrop-filter: blur(8px)
   -webkit-backdrop-filter: blur(8px)
 
@@ -61,6 +65,7 @@ $color-simple: #929292
   border: 1px solid #D5D5D5
   border-radius: 8px
   box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.1)
+  background-color: #fff
   &__title
     font-size: 1.4rem
     font-weight: 600
@@ -89,6 +94,16 @@ $color-simple: #929292
     &:active
       box-shadow: none
       transform: translateY(3px)
+  &__close-button
+    position: absolute
+    top: 10px
+    right: 12px
+    cursor: pointer
+    font-size: .9rem
+    color: $color-simple
+    opacity: 0.5
+    &:hover
+      opacity: 1
   
   .participants
     display: grid

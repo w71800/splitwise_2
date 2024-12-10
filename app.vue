@@ -13,6 +13,7 @@
   NuxtLayout
     NuxtPage
   SideNotification
+  SettlementEditor(v-if="isSettlementEditorShow")
   
 </template>
 
@@ -22,6 +23,7 @@ import type { Record } from '@/types/types'
 import { useRecordsStore } from '@/store/records'
 import { useUserDataStore } from '@/store/userData'
 import { useEditorStore } from '@/store/editor'
+import { useSettlementsStore } from '@/store/settlements'
 import { useRouter } from 'vue-router'
 import useAuth from '@/composables/auth'
 
@@ -31,6 +33,9 @@ const router = useRouter()
 const recordsStore = useRecordsStore()
 const editorStore = useEditorStore()
 const userDataStore = useUserDataStore()
+const settlementsStore = useSettlementsStore()
+
+const { isShow: isSettlementEditorShow } = storeToRefs(settlementsStore)
 
 const isNotificationShowing = ref(false)
 const isProcessSuccess = ref(true)

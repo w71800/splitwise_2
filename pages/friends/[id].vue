@@ -8,7 +8,7 @@
 .page
   .container
     Header(:title="friend?.displayName" :summary="partialSummary")
-    .settleup-button(@click="settleUp") 結算
+    .settleup-button(@click="handleSettleUp") 結算
   .records
     Record(v-for="record in displayRecords" :key="record.id" :record="record")
 </template>
@@ -19,11 +19,13 @@ import { useRoute } from 'vue-router'
 import { useRecordsStore } from '@/store/records'
 import { useUserDataStore } from '@/store/userData'
 import { getSummary } from '@/utils/utils'
+import { useSettlementsStore, createSettlement } from '@/store/settlements'
 import type { User } from '@/types/types'
 
 const route = useRoute()
 const { id: friendId } = route.params
 
+const settlementsStore = useSettlementsStore()
 const userDataStore = useUserDataStore()
 const { getRecordsByFriend, createDebtTracker } = useRecordsStore()
 const displayRecords = getRecordsByFriend(friendId as string)
@@ -36,12 +38,15 @@ const balance = computed(() => debtTrackers.value.reduce((acc, debtTracker) => a
 const { partial } = getSummary(displayRecords, userId.value)
 const partialSummary = partial.filter(item => item.id === friendId)
 
-const settleUp = () => {
+
+
+const handleSettleUp = () => {
+  settlementsStore.toggleSettlementEditor()
   // 1. 取得結算的總額
+  settlementsStore.addSettlement(createSettlement(userId.value, friendId, balance.value))
   // 2. 生成結算用的 record（顯示一個 modal）
   // 3. 更新本地的 records
   // 4. 更新遠端的 records
-  console.log('settle up')
 }
 
 // 可以考慮添加一個緩存機制
