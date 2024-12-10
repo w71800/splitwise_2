@@ -42,7 +42,7 @@ const userId = ref("kmi4kmbqwn8z46e33987ktjt")
 
 const { value, payers, fullDate, title, id: recordId } = toRefs(props.record)
 const [ _, month, date ] = fullDate.value.toISOString().split("T")[0].split('-')
-const isSettlement = ref(props.record.isSettlement || true) // TODO: 後面的 true 要清掉
+const isSettlement = ref(props.record.isSettlement)
 
 const isPayer = ref(payers.value.id === userId.value)
 
