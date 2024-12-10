@@ -4,7 +4,7 @@ import { fakeUser } from '@/data'
 import { fetchUserData } from '@/utils/api'
 
 export const useUserDataStore = defineStore('userData', {
-  state: (): User => fakeUser,
+  state: (): User => fakeUser, // userData 的各項屬性，變為整個 state 的分項
   actions: {
     async loadUserData() {
       try {

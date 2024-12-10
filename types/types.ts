@@ -73,3 +73,11 @@ export interface Summary {
     value: number
   }[]
 }
+
+export interface Settlement {
+  creator: Pick<User, 'id' | 'displayName'>
+  debtor: Pick<User, 'id' | 'displayName'>
+  creditor: Pick<User, 'id' | 'displayName'>
+  value: number
+  currency: 'NTD' | 'JPY' | 'USD'
+}

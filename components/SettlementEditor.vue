@@ -4,32 +4,33 @@
   .editor
     .editor__title 結算設定
     .editor__settlements-list
-      .editor__settlements-item
+      .editor__settlements-item(v-for="(settlement, index) in settlements" :key="settlement")
         .participants
-          .debtor.is-user 你
+          .debtor(:class="{ 'is-user': isUser(settlement.debtor.id) }") {{ isUser(settlement.debtor.id) ? '你' : settlement.debtor.displayName }}
           .arrow
             img(src="/icons/right-arrow.png")
-          .creditor 李佩璇
+          .creditor(:class="{ 'is-user': isUser(settlement.creditor.id) }") {{ isUser(settlement.creditor.id) ? '你' : settlement.creditor.displayName }}
         .settlement-info
-          input(type="number").value
-          .currency NTD
-      .editor__settlements-item
-        .participants
-          .debtor.is-user 你
-          .arrow
-            img(src="/icons/right-arrow.png")
-          .creditor 李佩璇
-        .settlement-info
-          input(type="number").value
-          .currency NTD
+          input.value(type="number" v-model="settlements[index].value")
+          .currency {{ settlement.currency }}
     .editor__button 確定
 </template>
 
 <script setup lang="ts">
 import { useSettlementsStore } from '@/store/settlements'
+import { useUserDataStore } from '@/store/userData'
 
 const settlementsStore = useSettlementsStore()
+const { settlements } = storeToRefs(settlementsStore)
+const userDataStore = useUserDataStore()
 
+const isUser = (id: string) => {
+  return id === userDataStore.id
+}
+
+// const displayName = (settlement: Settlement) => {
+//   return isUser(settlement.debtor.id) ? '你' : settlement.debtor.displayName
+// }
 </script>
 
 <style scoped lang="sass">
