@@ -14,21 +14,43 @@
         .settlement-info
           input.value(type="number" v-model="settlements[index].value")
           .currency {{ settlement.currency }}
-    .editor__button 確定
+    .editor__button(@click="handleClick") 確定
 </template>
 
 <script setup lang="ts">
-import { useSettlementsStore } from '@/store/settlements'
+import { useSettlementsStore, transformSettlement } from '@/store/settlements'
 import { useUserDataStore } from '@/store/userData'
+import { useRecordsStore } from '@/store/records';
+import { postRecord } from '@/utils/api';
 
 const settlementsStore = useSettlementsStore()
 const { settlements } = storeToRefs(settlementsStore)
 const { toggleSettlementEditor } = settlementsStore
+const recordStore = useRecordsStore()
+const { addRecord } = recordStore
 
 const userDataStore = useUserDataStore()
 
 const isUser = (id: string) => {
   return id === userDataStore.id
+}
+
+const handleClick = async () => {
+  let idList = []
+  console.log("click");
+  // 取得 settlement 之後，遍歷他們形成對應的 record
+  const records = settlements.value.map(settlement => transformSettlement(settlement))
+  // 透過 api postRecord 去處理
+  records.forEach(async record => {
+    try {
+      console.log(record);
+      let result = await postRecord(record)
+      idList.push(result)
+      await addRecord({ ...record, id: result })
+    } catch(error) {
+      console.log(error);
+    }
+  })
 }
 
 // const displayName = (settlement: Settlement) => {

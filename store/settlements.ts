@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import type { Settlement } from '@/types/types'
 import { useUserDataStore } from '@/store/userData'
+import type { Record } from '@/types/types.js'
 
 
 
@@ -25,22 +26,42 @@ const fakeSettlements = [
 
 export const createSettlement = (debtorId: string, creditorId: string, value: number = 0): Settlement => {
   const { getFriendById } = useUserDataStore()
-const { id: userId, displayName: userDisplayName } = storeToRefs(useUserDataStore())
+  const { id: userId, displayName: userDisplayName, strapiId: userStrapiId } = storeToRefs(useUserDataStore())
   return {
     creator: {
       id: userId.value,
+      strapiId: userStrapiId.value,
       displayName: userDisplayName.value
     },
     debtor: {
       id: debtorId,
+      strapiId: userStrapiId.value,
       displayName: userDisplayName.value
     },
     creditor: {
       id: creditorId,
+      strapiId: getFriendById(creditorId)?.strapiId || 0, // NOTE: 這邊的 0 可能會出錯
       displayName: getFriendById(creditorId)?.displayName || '未知'
     },
     value,
-    currency: 'NTD'
+    currency: 'TWD'
+  }
+}
+
+export const transformSettlement = (settlement: Settlement): Omit<Record, 'id'> => {
+  const { creditor, debtor } = settlement
+  const { value: settlementValue, currency } = settlement
+  return {
+    title: `結清 ${settlementValue} ${currency}`,
+    value: settlement.value,
+    currency: settlement.currency,
+    fullDate: new Date(),
+    participants: [ creditor, debtor ],
+    divisions: [ { ...creditor, value: 0 }, { ...debtor, value: settlementValue } ],
+    payers: { ...debtor, paid: settlementValue },
+    splitor: 'fixed',
+    group: null,
+    isSettlement: true
   }
 }
 

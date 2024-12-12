@@ -42,11 +42,9 @@ const partialSummary = partial.filter(item => item.id === friendId)
 
 const handleSettleUp = () => {
   settlementsStore.toggleSettlementEditor()
-  // 1. 取得結算的總額
-  settlementsStore.addSettlement(createSettlement(userId.value, friendId, balance.value))
-  // 2. 生成結算用的 record（顯示一個 modal）
-  // 3. 更新本地的 records
-  // 4. 更新遠端的 records
+  const settlement = createSettlement(userId.value, friendId as string, balance.value)
+  console.log(settlement);
+  settlementsStore.addSettlement(settlement)
 }
 
 // 可以考慮添加一個緩存機制

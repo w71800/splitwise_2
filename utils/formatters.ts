@@ -52,7 +52,8 @@ interface ApiRecord {
   value: number
   currency: 'TWD' | 'USD' | 'JPY'
   payers: ApiPayer[]
-  divisions: ApiDivision[]
+  divisions: ApiDivision[],
+  isSettlement?: boolean | null
 }
 
 export function formatApiRecord(apiRecord: ApiRecord): Record {
@@ -106,11 +107,12 @@ export function formatApiRecord(apiRecord: ApiRecord): Record {
     group,
     participants,
     payers: payers[0],
-    divisions
+    divisions,
+    isSettlement: apiRecord.isSettlement ?? false
   }
 }
 
-export function formatPostRecord(record: Record): { data: PostRecord } {
+export function formatPostRecord(record: Omit<Record, 'id'>): { data: PostRecord } {
   const schema = {
     title: record.title,
     splitor: record.splitor,
@@ -129,7 +131,9 @@ export function formatPostRecord(record: Record): { data: PostRecord } {
       participant: { id: d.strapiId },
       value: d.value
     })),
-    group: record.group ? { id: record.group.strapiId } : null
+    group: record.group ? { id: record.group.strapiId } : null,
+    isSettlement: record.isSettlement
+
   }
   return { data: schema }
 }

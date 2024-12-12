@@ -160,5 +160,6 @@ export const fakeUser: User = {
   email: 'william@gmail.com',
   avatar: '/avatars/profile.jpg',
   groups: fakeGroups,
-  friends: fakeFriends
+  friends: fakeFriends,
+  strapiId: 0
 }

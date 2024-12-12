@@ -12,8 +12,8 @@ export interface Group {
 }
 
 export interface User {
-  id: string;
-  strapiId: number;
+  id: string; // strapi 的對外 documentId，例如 asdzxcasd2
+  strapiId: number; // strapi 的對內存取 id，例如 3
   displayName: string;
   email?: string;
   avatar?: string;
@@ -75,9 +75,9 @@ export interface Summary {
 }
 
 export interface Settlement {
-  creator: Pick<User, 'id' | 'displayName'>
-  debtor: Pick<User, 'id' | 'displayName'>
-  creditor: Pick<User, 'id' | 'displayName'>
+  creator: Pick<User, 'id' | 'strapiId' | 'displayName'>
+  debtor: Pick<User, 'id' | 'strapiId' | 'displayName'>
+  creditor: Pick<User, 'id' | 'strapiId' | 'displayName'>
   value: number
-  currency: 'NTD' | 'JPY' | 'USD'
+  currency: 'TWD' | 'JPY' | 'USD'
 }

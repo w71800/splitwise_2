@@ -83,8 +83,12 @@ const fetchUserData = () => {
   })
 }
 
-// 成功的話，會回傳該紀錄於 strapi 的 documentId，後續用於路由
-const postRecord = async (record: Record): Promise<string> => {
+/**
+ * 
+ * @param record 
+ * @returns promise of documentId
+ */
+const postRecord = async (record: Omit<Record, 'id'>): Promise<string> => {
   const config = useRuntimeConfig()
   const token = config.public.strapiUserToken
   const postData = formatPostRecord(record)
