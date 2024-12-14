@@ -35,13 +35,13 @@ export const createSettlement = (debtorId: string, creditorId: string, value: nu
     },
     debtor: {
       id: debtorId,
-      strapiId: userStrapiId.value,
-      displayName: userDisplayName.value
+      strapiId: getFriendById(debtorId)?.strapiId || userStrapiId.value,
+      displayName: getFriendById(debtorId)?.displayName || userDisplayName.value
     },
     creditor: {
       id: creditorId,
-      strapiId: getFriendById(creditorId)?.strapiId || 0, // NOTE: 這邊的 0 可能會出錯
-      displayName: getFriendById(creditorId)?.displayName || '未知'
+      strapiId: getFriendById(creditorId)?.strapiId || userStrapiId.value,
+      displayName: getFriendById(creditorId)?.displayName || userDisplayName.value
     },
     value,
     currency: 'TWD'
@@ -53,12 +53,12 @@ export const transformSettlement = (settlement: Settlement): Omit<Record, 'id'> 
   const { value: settlementValue, currency } = settlement
   return {
     title: `結清 ${settlementValue} ${currency}`,
-    value: settlement.value,
+    value: settlementValue,
     currency: settlement.currency,
     fullDate: new Date(),
     participants: [ creditor, debtor ],
-    divisions: [ { ...creditor, value: 0 }, { ...debtor, value: settlementValue } ],
-    payers: { ...debtor, paid: settlementValue },
+    divisions: [ { ...creditor, value: settlementValue }, { ...debtor, value: -1 * settlementValue } ],
+    payers: { ...debtor, paid: 0 },
     splitor: 'fixed',
     group: null,
     isSettlement: true

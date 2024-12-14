@@ -133,7 +133,6 @@ export function formatPostRecord(record: Omit<Record, 'id'>): { data: PostRecord
     })),
     group: record.group ? { id: record.group.strapiId } : null,
     isSettlement: record.isSettlement
-
   }
   return { data: schema }
 }

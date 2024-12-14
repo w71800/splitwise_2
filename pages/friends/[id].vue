@@ -30,6 +30,9 @@ const userDataStore = useUserDataStore()
 const { getRecordsByFriend, createDebtTracker } = useRecordsStore()
 const displayRecords = getRecordsByFriend(friendId as string)
 
+const isNotificationShowing = inject('isNotificationShowing') as Ref<boolean>
+const isProcessSuccess = inject('isProcessSuccess') as Ref<boolean>
+
 const { id: userId, friends } = storeToRefs(userDataStore)
 const friend: User = friends.value?.find(friend => friend.id === friendId)!
 const debtTrackers = computed(() => displayRecords.map(record => createDebtTracker(record.id)))
@@ -39,11 +42,14 @@ const { partial } = getSummary(displayRecords, userId.value)
 const partialSummary = partial.filter(item => item.id === friendId)
 
 
-
 const handleSettleUp = () => {
+  let settlement = null
   settlementsStore.toggleSettlementEditor()
-  const settlement = createSettlement(userId.value, friendId as string, balance.value)
-  console.log(settlement);
+  if(balance.value <= 0) { // 如果我欠對方錢，則我結算
+    settlement = createSettlement(userId.value, friendId as string, balance.value)
+  } else { // 如果對方欠我錢，則對方結算
+    settlement = createSettlement(friendId as string, userId.value, balance.value)
+  }
   settlementsStore.addSettlement(settlement)
 }
 

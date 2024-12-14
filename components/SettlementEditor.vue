@@ -12,7 +12,11 @@
             img(src="/icons/right-arrow.png")
           .creditor(:class="{ 'is-user': isUser(settlement.creditor.id) }") {{ isUser(settlement.creditor.id) ? '你' : settlement.creditor.displayName }}
         .settlement-info
-          input.value(type="number" v-model="settlements[index].value")
+          input.value(
+            type="number"
+            :value="Math.abs(settlements[index].value)"
+            @input="settlements[index].value = Math.abs($event.target.value)"
+            )
           .currency {{ settlement.currency }}
     .editor__button(@click="handleClick") 確定
 </template>
@@ -23,11 +27,16 @@ import { useUserDataStore } from '@/store/userData'
 import { useRecordsStore } from '@/store/records';
 import { postRecord } from '@/utils/api';
 
+
 const settlementsStore = useSettlementsStore()
 const { settlements } = storeToRefs(settlementsStore)
 const { toggleSettlementEditor } = settlementsStore
 const recordStore = useRecordsStore()
 const { addRecord } = recordStore
+
+const isLoading = inject('isLoading') as Ref<boolean>
+const isNotificationShowing = inject('isNotificationShowing') as Ref<boolean>
+const isProcessSuccess = inject('isProcessSuccess') as Ref<boolean>
 
 const userDataStore = useUserDataStore()
 
@@ -36,21 +45,29 @@ const isUser = (id: string) => {
 }
 
 const handleClick = async () => {
-  let idList = []
-  console.log("click");
-  // 取得 settlement 之後，遍歷他們形成對應的 record
   const records = settlements.value.map(settlement => transformSettlement(settlement))
-  // 透過 api postRecord 去處理
-  records.forEach(async record => {
-    try {
-      console.log(record);
-      let result = await postRecord(record)
-      idList.push(result)
-      await addRecord({ ...record, id: result })
-    } catch(error) {
-      console.log(error);
-    }
-  })
+  isLoading.value = true
+  try {
+    await Promise.all(records.map( async record => {
+      try {
+        let fetchedId = await postRecord(record)
+        await addRecord({ ...record, id: fetchedId })
+      } catch(error) {
+        throw new Error(`error: ${error} 處理時發生問題`)
+      }
+    }))
+
+    toggleSettlementEditor()
+    
+  } catch(error) {
+    console.log(error);
+    isProcessSuccess.value = false
+  } finally {
+    setTimeout(() => {
+      isLoading.value = false
+      isNotificationShowing.value = true
+    }, 2000)
+  }
 }
 
 // const displayName = (settlement: Settlement) => {
