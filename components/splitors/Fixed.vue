@@ -4,7 +4,7 @@
     .participants
       .participant(v-for="(division, index) in divisions" :key="division.id")
         .avatar
-          img(:src="'/avatars/profile.jpg'")
+          img(:src="division.avatar ? division.avatar : '/avatars/default.png'")
         .name {{ division.displayName }}
         .input_wrapper.value_is_exist
           label(for="participant") $
@@ -20,7 +20,7 @@
       span 剩餘 
       span ${{ remainingValue }}
       span &nbsp;未分配
-  </template>
+</template>
   
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
@@ -55,5 +55,11 @@ watch(
 </script>
 
 <style scoped lang="sass">
-
+.avatar
+  border-radius: 50%
+  overflow: hidden
+  img
+    width: 100%
+    height: 100%
+    object-fit: contain
 </style>

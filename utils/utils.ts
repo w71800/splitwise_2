@@ -193,7 +193,6 @@ export const getDebts = (record: Record, userId?: string): Debt[] => {
     if (b.id === b.creditor.id) return 1
     return 0
   })
-  console.log(debts);
   return debts
 }
 

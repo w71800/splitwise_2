@@ -9,7 +9,7 @@
       .participant(v-for="division in divisions" :key="division.id")
         label(:for="`division${division.id}`")
         .avatar
-          img(:src="division.avatar")
+          img(:src="division.avatar ? division.avatar : '/avatars/default.png'")
         .name {{ division.displayName }}
         .input_wrapper
           input(
@@ -135,4 +135,12 @@ label
   align-items: center
   justify-content: flex-end
   gap: 20px
+
+.avatar
+  border-radius: 50%
+  overflow: hidden
+  img
+    width: 100%
+    height: 100%
+    object-fit: contain
 </style>

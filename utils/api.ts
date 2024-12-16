@@ -89,8 +89,7 @@ const fetchUserData = () => {
  * @returns promise of documentId
  */
 const postRecord = async (record: Omit<Record, 'id'>): Promise<string> => {
-  const config = useRuntimeConfig()
-  const token = config.public.strapiUserToken
+  const token = getToken()
   const postData = formatPostRecord(record)
 
   // console.log(postData)
@@ -137,8 +136,7 @@ const deleteRecord = async (documentId: string) => {
 
 // 成功的話，會回傳該紀錄於 strapi 的 documentId，後續看看如何使用（例如：更新 pinia 的紀錄。但是 pinia 應該已經一起編輯好了）
 const updateRecord = async (documentId: string): Promise<string> => {
-  const config = useRuntimeConfig()
-  const token = config.public.strapiUserToken
+  const token = getToken()
   const { getRecordById } = useRecordsStore()
   const updateData = formatPostRecord(getRecordById(documentId)!)
 

@@ -4,7 +4,7 @@
     .participants
       .participant(v-for="(division, index) in divisions" :key="division.id")
         .avatar
-          img(:src="division.avatar")
+          img(:src="division.avatar ? division.avatar : '/avatars/default.png'")
         .name {{ division.displayName }}
           .value-hinter ${{ hinterValue(division.value) }}
         .input_wrapper
@@ -71,4 +71,12 @@ watch(
       color: $color_secondary
       &.settled
         color: $color_primary
+
+.avatar
+  border-radius: 50%
+  overflow: hidden
+  img
+    width: 100%
+    height: 100%
+    object-fit: contain
 </style>
