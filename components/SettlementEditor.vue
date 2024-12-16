@@ -18,7 +18,7 @@
             @input="settlements[index].value = Math.abs($event.target.value)"
             )
           .currency {{ settlement.currency }}
-    .editor__button(@click="handleClick") 確定
+    Button.editor__button(@click="handleClick" themeColor="secondary") 確定
 </template>
 
 <script setup lang="ts">
@@ -26,7 +26,7 @@ import { useSettlementsStore, transformSettlement } from '@/store/settlements'
 import { useUserDataStore } from '@/store/userData'
 import { useRecordsStore } from '@/store/records';
 import { postRecord } from '@/utils/api';
-
+import Button from '@/components/Button.vue'
 
 const settlementsStore = useSettlementsStore()
 const { settlements } = storeToRefs(settlementsStore)
@@ -121,18 +121,7 @@ $color-simple: #929292
     justify-content: space-between
     margin-bottom: 20px
   &__button
-    width: fit-content
     margin: 0 auto
-    padding: 8px 12px
-    border-radius: 6px
-    background-color: $color-secondary
-    color: white
-    cursor: pointer
-    box-shadow: 0 3px 0px 0 darken($color-secondary, 13%)
-    transition: all 0.2s ease
-    &:active
-      box-shadow: none
-      transform: translateY(3px)
   &__close-button
     position: absolute
     top: 10px

@@ -8,7 +8,7 @@
 .page
   .container
     Header(:title="friend?.displayName" :summary="partialSummary")
-    .settleup-button(@click="handleSettleUp") 結算
+    Button.settleup-button(@click="handleSettleUp" themeColor="secondary") 結算
   .records
     Record(v-for="record in displayRecords" :key="record.id" :record="record")
 </template>
@@ -21,6 +21,7 @@ import { useUserDataStore } from '@/store/userData'
 import { getSummary } from '@/utils/utils'
 import { useSettlementsStore, createSettlement } from '@/store/settlements'
 import type { User } from '@/types/types'
+import Button from '@/components/Button.vue'
 
 const route = useRoute()
 const { id: friendId } = route.params
@@ -66,12 +67,6 @@ const handleSettleUp = () => {
   margin-bottom: 20px
 
 .settleup-button
-  padding: 4px 10px
-  padding-right: 8px
-  background-color: $color_secondary
-  width: fit-content
-  border-radius: 6px
-  color: white
-  letter-spacing: 2px
-  cursor: pointer
+  position: relative
+  left: 16px
 </style>
