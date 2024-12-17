@@ -16,7 +16,7 @@ export interface User {
   strapiId: number; // strapi 的對內存取 id，例如 3
   displayName: string;
   email?: string;
-  avatar?: string;
+  avatar: string | null;
   groups?: Group[];
   friends?: User[];
 }

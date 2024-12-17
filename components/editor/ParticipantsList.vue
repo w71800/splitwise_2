@@ -4,7 +4,7 @@
     .label 和：
     .participants-item(v-for="participant in record.participants" :key="participant.id") 
       .avatar
-        img(:src="participant.avatar")
+        img(:src="participant.avatar ? participant.avatar : '/avatars/default.png'")
       .name {{ participant.displayName }}
       .remove(@click="removeParticipant(participant)")
         img(:src="'/icons/remove.png'")
@@ -15,7 +15,7 @@
       @click="insertParticipant(participant)"
     ) 
       .avatar
-        img(:src="participant.avatar")
+        img(:src="participant.avatar ? participant.avatar : '/avatars/default.png'")
       span {{ participant.displayName }}
 </template>
 

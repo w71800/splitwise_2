@@ -66,11 +66,12 @@ export function formatApiRecord(apiRecord: ApiRecord): Record {
     strapiId: p.participant.id,
     email: p.participant.email,
     displayName: p.participant.username,
-    tags: p.tags.map(t => t.tag)
+    tags: p.tags.map(t => t.tag),
+    avatar: `${strapiHost}${p.participant.avatar.url}`
   }))
 
   // 轉換付款者資料
-  const payers: Payer[] = apiRecord.payers.map((p: ApiPayer) => ({
+  const payers: Pick<Payer, 'id' | 'strapiId' | 'displayName' | 'paid'>[] = apiRecord.payers.map((p: ApiPayer) => ({
     id: p.payer.documentId,
     strapiId: p.payer.id,
     displayName: p.payer.username,
