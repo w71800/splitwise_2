@@ -41,18 +41,15 @@ export const splitors = {
    * @param {Record} record - 記錄對象
    * @returns {Array<{id: string, displayName: string, shouldPay: number}>} 每個參與者應付金額的數組
    */
-  equal(record: Record): {
-    id: string;
-    displayName: string;
-    shouldPay: number;
-  }[] {
+  equal(record: Record): Pick<Debt, 'id' | 'displayName' | 'shouldPay' | 'avatar'>[] {
     const { divisions, value } = record
     const activeDivisions = divisions.filter(division => division.value > 0)
     const shouldPay = value / activeDivisions.length
     const debts = divisions.map(division => ({
       id: division.id,
       displayName: division.displayName,
-      shouldPay: division.value > 0 ? shouldPay : 0
+      shouldPay: division.value > 0 ? shouldPay : 0,
+      avatar: division.avatar
     }))
     
     return debts
@@ -62,16 +59,13 @@ export const splitors = {
    * @param {Record} record - 記錄對象
    * @returns {Array<{id: string, displayName: string, shouldPay: number}>} 每個參與者應付金額的數組
    */
-  fixed(record: Record): {
-    id: string;
-    displayName: string;
-    shouldPay: number;
-  }[] {
+  fixed(record: Record): Pick<Debt, 'id' | 'displayName' | 'shouldPay' | 'avatar'>[] {
     const { divisions } = record
     const debts = divisions.map(division => ({
       id: division.id,
       displayName: division.displayName,
-      shouldPay: division.value
+      shouldPay: division.value,
+      avatar: division.avatar
     }))
     
     return debts
@@ -81,16 +75,13 @@ export const splitors = {
    * @param {Record} record - 記錄對象
    * @returns {Array<{id: string, displayName: string, shouldPay: number}>} 每個參與者應付金額的數組
    */
-  percentage(record: Record): {
-    id: string;
-    displayName: string;
-    shouldPay: number;
-  }[] {
+  percentage(record: Record): Pick<Debt, 'id' | 'displayName' | 'shouldPay' | 'avatar'>[] {
     const { divisions, value } = record
     const debts = divisions.map(division => ({
       id: division.id,
       displayName: division.displayName,
-      shouldPay: value * (division.value / 100)
+      shouldPay: value * (division.value / 100),
+      avatar: division.avatar
     }))
     
     return debts
@@ -100,17 +91,14 @@ export const splitors = {
    * @param {Record} record - 記錄對象
    * @returns {Array<{id: string, displayName: string, shouldPay: number}>} 每個參與者應付金額的數組
    */
-  ratio(record: Record): {
-    id: string;
-    displayName: string;
-    shouldPay: number;
-  }[] {
+  ratio(record: Record): Pick<Debt, 'id' | 'displayName' | 'shouldPay' | 'avatar'>[] {
     const { divisions, value } = record
     const totalRatio = divisions.reduce((sum, division) => sum + division.value, 0)
     const debts = divisions.map(division => ({
       id: division.id,
       displayName: division.displayName,
-      shouldPay: value * (division.value / totalRatio)
+      shouldPay: value * (division.value / totalRatio),
+      avatar: division.avatar
     }))
     
     return debts
@@ -159,12 +147,8 @@ export const getDebts = (record: Record, userId?: string): Debt[] => {
   // 5. 分配債務給債權人已記帳
 
   
-  // 先計算每一個參與者的應付金額
-  const owes: {
-    id: string;
-    displayName: string;
-    shouldPay: number;
-  }[] = splitors[splitor](record)
+  // 先計算每一個參與者的應付金額 
+  const owes: Omit<Debt, 'creditor' | 'debt'>[] = splitors[splitor](record)
 
   // 計算每一個參與者的債務
   debts = owes.map(owe => {

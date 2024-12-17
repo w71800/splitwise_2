@@ -6,13 +6,13 @@
 <template lang="pug">
 .detail.detail--payer(v-if="isPayer")
   .avatar 
-    img(src="/avatars/profile.jpg")
+    img(:src="payer.avatar ? payer.avatar : '/avatars/default.png'")
   .info {{ displayInfo }}
 .detail.detail--debtor(v-else)
   .separator
   .wrapper
     .avatar
-      img(src="/avatars/profile.jpg")
+      img(:src="debt.avatar ? debt.avatar : '/avatars/default.png'")
     .info {{ displayInfo }}
 </template>
 

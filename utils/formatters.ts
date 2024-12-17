@@ -71,11 +71,12 @@ export function formatApiRecord(apiRecord: ApiRecord): Record {
   }))
 
   // 轉換付款者資料
-  const payers: Pick<Payer, 'id' | 'strapiId' | 'displayName' | 'paid'>[] = apiRecord.payers.map((p: ApiPayer) => ({
+  const payers: Pick<Payer, 'id' | 'strapiId' | 'displayName' | 'paid' | 'avatar'>[] = apiRecord.payers.map((p: ApiPayer) => ({
     id: p.payer.documentId,
     strapiId: p.payer.id,
     displayName: p.payer.username,
-    paid: p.paid
+    paid: p.paid,
+    avatar: `${strapiHost}${p.payer.avatar.url}`
   }))
 
   // 轉換分帳資料
