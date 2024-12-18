@@ -8,6 +8,7 @@
   input(
     type="text"
     placeholder="搜尋"
+    v-model="searchTextModel"
   )
   .tags
     .tags__hint 標籤：
@@ -21,26 +22,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
 import { useRecordsStore } from '@/store/records'
-import { getTags } from '@/utils/utils';
 import { useUserDataStore } from '@/store/userData';
+import { getTags } from '@/utils/utils';
 
-const { records } = useRecordsStore()
-const { id: userId } = useUserDataStore()
 interface Tag {
   name: string
   isActive: boolean
 }
 
-const emit = defineEmits(['update:activeTags'])
+const searchTextModel = defineModel<string>('searchText')
+const activeTagsModel = defineModel<string[]>('activeTags')
+
+const { records } = useRecordsStore()
+const { id: userId } = useUserDataStore()
 
 const tags = ref<Tag[]>(getTags(records, userId).map( tag => ({ name: tag, isActive: false })))
-const activeTags = computed(() => tags.value.filter(tag => tag.isActive).map(tag => tag.name))
 
 const toggleTag = (tag: Tag) => {
   tag.isActive = !tag.isActive
-  emit('update:activeTags', activeTags.value)
+  activeTagsModel.value = tags.value.filter(tag => tag.isActive).map(tag => tag.name)
 }
 </script>
 

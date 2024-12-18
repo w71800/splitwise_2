@@ -113,22 +113,32 @@ export const splitors = {
 interface Filter {
   id?: string
   tags?: string[]
+  searchText?: string
 }
 export const filterRecords = (records: Record[], conditions: Filter): Record[] => {
-  let { id, tags } = conditions
-
+  let { id, tags, searchText } = conditions
+  let filteredRecords = [...records]
+  
   if(id) {
-    return records.filter(record => record.id === id)
+    filteredRecords = filteredRecords.filter(record => record.id === id)
   }
+
   if(tags && tags.length > 0) {
-    return records.filter(record => {
+    filteredRecords = filteredRecords.filter(record => {
       const { participants } = record
       return participants.some(p => 
         p.tags && p.tags.some(tag => tags.includes(tag))
       )
     })
   }
-  return records // 如果沒有條件，返回所有記錄
+
+  if (searchText) {
+    const searchLower = searchText.toLowerCase()
+    filteredRecords = filteredRecords.filter(record => 
+      record.title.toLowerCase().includes(searchLower)
+    )
+  }
+  return filteredRecords 
 }
 
 /**
@@ -147,19 +157,19 @@ export const getDebts = (record: Record, userId?: string): Debt[] => {
   // 5. 分配債務給債權人已記帳
 
   
-  // 先計算每一個參與者的應付金額 
+  // 先計算每一個參與者的 shouldPay
   const owes: Omit<Debt, 'creditor' | 'debt'>[] = splitors[splitor](record)
 
-  // 計算每一個參與者的債務
+  // 計算每一個參與者的債務狀態。正值為可以得到（債權人），負值為需要支付（債務人）
   debts = owes.map(owe => {
     
-    let debt = owe.id === payers.id
+    let debtValue = owe.id === payers.id
       ? payers.paid - owe.shouldPay
       : -1 * owe.shouldPay
     
     return {
       ...owe,
-      debt,
+      debt: debtValue,
       creditor: {
         id: payers.id,
         displayName: payers.displayName,
@@ -177,6 +187,7 @@ export const getDebts = (record: Record, userId?: string): Debt[] => {
     if (b.id === b.creditor.id) return 1
     return 0
   })
+
   return debts
 }
 

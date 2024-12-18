@@ -55,7 +55,7 @@ const { id: userId } = storeToRefs(userDataStore)
 
 const showNotification = useSideNotification()
 
-const { getRecordById, deleteRecord, createDebtTracker } = useRecordsStore() // NOTE: 這邊透過這個 getter 拿出來的紀錄，會保持響應性嗎？
+const { getRecordById, deleteRecord, createDebtTracker } = useRecordsStore()
 const { records } = storeToRefs(useRecordsStore())
 
 const debtTracker = computed(() => createDebtTracker(recordId))

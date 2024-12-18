@@ -9,15 +9,18 @@
 <script setup lang="ts">
 import { useRecordsStore } from '@/store/records'
 import { filterRecords } from '@/utils/utils'
+import { ref, provide, inject } from 'vue'
 
 definePageMeta({
   layout: 'search'
 })
 
-const activeTags = inject<Ref<string[]>>('activeTags')
 const { records } = storeToRefs(useRecordsStore())
 
-const displayRecords = computed(() => filterRecords(records.value, { tags: activeTags.value }))
+const activeTags = inject<Ref<string[]>>('activeTags')
+const searchText = inject<Ref<string>>('searchText')
+
+const displayRecords = computed(() => filterRecords(records.value, { tags: activeTags.value, searchText: searchText.value }))
 
 </script>
 <style scoped lang="sass">

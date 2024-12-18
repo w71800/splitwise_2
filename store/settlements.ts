@@ -52,7 +52,7 @@ export const transformSettlement = (settlement: Settlement): Omit<Record, 'id'> 
   const { creditor, debtor } = settlement
   const { value: settlementValue, currency } = settlement
   return {
-    title: `結清 ${settlementValue} ${currency}`,
+    title: `結算 ${settlementValue} ${currency}`,
     value: settlementValue,
     currency: settlement.currency,
     fullDate: new Date(),
