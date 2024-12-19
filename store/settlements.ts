@@ -56,8 +56,14 @@ export const transformSettlement = (settlement: Settlement): Omit<Record, 'id'> 
     value: settlementValue,
     currency: settlement.currency,
     fullDate: new Date(),
-    participants: [ creditor, debtor ],
-    divisions: [ { ...creditor, value: settlementValue }, { ...debtor, value: -1 * settlementValue } ],
+    participants: [ 
+      { ...creditor, tags: ["結清"] } , 
+      { ...debtor, tags: ["結清"] }
+    ],
+    divisions: [ 
+      { ...creditor, value: settlementValue }, 
+      { ...debtor, value: -1 * settlementValue } 
+    ],
     payers: { ...debtor, paid: 0 },
     splitor: 'fixed',
     group: null,

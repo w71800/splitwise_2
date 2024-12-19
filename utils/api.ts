@@ -4,7 +4,7 @@ import { formatPostRecord } from '@/utils/formatters'
 import { useRecordsStore } from '@/store/records'
 import { useUserDataStore } from '@/store/userData'
 import useAuth from '@/composables/auth'
-
+import { createFetchRequest } from './apiInstance'
 const { getToken, setToken } = useAuth()
 
 interface LoginData {
@@ -21,11 +21,12 @@ interface SignupData {
 
 const endpointUrl = (resource: string, populates?: string[]) => {
   const config = useRuntimeConfig()
-  const { strapiHost } = config.public
-  return `${strapiHost}/api/${resource}${populates ? `?${populates.join('&')}` : ''}`
+  const { strapiHost } = config.public 
+  // return `${strapiHost}/api/${resource}${populates ? `?${populates.join('&')}` : ''}`
+  return `/api/${resource}${populates ? `?${populates.join('&')}` : ''}`
 }
 
-const fetchRecords = () => {
+const fetchRecords = async () => {
   const config = useRuntimeConfig()
   const userDataStore = useUserDataStore()
   const { id: userId } = storeToRefs(userDataStore)
@@ -41,22 +42,26 @@ const fetchRecords = () => {
   params.push(`filters[participants][participant][documentId][$eq]=${userId.value}`)
 
   const endpoint = endpointUrl('records', params)
-  const token = config.public.strapiTokenDev
 
-  return fetch(endpoint, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error('Failed to fetch records')
-      }
-      return res.json().then(data => data.data)
-    })
-    .catch((error) => {
-      throw new Error(error.message)
-    })
+  const data = await createFetchRequest(endpoint, { tokenType: 'api' })
+  return data.data
+  
+  // const token = config.public.strapiTokenDev
+
+  // return fetch(endpoint, {
+  //   headers: {
+  //     Authorization: `Bearer ${token}`
+  //   }
+  // })
+  //   .then((res) => {
+  //     if (!res.ok) {
+  //       throw new Error('Failed to fetch records')
+  //     }
+  //     return res.json().then(data => data.data)
+  //   })
+  //   .catch((error) => {
+  //     throw new Error(error.message)
+  //   })
 }
 
 const fetchUserData = () => {
@@ -71,16 +76,16 @@ const fetchUserData = () => {
   ]
 
   const endpoint = endpointUrl('users/me', populateParams)
-
-  return fetch(endpoint, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  })
-  .then(res => res.json())
-  .catch(error => {
-    throw error
-  })
+  return createFetchRequest(endpoint, { tokenType: 'user' })
+  // return fetch(endpoint, {
+  //   headers: {
+  //     Authorization: `Bearer ${token}`
+  //   }
+  // })
+  // .then(res => res.json())
+  // .catch(error => {
+  //   throw error
+  // })
 }
 
 /**
