@@ -326,6 +326,10 @@ export function getComplement(source: any[], target: any[]): any[] {
   return source.filter(item => !target?.some(t => t.id === item.id))
 }
 
+export const concatApiEndpointUrl = (resource: string, populates?: string[]) => {
+  return `/api${resource}${populates ? `?${populates.join('&')}` : ''}`
+}
+
 export enum DebtStatus {
   Receivable = '可回收',
   Payable = '應支付',

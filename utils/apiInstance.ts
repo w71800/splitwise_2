@@ -28,8 +28,9 @@ export const createFetchRequest = async (
     const response = await fetch(`${baseURL}${endpoint}`, {
       ...options,
       headers: {
-        ...options.headers,
+        'Content-Type': 'application/json',
         'Authorization': token ? `Bearer ${token}` : '',
+        ...options.headers,
       },
       signal: controller.signal
     })

@@ -14,7 +14,6 @@
     NuxtPage
   SideNotification
   SettlementEditor(v-if="isSettlementEditorShow")
-  
 </template>
 
 <script setup lang="ts">
