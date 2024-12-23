@@ -6,7 +6,7 @@ import { useUserDataStore } from '@/store/userData'
 import useAuth from '@/composables/auth'
 import { createFetchRequest } from './apiInstance'
 import { concatApiEndpointUrl } from './utils'
-const { getToken, setToken } = useAuth()
+const { getToken, setToken, clearToken } = useAuth()
 
 interface LoginData {
   identifier: string
@@ -20,6 +20,32 @@ interface SignupData {
   password: string
 }
 
+const handleApiError = async (error: unknown) => {
+  const router = useRouter()
+  // 處理 HTTP 錯誤
+  if (error instanceof Error) {
+    switch(error.message) {
+      case '401':
+        clearToken()
+        router.push('/auth')
+        alert('登入權限已過期，請重新登入！')
+        throw new Error(`登入權限已過期，請重新登入！`)
+      default:
+        throw new Error(error.message || "發生某些 HTTP 問題")
+    }
+  } 
+
+  // 處理網路錯誤
+  if (error instanceof TypeError) {
+    console.error('Network Error:', error.message)
+  } 
+  
+  if (error instanceof DOMException && error.name === 'AbortError') {
+    console.error('Request Timeout')
+  }
+
+  throw error
+}
 
 const fetchRecords = async () => {
   const userDataStore = useUserDataStore()
@@ -40,7 +66,8 @@ const fetchRecords = async () => {
     const response = await createFetchRequest(endpoint, { tokenType: 'api' })
     return response.data
   } catch(e) {
-    throw new Error(`取得紀錄時發生錯誤：${e}`)
+    handleApiError(e)
+    throw new Error(`取得紀錄時發生錯誤`)
   }
 }
 
@@ -57,7 +84,8 @@ const fetchUserData = () => {
   try {
     return createFetchRequest(endpoint, { tokenType: 'user' })
   } catch(e) {
-    throw new Error(`取得使用者資料時發生錯誤：${e}`)
+    handleApiError(e)
+    throw new Error(`取得使用者資料時發生錯誤`)
   }
   
 }
@@ -77,7 +105,8 @@ const postRecord = async (record: Omit<Record, 'id'>): Promise<string> => {
     })
     return response.data.documentId
   } catch(e) {
-    throw new Error(`儲存紀錄時發生錯誤：${e}`)
+    handleApiError(e)
+    throw new Error(`儲存紀錄時發生錯誤`)
   }
 }
 
@@ -96,7 +125,8 @@ const deleteRecord = async (documentId: string) => {
       tokenType: 'api'
     })
   } catch(e) {
-    throw new Error(`刪除紀錄時發生錯誤：${e}`)
+    handleApiError(e)
+    throw new Error(`刪除紀錄時發生錯誤`)
   }
 }
 
@@ -119,7 +149,8 @@ const updateRecord = async (documentId: string): Promise<string> => {
     })
     return response.data.documentId
   } catch(e) {
-    throw new Error(`更新紀錄時發生錯誤：${e}`)
+    handleApiError(e)
+    throw new Error(`更新紀錄時發生錯誤`)
   }
 
   // return await fetch(endpointUrl(`records/${documentId}`), {
@@ -150,7 +181,8 @@ const login = async (data: LoginData) => {
     
     return response
   } catch(e) {
-    throw new Error(`登入時發生錯誤：${e}`)
+    handleApiError(e)
+    throw new Error(`登入時發生錯誤`)
   }
   // return await fetch(endpointUrl('auth/local'), {
   //   method: 'POST',
@@ -196,7 +228,8 @@ const signup = async (data: SignupData) => {
       }) // 這邊 strapi 是吃 identifier 和 password
     })
   } catch(e) {
-    throw new Error(`註冊時發生錯誤：${e}`)
+    handleApiError(e)
+    throw new Error(`註冊時發生錯誤`)
   }
   // return await fetch(endpointUrl('auth/local/register'), {
   //   method: 'POST',

@@ -112,8 +112,8 @@ const methodsMapper = {
           showNotification('success')
         }, 500)
       } catch (error) {
-        console.error(error)
         showNotification('error')
+        throw error
       }
     } else {
       try {
@@ -121,8 +121,8 @@ const methodsMapper = {
         await strapiApi.updateRecord(documentId)
         showNotification('success')
       } catch (error) {
-        console.error(error)
         showNotification('error')
+        throw error
       }
     }
     isEditorShowing.value = false

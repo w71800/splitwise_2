@@ -27,7 +27,7 @@ import { useRouter } from 'vue-router'
 import useAuth from '@/composables/auth'
 
 
-const { isAuthenticated } = useAuth()
+const { isAuthenticated, clearToken } = useAuth()
 const router = useRouter()
 const recordsStore = useRecordsStore()
 const editorStore = useEditorStore()
@@ -60,7 +60,8 @@ const initApp = async () => {
     await recordsStore.loadRecords()
     await editorStore.initializeEditor()
   } catch (error) {
-    console.error(error)
+    console.error(error);
+    throw error
   } finally {
     setTimeout(() => {
       isLoading.value = false
@@ -81,13 +82,10 @@ onMounted(async () => {
 })
 
 onErrorCaptured((error) => {
-  console.log(error)
+  console.log("元件渲染發生錯誤了！");
 })
 
 router.beforeEach(async (to, from, next) => {
-  console.log('當前驗證狀態：', isAuthenticated.value)
-  console.log('目標路由：', to.path)
-
   // 如果已經在 auth 頁面，直接放行
   if (to.path === '/auth') {
     next()

@@ -89,12 +89,8 @@ export const useEditorStore = defineStore('editor', {
       }
     },
     async initializeEditor() {
-      const userDataStore = useUserDataStore()
-      
-      await userDataStore.loadUserData()
       await this.loadDivisionsMapper()
       this.setRecord()
-      
       this.isInitialized = true
     },
     openEditor(record: Record | null = null) {

@@ -10,12 +10,11 @@ export const useUserDataStore = defineStore('userData', {
   },
   actions: {
     async loadUserData() {
+      console.log('loadUserData')
       try {
         this.$state = this.dataFormatter(await fetchUserData())
-        return true 
       } catch (error) {
-        console.error(error)
-        return false
+        throw error
       }
     },
     dataFormatter(data: any): User {
