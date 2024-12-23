@@ -114,7 +114,8 @@ const updateRecord = async (documentId: string): Promise<string> => {
   try {
     const response = await createFetchRequest(endpoint, {
       method: 'PUT',
-      tokenType: 'api'
+      tokenType: 'api',
+      body: JSON.stringify(updateData)
     })
     return response.data.documentId
   } catch(e) {

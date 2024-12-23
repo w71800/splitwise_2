@@ -15,9 +15,8 @@ export const createApiConfig = () => {
 
 export const handleApiError = async (error: unknown) => {
   // 處理 HTTP 錯誤
-  if (error instanceof Response) {
-    let errorData = await error.json()
-    throw new Error(errorData.message || '伺服器錯誤')
+  if (error instanceof Error) {
+    throw new Error(error.message || "發生某些 HTTP 問題")
   } 
 
   // 處理網路錯誤

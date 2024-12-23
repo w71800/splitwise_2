@@ -35,9 +35,10 @@ export const createFetchRequest = async (
       signal: controller.signal
     })
 
-    // if (!response.ok) {
-    //   throw new Error(`HTTP error! status: ${response.status}`)
-    // }
+    if (!response.ok) {
+      const parsedErrorResponse = await response.json()
+      throw new Error(`遠端處理發生問題: ${parsedErrorResponse.error.message}`)
+    }
 
     return await response.json()
   } catch (error) {
