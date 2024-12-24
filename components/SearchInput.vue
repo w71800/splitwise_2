@@ -46,18 +46,19 @@ const toggleTag = (tag: Tag) => {
 </script>
 
 <style scoped lang="sass">
+$padding: 20px
 .search-input
   width: 100vw
   position: sticky
   top: 0
   background-color: $color_primary
-  padding: 10px 0px
+  padding: 15px 0px
   padding-top: 15px
   z-index: 2
   input
     display: block
     margin: 0 auto
-    width: 90%
+    width: calc( 100% - 2 * $padding )
     height: 30px
     border-radius: 20px
     border: none
@@ -70,7 +71,7 @@ const toggleTag = (tag: Tag) => {
     &::placeholder
       text-align: left
   .tags
-    padding-left: 20px
+    padding-left: $padding
     display: flex
   .tags__hint
     color: rgba(#fff, .9)
