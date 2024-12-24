@@ -6,7 +6,7 @@ interface ApiUser {
   documentId: string
   email: string
   username: string
-  avatar: string
+  avatar: { url: string } | null
 }
 
 interface ApiTag {
@@ -67,7 +67,7 @@ export function formatApiRecord(apiRecord: ApiRecord): Record {
     email: p.participant.email,
     displayName: p.participant.username,
     tags: p.tags.map(t => t.tag),
-    avatar: `${strapiHost}${p.participant.avatar.url}`
+    avatar: p.participant.avatar && new URL(p.participant.avatar.url, strapiHost).toString()
   }))
 
   // 轉換付款者資料
@@ -76,7 +76,7 @@ export function formatApiRecord(apiRecord: ApiRecord): Record {
     strapiId: p.payer.id,
     displayName: p.payer.username,
     paid: p.paid,
-    avatar: `${strapiHost}${p.payer.avatar.url}`
+    avatar: p.payer.avatar && new URL(p.payer.avatar.url, strapiHost).toString()
   }))
 
   // 轉換分帳資料
@@ -84,7 +84,7 @@ export function formatApiRecord(apiRecord: ApiRecord): Record {
     id: d.participant.documentId,
     strapiId: d.participant.id,
     displayName: d.participant.username,
-    avatar: `${strapiHost}${d.participant.avatar.url}`,
+    avatar: d.participant.avatar && new URL(d.participant.avatar.url, strapiHost).toString(),
     value: d.value
   }))
 

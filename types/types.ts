@@ -36,7 +36,7 @@ export interface Payer extends User {
 export interface Record {
   id: string;
   title: string;
-  value: number;
+  value: number | null;
   currency: string;
   fullDate: Date;
   participants: Participant[];

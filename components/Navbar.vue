@@ -43,6 +43,7 @@ const editorStore = useEditorStore()
 
 const { id: userId, displayName, avatar } = storeToRefs(userDataStore)
 const { editorMode } = storeToRefs(editorStore)
+console.log(avatar);
 
 
 
@@ -76,8 +77,8 @@ const navItems = [
     name: '帳戶', 
     path: `/account`, 
     icon: {
-      active: avatar?.value,
-      inactive: avatar?.value
+      active: avatar.value ?? '/avatars/default.png',
+      inactive: avatar.value ?? '/avatars/default.png'
     }
   },
 ]

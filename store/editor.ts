@@ -18,7 +18,7 @@ const createEmptyRecord = (): Record => {
   return {
     id: uuidv4(),
     title: '',
-    value: 0,
+    value: null,
     currency: 'TWD',
     fullDate: new Date(),
     participants: [ userData ],

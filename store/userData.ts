@@ -19,7 +19,7 @@ export const useUserDataStore = defineStore('userData', {
     },
     dataFormatter(data: any): User {
       const runtimeConfig = useRuntimeConfig()
-      const avatarUrl = runtimeConfig.public.strapiHost + data.avatar?.url
+      const avatarUrl = data.avatar && new URL(data.avatar.url, runtimeConfig.public.strapiHost).toString()
       return {
         id: data.documentId,
         strapiId: data.id,

@@ -4,7 +4,7 @@
     .participants
       .participant(v-for="(division, index) in divisions" :key="division.id")
         .avatar
-          img(:src="division.avatar ? division.avatar : '/avatars/default.png'")
+          img(:src="division.avatar ?? '/avatars/default.png'")
         .name {{ division.displayName }}
         .input_wrapper.value_is_exist
           label(for="participant") $

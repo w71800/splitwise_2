@@ -2,7 +2,7 @@
 .page
   h1 您好，{{ displayName }}
   .img__wrapper
-    img(:src="avatar")
+    img(:src="avatar ?? '/avatars/default.png'")
   p {{ email }}
   .signout(@click="handleSignout") 登出
 </template>
