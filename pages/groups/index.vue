@@ -5,7 +5,7 @@
     :key="group.id" 
     :id="group.id" 
     :avatar="group.avatar" 
-    :name="group.name"
+    :name="displayAvatar(group)"
   )
 </template>
 
@@ -15,7 +15,7 @@ import { storeToRefs } from 'pinia'
 
 const userDataStore = useUserDataStore()
 const { groups } = storeToRefs(userDataStore)
-
+const displayAvatar = (group) => group.avatar ?? '/avatars/default.png'
 
 </script>
 

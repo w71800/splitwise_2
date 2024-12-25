@@ -5,7 +5,7 @@
     :key="friend?.id"
     :id="friend?.id"
     :name="friend?.displayName"
-    :avatar="friend?.avatar"
+    :avatar="displayAvatar(friend)"
   )
 </template>
 
@@ -15,6 +15,7 @@ import { storeToRefs } from 'pinia'
 
 const userDataStore = useUserDataStore()
 const { friends } = storeToRefs(userDataStore)
+const displayAvatar = (friend) => friend.avatar ?? '/avatars/default.png'
 </script>
 
 <style scoped lang="sass">

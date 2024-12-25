@@ -30,13 +30,13 @@ export const useUserDataStore = defineStore('userData', {
           id: group.documentId,
           strapiId: group.id,
           name: group.name,
-          avatar: runtimeConfig.public.strapiHost + group.avatar?.url
+          avatar: group.avatar && new URL(group.avatar.url, runtimeConfig.public.strapiHost).toString()
         })),
         friends: data.friends.map((friend: any) => ({
           id: friend.documentId,
           strapiId: friend.id,
           displayName: friend.username,
-          avatar: runtimeConfig.public.strapiHost + friend.avatar?.url
+          avatar: friend.avatar && new URL(friend.avatar.url, runtimeConfig.public.strapiHost).toString()
         }))
       }
     },

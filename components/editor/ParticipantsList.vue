@@ -5,7 +5,7 @@
     .participants-items
       .participants-item(v-for="participant in record.participants" :key="participant.id") 
         .avatar
-          img(:src="participant.avatar ? participant.avatar : '/avatars/default.png'")
+          img(:src="participant.avatar ?? '/avatars/default.png'")
         .name {{ participant.displayName }}
         .remove(@click="removeParticipant(participant)")
           img(:src="'/icons/remove.png'")
@@ -16,13 +16,12 @@
       @click="insertParticipant(participant)"
     ) 
       .avatar
-        img(:src="participant.avatar ? participant.avatar : '/avatars/default.png'")
+        img(:src="participant.avatar ?? '/avatars/default.png'")
       span {{ participant.displayName }}
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { fakeFriends } from '@/data'
 import type { Participant } from '@/types/types'
 import { useEditorStore } from '@/store/editor'
 import { getComplement as getComplementParticipants } from '@/utils/utils'
