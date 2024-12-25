@@ -2,12 +2,13 @@
 .editor__participants
   .participants-list(@click="toggleRecommendList")
     .label 和：
-    .participants-item(v-for="participant in record.participants" :key="participant.id") 
-      .avatar
-        img(:src="participant.avatar ? participant.avatar : '/avatars/default.png'")
-      .name {{ participant.displayName }}
-      .remove(@click="removeParticipant(participant)")
-        img(:src="'/icons/remove.png'")
+    .participants-items
+      .participants-item(v-for="participant in record.participants" :key="participant.id") 
+        .avatar
+          img(:src="participant.avatar ? participant.avatar : '/avatars/default.png'")
+        .name {{ participant.displayName }}
+        .remove(@click="removeParticipant(participant)")
+          img(:src="'/icons/remove.png'")
   .recommend-participants(:class="{ 'active': isRecommendListActive }")
     .recommend-item(
       v-for="participant in recommendParticipants" 
@@ -73,15 +74,20 @@ const toggleRecommendList = () => {
     font-weight: $font-weight-bold
     height: 34px
     align-content: center
+  .participants-items
+    display: flex
+    align-items: center
+    flex-wrap: wrap
+    gap: 12px 10px
   .participants-item
     align-items: center
     display: flex
     justify-content: space-between
     gap: 8px
-    margin-right: 8px
     border: 1px solid #929292
     border-radius: 24px
     padding: 6px 10px 6px 8px
+    flex-shrink: 0
     .avatar
       +block_size(20px)
       border: 1px solid #000
