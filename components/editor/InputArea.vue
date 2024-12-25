@@ -8,8 +8,9 @@
   .input_wrapper.item-name
     input(type="text" v-model="record.title" placeholder="項目名稱")
   .input_wrapper.value
-    .icon.currency-btn(@click="isCurrencyListActive = !isCurrencyListActive")
-      img(:src="'/icons/currency.png'")
+    .currency-btn(@click="isCurrencyListActive = !isCurrencyListActive")
+      .btn(:active="isCurrencyListActive")
+        img(:src="'/icons/currency.png'")
       .currency-list(:class="{ 'active': isCurrencyListActive }")
         .currency-item(
           v-for="currency in currencyList" 
@@ -77,19 +78,32 @@ watch(() => record, (newRecord) => {
   flex-direction: column
   gap: 40px
   margin-bottom: 10px
-
   .input_wrapper
     display: flex
     align-items: center
     .icon
-      +block_size(35px)
       margin-right: 20px
       flex-shrink: 0
-    .icon.currency-btn
+    .currency-btn
+      +block_size(35px)
+      margin-right: 20px
+      top: 0px
       cursor: pointer
-      border: 2px solid #5E5E5E
-      border-radius: 10px
-      padding: 5px
+      flex-shrink: 0
+      -webkit-tap-highlight-color: transparent
+      .btn
+        +block_size(100%)
+        margin: 0
+        padding: 4px
+        opacity: 0.8
+        border: 2px solid #5E5E5E
+        border-radius: 10px
+        $transition-duration: 0.2s
+        transition: top $transition-duration, box-shadow $transition-duration
+        img
+          +block_size(100%)
+          object-fit: contain
+        // +debug()
     input
       font-size: 23px
       font-weight: $font-weight-bold
@@ -98,6 +112,7 @@ watch(() => record, (newRecord) => {
       min-width: 100px
     input::placeholder
       color: rgba(#5e5e5e, 0.3)
+    
   
   .input_wrapper 
     &.item-name
@@ -116,28 +131,49 @@ watch(() => record, (newRecord) => {
         margin-left: 20px
   
   .currency-list
-    display: none
+    $space: 12px
+    height: 0px
+    overflow: hidden
     position: absolute
-    border: 1px solid #000
     border-radius: 6px
     bottom: 0px
     left: 50%
     transform: translateX(-50%) translateY(calc(100% + 10px))
     font-size: 1rem
     flex-direction: column
-    gap: 10px
-    padding: 10px 0px
+    gap: $space
+    // padding: 10px 0px
     background-color: #fff
-    z-index: 99
+    z-index: 100
+    box-shadow: -2px 2px 5px 0px rgba(lighten(#5E5E5E, 30), .7)
+    opacity: 0
+    transition: height 0.3s, opacity 0.3s
     .currency-item
-      padding: 0 10px
+      padding: 0 15px
       cursor: pointer
       text-align: left
+      &:first-child
+        margin-top: $space
+      &:last-child
+        margin-bottom: $space
+        
 
+.currency-btn
+  .btn[active="false"]
+    top: 0
+    box-shadow: 0px 3px 0px 0px rgba(lighten(#5E5E5E, 30), .7)
+  .btn[active="true"]
+    top: 3px
+    box-shadow: none
+  
 .currency-list
   &.active
     display: flex !important
+    height: auto
+    opacity: 1
   .currency-item
+    &:not(.active)
+      color: rgba(#5E5E5E, 0.7)
     &.active
       font-weight: $font-weight-bold
       color: $color-primary
