@@ -15,7 +15,7 @@ import { storeToRefs } from 'pinia'
 
 const userDataStore = useUserDataStore()
 const { friends } = storeToRefs(userDataStore)
-const displayAvatar = (friend) => friend.avatar ?? '/avatars/default.png'
+const displayAvatar = (friend) => friend.avatar.url ?? '/avatars/default.png'
 </script>
 
 <style scoped lang="sass">

@@ -4,8 +4,8 @@
     v-for="group in groups" 
     :key="group.id" 
     :id="group.id" 
-    :avatar="group.avatar" 
-    :name="displayAvatar(group)"
+    :avatar="displayAvatar(group)" 
+    :name="group.name"
   )
 </template>
 
