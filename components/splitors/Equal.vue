@@ -114,13 +114,14 @@ label
   top: 0
   left: 0
   z-index: 1
+
 .splitor__hinter
   display: flex
   align-items: center
 
 .title
   flex-grow: 3
-  margin-bottom: 0
+  margin-bottom: 0px !important
   margin-right: 20px
 
 .divider
