@@ -45,7 +45,7 @@ const splitorText = computed(() => {
   font-size: 19px
   cursor: pointer
   text-align: center
-  // margin: 0 auto
+  box-shadow: 0px 7px 2px 0px rgba(lighten(#5e5e5e, 20), .7)
   span
     color: #929292
     font-weight: $font-weight-regular
