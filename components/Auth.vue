@@ -63,8 +63,8 @@ enum Status {
 
 const isSignup = ref(false)
 const formData = reactive({
-  email: '',
-  password: '',
+  email: 'tester@tester.com',
+  password: '000000',
   username: '',
   displayName: '',
 })
