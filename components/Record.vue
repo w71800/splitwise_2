@@ -37,8 +37,8 @@ const props = defineProps<{
   record: RecordProps
 }>()
 
-// const userId = ref(useUserDataStore().id)
-const userId = ref("kmi4kmbqwn8z46e33987ktjt")
+const userId = ref(useUserDataStore().id)
+// const userId = ref("kmi4kmbqwn8z46e33987ktjt")
 
 const { value, payers, fullDate, title, id: recordId } = toRefs(props.record)
 const [ _, month, date ] = fullDate.value.toISOString().split("T")[0].split('-')
