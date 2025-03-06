@@ -52,6 +52,9 @@ const handleSignout = async () => {
 </script>
 
 <style scoped lang="sass">
+.page
+  padding-top: 20px
+
 h1
   text-align: center
   margin-bottom: 20px

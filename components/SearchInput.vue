@@ -55,6 +55,7 @@ $padding: 20px
   padding: 15px 0px
   padding-top: 15px
   z-index: 2
+  +max_width()
   input
     display: block
     margin: 0 auto

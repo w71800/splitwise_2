@@ -95,10 +95,10 @@ const handleAdd = () => {
 .navbar
   position: fixed
   bottom: 0
-  right: 0
-  left: 0
+  // right: 0
+  // left: 0
   background-color: rgba(#fff, 1)
-  box-shadow: 0 -2px 10px 0 rgba(0, 0, 0, 0.1)
+  box-shadow: 0 -2px 10px 0 rgba(0, 0, 0, 0.1), 0px 0px 6px 4px rgba(black, .2)
   z-index: 100
   // +debug()
 

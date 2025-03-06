@@ -10,9 +10,19 @@
 html, body
   padding: 0
   margin: 0
+  height: 100%
 
-#app
-  width: 100vw
+#__nuxt, #app, .layout
+  height: 100%
+
+.layout
+  +max_width
+  margin: 0 auto
+  box-shadow: 2px 0px 10px 4px rgba(black, .3)
+
+.topbar, .navbar, .searchInput
+  +max_width
+
 
 h1, h2, h3, h4, h5, h6, p
   margin: 0

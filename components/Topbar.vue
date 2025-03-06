@@ -143,7 +143,6 @@ const methodsMapper = {
   // +debug
   position: sticky
   top: 0
-  width: 100vw
   background-color: #fff
   display: flex
   justify-content: space-between

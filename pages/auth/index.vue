@@ -9,7 +9,7 @@
 
 <style scoped lang="sass">
 .page
-  position: absolute
+  position: fixed
   width: 100vw
   height: 100vh
   left: 0
