@@ -58,7 +58,7 @@ onUnmounted(() => {
 .scroll-container
   height: 100%
 .scroll-contents
-  width: 200vw
+  width: 200%
   height: 100%
   display: flex
 

@@ -15,10 +15,16 @@ html, body
 #__nuxt, #app, .layout
   height: 100%
 
+// 一些主要畫面因應螢幕過大的整體大小與置中處理
 .layout
   +max_width
   margin: 0 auto
   box-shadow: 2px 0px 10px 4px rgba(black, .3)
+
+.scroll-contents__left, .scroll-contents__right
+  box-shadow: 2px 0px 10px 4px rgba(black, .3)
+  +max_width
+  margin: 0 auto
 
 .topbar, .navbar, .searchInput
   +max_width

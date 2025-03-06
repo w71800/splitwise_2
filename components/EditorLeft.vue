@@ -48,8 +48,7 @@ const topbarConfig = {
 <style lang="sass" scoped>
 .scroll-contents__left
   height: 100%
-  width: 100vw
-  flex-shrink: 0
+  
 .avatar
   +block_size(32px)
   border-radius: 50%

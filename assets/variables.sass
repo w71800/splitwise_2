@@ -8,6 +8,7 @@ $font_weight_regular: 400
 $font_weight_medium: 500
 $font_weight_semibold: 600
 $font_weight_bold: 700
+$max_width: 576px
 
 @mixin block_size($w, $h: $w)
   width: $w
@@ -23,4 +24,4 @@ $font_weight_bold: 700
 
 @mixin max_width
   width: 100%
-  max-width: 576px
+  max-width: $max_width

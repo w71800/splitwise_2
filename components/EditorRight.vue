@@ -105,8 +105,6 @@ const topbarConfig = {
 <style scoped lang="sass">
 .scroll-contents__right
   height: 100%
-  width: 100vw
-  flex-shrink: 0
 
 .content__body
   display: grid
