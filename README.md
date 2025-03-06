@@ -3,7 +3,7 @@
 <img src="https://i.imgur.com/qi2LfDv.png" width="40%">
 
 Self-Made Splitwise 是一參考自「Splitwise」的簡單易用的分帳應用程式。可以幫助你和朋友、家人或群組輕鬆管理共同支出與帳務。以下是一些技術細節：
-- Tech Stack：採用 ```Nuxt.js``` 作為主要框架，並使用 ```Pinia``` 進行前端狀態管理，作為學習這些技術的起點。此外，使用 ```Strapi``` 這個 Headless CMS 儲存帳目與用戶資料，並利用其既有的使用者 Token 機制來實現身份驗證。
+- Tech Stack：採用 ```Nuxt.js``` 作為主要框架，並使用 ```Pinia``` 進行前端狀態管理，作為學習這些技術的起點。此外，使用 Strapi 來快速開發 API 及整合 mySQL 來儲存帳目與用戶資料，並利用其既有的使用者 Token 機制來實現身份驗證。
 - 全站採用 Client-Side Rendering（CSR），以提供類似行動應用的使用體驗，同時簡化狀態管理。
 - 使用 ```Vuelidate``` 在前端預先驗證登入表單的使用者輸入，提升輸入體驗與錯誤處理效率。
 
