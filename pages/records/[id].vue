@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import Detail from './components/Detail.vue'
-import { computed } from 'vue'
+import { computed, ref, inject } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRecordsStore } from '@/store/records'
 import { getDebts, getSingleDigitMonth } from '@/utils/utils'
@@ -65,7 +65,7 @@ const value = computed(() => record.value?.value || 0)
 const debts = computed(() => record.value ? getDebts(record.value) : [])
 const tags = computed(() => record.value?.participants.find(participant => participant.id === userId.value)?.tags || [])
 const group = computed(() => record.value?.group?.name || null)
-// const isLoading = ref(true)
+const isLoading = inject('isLoading') as Ref<boolean>
 
 const displayDate = computed(() => {
   const [ year, month, day ] = record.value?.fullDate?.toISOString().split("T")[0].split('-') || ["1900", "1", "1"]
@@ -76,6 +76,7 @@ const handleDeleteRecord = async () => {
   let yes = confirm('確定要刪除這筆紀錄嗎？')
   if (yes) {
     try {
+      isLoading.value = true
       await api.deleteRecord(recordId)
       await deleteRecord(recordId)
       router.push('/search')
@@ -86,6 +87,10 @@ const handleDeleteRecord = async () => {
     } catch (error) {
       console.error(error)
       showNotification('error')
+    } finally {
+      setTimeout(() => {
+        isLoading.value = false
+      }, 1000)
     }
   }
 }

@@ -38,6 +38,10 @@ export const createFetchRequest = async (
     if (!response.ok) {
       throw new Error(`${response.status}`)
     }
+    // 特別處理 DELETE 回傳的 204 空內容
+    if(response.status === 204) {
+      return true
+    }
 
     return await response.json()
   } catch (error) {

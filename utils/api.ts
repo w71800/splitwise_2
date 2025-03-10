@@ -126,7 +126,7 @@ const deleteRecord = async (documentId: string) => {
     })
   } catch(e) {
     handleApiError(e)
-    throw new Error(`刪除紀錄時發生錯誤`)
+    throw new Error(`刪除紀錄時發生錯誤：${e}`)
   }
 }
 
