@@ -207,15 +207,19 @@ onUnmounted(() => {
 
 .recommend-groups
   position: absolute
-  left: 8px
+  left: 15px
   bottom: calc(100% + 10px)
   display: block
   border: 1px solid rgba(#929292, 0.3)
+  border-radius: 5px
+  background: white
+  box-shadow: 0px 0px 5px rgba(#929292, 0.3)
   .recommend-item
     cursor: pointer
     display: flex
-    padding: 5px 8px
-    padding-right: 100px
+    align-items: center
+    padding: 6px 12px
+    padding-right: 80px
     gap: 8px
     border-bottom: 1px solid rgba(#929292, 0.3)
     color: #5E5E5E

@@ -39,20 +39,51 @@ const splitorText = computed(() => {
 
 <style scoped lang="sass">
 .divide_info
-  padding: 8px 20px
+  padding: 12px 20px  
   border: 1px solid #929292
-  border-radius: 8px
+  border-radius: 10px  
   font-size: 19px
   cursor: pointer
   text-align: center
-  box-shadow: 0px 7px 2px 0px rgba(lighten(#5e5e5e, 20), .7)
+  box-shadow: 0px 3px 6px 0px rgba(94, 94, 94, 0.3)  
+  position: relative  
+  transition: all 0.2s ease  
+  background-color: white  
+  
   span
-    color: #929292
+    color: #6a6a6a  
     font-weight: $font-weight-regular
+    transition: color 0.2s ease  
+    
     &.highlight
       display: inline-block
-      color: $color-primary
+      color: $color-primary  
       padding: 0px 5px
       font-weight: $font-weight-bold
+  
+  
+  &:hover
+    transform: translateY(-2px)  
+    box-shadow: 0px 5px 8px 0px rgba(94, 94, 94, 0.4)  
+    border-color: $color-primary  
+  
+  &.active
+    border-color: $color-primary
+    box-shadow: 0px 3px 8px 0px rgba($color-primary, 0.3)
+      
+    &:before
+      content: ''
+      position: absolute
+      left: 0
+      top: 0
+      height: 100%
+      width: 4px
+      background-color: $color-primary
+      border-top-left-radius: 10px
+      border-bottom-left-radius: 10px
+  
+  &:active
+    transform: translateY(1px)  
+    box-shadow: 0px 2px 4px 0px rgba(94, 94, 94, 0.25)  
 
 </style>

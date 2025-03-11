@@ -25,7 +25,7 @@ const displayRecords = computed(() => filterRecords(records.value, { tags: activ
 </script>
 <style scoped lang="sass">
 .page
-  padding-bottom: 65px
+  padding-bottom: 75px
 .no-records
   text-align: center
   margin-top: 20px
