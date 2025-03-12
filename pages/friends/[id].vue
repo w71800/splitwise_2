@@ -5,7 +5,7 @@
 -->
 
 <template lang="pug">
-.page
+.page.friends-page
   .container
     Header(:title="friend?.displayName" :summary="partialSummary")
     Button.settleup-button(@click="handleSettleUp" themeColor="secondary") 結算
@@ -60,11 +60,14 @@ const handleSettleUp = () => {
 
 <style scoped lang="sass">
 .page
-  padding-top: 50px // 這裡可以根據 Header 組件的實際高度進行調整
+  padding-top: 10px
 
 .container
-  // +debug()
   margin-bottom: 20px
+
+.records
+  padding: 0 20px
+  padding-bottom: 70px
 
 .settleup-button
   position: relative

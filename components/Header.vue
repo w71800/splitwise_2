@@ -8,6 +8,10 @@
 <template lang="pug">
 header.header
   .header__container
+    .header__hero
+      img(src="/imgs/hero.png")
+    .header__avatar
+      img(src="/avatars/default.png")
     h1.header__title {{ title }}
     .summary
       ul.summary__list
@@ -50,17 +54,42 @@ const statusClass = computed(() => {
 .header
   margin-bottom: 16px
   &__container
-    padding: 0 16px
     // border-bottom: 1px solid #888
+  &__title
+    padding: 0 20px
   &__title
     font-size: 24px
     font-weight: 700
     color: #555
-  &__summary
-    font-size: 14px
-    color: #888
+  &__hero
+    +block_size(100%, 200px)
+    background-color: $color_primary
+    margin-bottom: 70px
+  &__avatar
+    --size: 100px
+    border-radius: 50%
+    border: 5px solid $color_primary
+    // border-color: white white $color_primary $color_primary
+    +block_size(var(--size))
+    background-color: white
+    position: absolute
+    left: 20px
+    top: calc(200px - 50px)
+    +flex_center()
 
+  &__hero
+    opacity: 0.8
+    img
+      +img_fullwidth
+  &__avatar
+    img
+      border-radius: 50%
+      +img_fullwidth(90%)
+  
 .summary
+  padding: 0 20px
+  font-size: 14px
+  color: #888
   &__list
     padding: 0 16px
   &__item

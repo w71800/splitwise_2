@@ -25,3 +25,7 @@ $max_width: 576px
 @mixin max_width
   width: 100%
   max-width: $max_width
+
+@mixin img_fullwidth($size: 100%)
+  +block_size($size)
+  object-fit: cover

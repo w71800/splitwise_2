@@ -4,7 +4,7 @@
 -->
 
 <template lang="pug">
-.page
+.page.groups-page
   .container
     Header(:title="group.name" :summary="partialSummary")
     Button.settleup-button(@click="handleSettleUp" themeColor="secondary") 結算
@@ -42,8 +42,16 @@ const debtTrackers = computed(() => records.map(record => createDebtTracker(reco
 </script>
 
 <style scoped lang="sass">
+.records
+  padding: 0 20px
+  padding-bottom: 70px
+
+.container
+  margin-bottom: 20px
+
 .settleup-button
   position: relative
   left: 16px
+
 
 </style>
