@@ -59,9 +59,6 @@ const handleSettleUp = () => {
 </script>
 
 <style scoped lang="sass">
-.page
-  padding-top: 10px
-
 .container
   margin-bottom: 20px
 
