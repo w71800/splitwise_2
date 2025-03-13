@@ -11,7 +11,7 @@ header.header
     .header__hero
       img(src="/imgs/hero.png")
     .header__avatar
-      img(src="/avatars/default.png")
+      img(:src="entityData.avatar ?? '/avatars/default.png'")
     h1.header__title {{ title }}
     .summary
       ul.summary__list
@@ -25,16 +25,20 @@ header.header
 </template>
   
 <script setup lang="ts">
-import { computed } from 'vue'
-import type { Summary } from '@/types/types'
+import { computed, type Reactive } from 'vue'
+import type { Group, Summary, User } from '@/types/types'
 import { useUserDataStore } from '@/store/userData'
+import { useRoute } from 'vue-router'
 
-const { id: userId } = useUserDataStore()
+const { id: userId, getFriendById, getGroupById } = useUserDataStore()
+const { id: paramsId } = useRoute().params
 
 const props = defineProps<{
   title: string
   summary: Summary[]
 }>()
+
+const entityData = (getFriendById(paramsId as string) ?? getGroupById(paramsId as string)) as Reactive<User|Group>
 
 const displayLabel = computed(() => {
   return (item: Summary['partial'][number]) => `${item.id === userId ? '我' : item.displayName}：`
@@ -93,7 +97,6 @@ const statusClass = computed(() => {
     +flex_center()
     animation: parallax-avatar linear 1s
     animation-timeline: scroll()
-
   &__hero
     opacity: 0.8
     img

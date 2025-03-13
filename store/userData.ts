@@ -6,7 +6,8 @@ import { fetchUserData } from '@/utils/api'
 export const useUserDataStore = defineStore('userData', {
   state: (): User => fakeUser, // userData 的各項屬性，變為整個 state 的分項
   getters: {
-    getFriendById: (state: User) => (id: string) => state.friends?.find(friend => friend.id === id) || null
+    getFriendById: (state: User) => (id: string) => state.friends?.find(friend => friend.id === id) || null,
+    getGroupById: (state: User) => (id: string) => state.groups?.find(group => group.id === id) || null
   },
   actions: {
     async loadUserData() {
