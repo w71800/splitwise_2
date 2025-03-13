@@ -51,6 +51,20 @@ const statusClass = computed(() => {
 </script>
 
 <style lang="sass" scoped>
+@keyframes parallax-avatar
+  from
+    transform: translateY(0px)
+    box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, .5)
+  to
+    transform: translateY(-50px)
+    box-shadow: 6px 6px 5px 0 rgba(0, 0, 0, .5)
+
+@keyframes parallax-hero
+  from
+    transform: translateY(0px)
+  to
+    transform: translateY(20px)
+  
 .header
   margin-bottom: 16px
   &__container
@@ -65,17 +79,20 @@ const statusClass = computed(() => {
     +block_size(100%, 200px)
     background-color: $color_primary
     margin-bottom: 70px
+    animation: parallax-hero linear 1s
+    animation-timeline: scroll()
   &__avatar
     --size: 100px
     border-radius: 50%
     border: 5px solid $color_primary
-    // border-color: white white $color_primary $color_primary
     +block_size(var(--size))
     background-color: white
     position: absolute
     left: 20px
     top: calc(200px - 50px)
     +flex_center()
+    animation: parallax-avatar linear 1s
+    animation-timeline: scroll()
 
   &__hero
     opacity: 0.8
