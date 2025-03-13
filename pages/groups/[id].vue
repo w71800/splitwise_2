@@ -7,7 +7,7 @@
 .page.groups-page
   .container
     Header(:title="group.name" :summary="partialSummary")
-    Button.settleup-button(@click="handleSettleUp" themeColor="secondary") 結算
+    //- Button.settleup-button(@click="handleSettleUp" themeColor="secondary") 結算
   .records
     Record(v-for="record in records" :key="record.id" :record="record")
 </template>
