@@ -55,19 +55,19 @@ const statusClass = computed(() => {
 </script>
 
 <style lang="sass" scoped>
-@keyframes parallax-avatar
-  from
-    transform: translateY(0px)
-    box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, .5)
-  to
-    transform: translateY(-50px)
-    box-shadow: 6px 6px 5px 0 rgba(0, 0, 0, .5)
+// @keyframes parallax-avatar
+//   from
+//     transform: translateY(0px)
+//     box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, .5)
+//   to
+//     transform: translateY(-50px)
+//     box-shadow: 6px 6px 5px 0 rgba(0, 0, 0, .5)
 
-@keyframes parallax-hero
-  from
-    transform: translateY(0px)
-  to
-    transform: translateY(20px)
+// @keyframes parallax-hero
+//   from
+//     transform: translateY(0px)
+//   to
+//     transform: translateY(20px)
   
 .header
   margin-bottom: 16px
