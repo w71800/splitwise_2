@@ -2,6 +2,18 @@ import { resolve } from 'path'
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  app: {
+    head: {
+      title: 'Self-Made Splitwise',
+      link: [
+        {
+          rel: 'icon',
+          type: 'image/x-icon',
+          href: '/auth/logo.png'
+        }
+      ]
+    }
+  },
   ssr: false,
   compatibilityDate: '2024-04-03',
   devtools: { enabled: false },
