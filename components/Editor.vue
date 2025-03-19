@@ -54,7 +54,6 @@ onUnmounted(() => {
   right: 0
   top: 0
   background-color: #fff
-  z-index: 100
 .scroll-container
   height: 100%
 .scroll-contents
